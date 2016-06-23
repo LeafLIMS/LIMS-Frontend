@@ -1,0 +1,73 @@
+<md-dialog aria-label="Create a new product" flex="60">
+    <form name="form" ng-submit="form.$valid && create()" novalidate>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Create a new product</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="row">
+            <div flex layout="column">
+                <md-input-container>
+                    <label>Name</label>
+                    <input ng-model="product.name" required>
+                </md-input-container>
+                <md-input-container>
+                    <label>Product status</label>
+                    <md-select ng-model="product.status"
+                        aria-label="Product status" required>
+                        <md-option selected>Added</md-option>
+                        <md-option>Submitted</md-option>
+                        <md-option>Received</md-option>
+                        <md-option>In Progress</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Product type</label>
+                    <md-select ng-model="product.product_type"
+                        aria-label="Product type" required>
+                        <md-option 
+                            ng-repeat="t in product_types"
+                            ng-value="t.name">{{ t.display_name }}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Optimised for</label>
+                    <md-select ng-model="product.optimised_for"
+                        aria-label="Optimised for" ng-required="product.optimised_sequence">
+                        <md-option ng-repeat="org in organisms" ng-value="org.id">
+                            {{ org.name }}</md-option>
+                    </md-select>
+                </md-input-container>
+                <h4 class="section-subheader">Product Design</h4>
+                <div layout="row" layout-align="center center">
+                    <md-input-container flex>
+                        <label>Product design format</label>
+                        <md-select ng-model="designformat">
+                            <md-option>SBOL</md-option>
+                            <md-option>GenBank</md-option>
+                            <md-option>CSV</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div flex>
+                        {{ designfile.name }}
+                        <md-button 
+                            aria-label="Select a design file"
+                            ngf-select
+                            ng-model="product.design_file">
+                            Choose file
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Create</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

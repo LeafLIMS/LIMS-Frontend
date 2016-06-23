@@ -1,0 +1,66 @@
+<div class="gm-task-field" layout="column" flex>
+    <md-input-container flex >
+        <label>Field label</label>
+        <input ng-model="field.label" required>
+    </md-input-container>
+    <div layout="row" layout-align="start center">
+        <div
+            layout="column"
+            layout-align="center center"
+            flex="25" 
+            ng-repeat="prop in field.properties">
+            <md-input-container flex>
+                <label>Label</label>
+                <input ng-model="prop.label">
+            </md-input-container>
+            <div layout="row" layout-align="start center">
+                <md-input-container class="task-field-amount">
+                    <label>Amount</label>
+                    <input type="number" step="1" 
+                        required
+                        aria-label="{{ prop.label }} amount"
+                        ng-model="prop.amount">
+                </md-input-container>
+                <md-autocomplete flex
+                    md-selected-item-change="setMeasure(prop, prop.mItem)"
+                    md-selected-item="prop.mItem"
+                    md-search-text="prop.mText"
+                    md-items="item in filterMeasures(prop.mText)"
+                    md-item-text="item.name"
+                    md-min-length="0"
+                    md-select-on-match
+                    required
+                    md-floating-label="Choose amount measure">
+                    <md-item-template>
+                        <span md-highlight-text="prop.mText"
+                            md-highlight-flags="^i">
+                            {{ item.name }} ({{ item.symbol }})
+                        </span>
+                    </md-item-template>
+                </md-autocomplete> 
+            </div>
+            <md-checkbox ng-model="prop.from_calculation" flex>
+                Amount from calculation
+            </md-checkbox>
+            <md-select ng-model="prop.calculation_used"
+                flex
+                ng-show="prop.from_calculation"
+                ng-required="prop.from_calculation">
+                <md-option ng-repeat="calc in availableCalculations"
+                    ng-value="calc.id">{{ calc.label }}</md-option>
+            </md-select>
+            <md-button class="md-icon-button"  
+                ng-click="removeParameter(field, $index)">
+                <md-icon>delete</md-icon>
+            </md-button>
+        </div>
+        <md-button ng-show="field.properties.length < 4" 
+            ng-click="addParameter(field)">
+            Add property
+        </md-button>
+    </div>
+    <md-input-container flex >
+        <label>Description</label>
+        <textarea ng-model="field.description"></textarea>
+    </md-input-container>
+</div>

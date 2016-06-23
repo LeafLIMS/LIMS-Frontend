@@ -1,0 +1,49 @@
+<md-dialog aria-label="Start a workflow" flex="60">
+    <form ng-submit="change()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Switch workflows</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <p>Start a new workflow</p>
+            <md-input-container>
+                <label>Workflow to run</label>
+                <md-select ng-model="workflow"
+                    aria-label="Workflow to run" required>
+                    <md-option ng-repeat="w in availableWorkflows" 
+                        ng-value="w.id">
+                        <md-icon>linear_scale</md-icon>
+                        {{ w.name }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <p>OR</p>
+            <p>Choose an existing workflow</p>
+            <md-input-container>
+                <label>Workflow to switch to</label>
+                <md-select ng-model="active_workflow"
+                    aria-label="Workflow to run" required
+                    ng-disabled="activeWorkflows.length == 0">
+                    <md-option 
+                        ng-repeat="w in activeWorkflows" 
+                        ng-value="w.id">
+                        <md-icon>linear_scale</md-icon>
+                        {{ w.workflow_name }}: 
+                        {{ w.products.length }} products, 
+                        started on {{ w.date_started|date:"short" }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Switch</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

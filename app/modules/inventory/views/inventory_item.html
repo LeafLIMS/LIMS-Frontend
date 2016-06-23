@@ -1,0 +1,175 @@
+<form flex layout-fill
+    layout="column"
+    novalidate
+    name="inventoryItemForm" 
+    class="no-padding">
+    <md-toolbar class="md-primary md-hue-1">
+        <div class="md-toolbar-tools">
+            <span ng-if="item.in_inventory">
+                <md-icon class="positive">check_circle</md-icon>
+                Available
+            </span>
+            <span ng-if="!item.in_inventory">
+                <md-icon class="negative">cancel</md-icon>
+                Unavailable
+            </span>
+            <span flex></span>
+            <md-button ng-click="dispense()" 
+                ng-show="item.in_inventory">
+                <md-icon>unarchive</md-icon>
+                Dispense item
+            </md-button>
+            <span flex></span>
+            <md-menu>
+                <md-button ng-click="$mdOpenMenu()"
+                    aria-label="More inventory actions"
+                    class="md-icon-button">
+                    <md-icon md-menu-origin>more_horiz</md-icon> 
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="restock()"> 
+                            <md-icon>system_update_alt</md-icon>
+                            Restock item
+                        </md-button>
+                    </md-menu-item>
+                    <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-button ng-click="delete()">
+                            <md-icon>delete</md-icon>
+                            Delete item
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <div layout="row" flex> 
+        <div flex="33" class="coloured-section" layout="column">
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input required name="name" ng-model="item.name">
+                    <div ng-messages="form.name.$invalid">
+                        <div ng-message="required">A name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Type</label>
+                    <input disabled ng-model="item.item_type" class="noedit">
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Description</label>
+                    <textarea ng-model="item.description"></textarea>
+                </md-input-container>
+            </div>
+            <div>
+                <md-chips ng-model="item.tags" md-autocomplete-snap
+                    flex
+                    md-transform-chip="makeChip($chip)">
+                    <md-autocomplete
+                        md-selected-item="selectedTag"
+                        md-search-text="searchText"
+                        md-items="tag in tags"
+                        md-item-text="tag.name"
+                        md-floating-label="Tag this item">
+                        <span md-highlight-text="searchText">{{ tag.name }}</span>
+                    </md-autocomplete>
+                    <md-chip-template>
+                        <span>{{ $chip.name }}</span>
+                    </md-chip-template>
+                </md-chips>
+            </div>
+            <div class="top-padded">
+                <div layout="row">
+                    <md-input-container flex class="read-only">
+                        <label>Added on</label>
+                        <input disabled value="{{ item.added_on|date:'medium' }}">
+                    </md-input-container>
+                    <md-input-container flex class="read-only">
+                        <label>Last updated on</label>
+                        <input disabled value="{{ item.last_updated_on|date:'medium' }}">
+                    </md-input-container>
+                </div>
+                <md-input-container class="read-only">
+                    <label>Added by</label>
+                    <input disabled value="{{ item.added_by }}">
+                </md-input-container>
+            </div>
+            <div ng-if="item.created_from.length > 0"> 
+                <h3 class="section-subheader">Created from</h3>
+                <md-list class="created-from">
+                    <md-list-item 
+                        ng-repeat="created in item.created_from"
+                        ui-sref="inventory_item({id: created.id})">
+                        <md-icon md-svg-icon="alt:drawing"></md-icon>
+                        <p>{{ created.name }} {{ created.identifier }}</p>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </div>
+        <div layout="column" flex class="top-padded side-padded">
+            <div layout="column">
+                <h3 class="section-subheader">Inventory</h3>
+                <md-input-container>
+                    <label>Identifier</label>
+                    <input ng-model="item.identifier">
+                </md-input-container>
+                <div layout="row">
+                    <md-input-container class="read-only">
+                        <label>Amount</label>
+                        <input required type="number" 
+                            disabled
+                            ng-model="item.amount_available">
+                    </md-input-container>
+                    <md-input-container flex class="read-only">
+                        <label>Measure</label>
+                        <md-select required ng-model="item.amount_measure">
+                            <md-option ng-repeat="measure in measures"
+                                disabled
+                                ng-value="measure.symbol">
+                                {{ measure.name }} ({{ measure.symbol }})
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <md-input-container>
+                    <label>Location</label>
+                    <md-select required ng-model="item.location">
+                        <md-option ng-repeat="location in locations"
+                            ng-value="location.code">
+                            {{ location.display_name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <div flex>
+                    <h3 class="section-subheader">History</h3>
+                    <md-list class="md-dense">
+                        <md-list-item class="md-2-line" ng-repeat="tfr in item.transfers">
+                            <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && tfr.is_addition">add</md-icon>
+                            <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && !tfr.is_addition">done</md-icon>
+                            <md-icon class="md-avatar-icon md-warn" ng-if="!tfr.transfer_complete">hourglass_empty</md-icon>
+                            <div class="md-list-item-text">
+                                <h3>{{ tfr.amount_taken }}{{ tfr.amount_measure }}</h3> 
+                                <p>{{ tfr.date_created|date:"medium" }}</p>
+                            </div>
+                            <md-button 
+                                ng-if="!tfr.transfer_complete" 
+                                ng-click="completeTransfer(tfr)"
+                                class="md-secondary md-icon-button md-warn">
+                                <md-icon>done</md-icon>
+                            </md-button>
+                        </md-list-item>
+                    </md-list>
+                </div>
+                <div flex>
+                    <h3 class="section-subheader">Properties</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

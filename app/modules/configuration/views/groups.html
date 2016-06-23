@@ -1,0 +1,54 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createGroup()">
+            <md-icon>add</md-icon>
+            Create a group
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>Groups</span>
+            <span flex></span>
+            <md-input-container class="md-body-1 toolbar-input">
+                <md-icon>search</md-icon>
+                <input aria-label="search groups" 
+                    type="search" ng-model="search">
+            </md-input-container>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table>
+            <thead md-head md-order="query.ordering" md-on-redorder="onSortItems">
+                <tr md-row>
+                    <th md-column md-order-by="name">Name</th>
+                    <th md-column></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="item" ng-repeat="item in groups">
+                    <td md-cell>{{ item.name }}</td>
+                    <td md-cell>
+                        <md-button class="md-icon-button"
+                            aria-label="Edit item"
+                            ng-click="editItem(item.id)">
+                            <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button md-warn"
+                            aria-label="Delete item"
+                            ng-click="deleteItem(item.id)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-page="groups.meta.current"
+        md-options="[10,20,50,100]"
+        md-on-paginate="onPaginateItems"
+        md-total="{{ groups.meta.count }}" md-page-select>
+    </md-table-pagination>
+</md-card>

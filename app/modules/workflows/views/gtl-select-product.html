@@ -1,0 +1,89 @@
+<div layout="column">
+    <div layout="row" layout-align="start center">
+        <md-input-container flex class="no-error">
+            <label>Filter</label>
+            <input ng-model="filterText">
+        </md-input-container>
+    </div>
+    <div layout="row">
+        <md-button 
+            class="md-icon-button"
+            ng-click="selectAll(selected)">
+            <md-icon>done_all</md-icon> 
+        </md-button>
+        <md-button 
+            class="md-icon-button"
+            ng-click="deselectAll(selected)">
+            <md-icon>clear</md-icon> 
+        </md-button>
+        <span flex></span>
+        <md-button 
+            class="md-icon-button"
+            ng-click="selectAll(selectedToUse)">
+            <md-icon>done_all</md-icon> 
+        </md-button>
+        <md-button 
+            class="md-icon-button"
+            ng-click="deselectAll(selectedToUse)">
+            <md-icon>clear</md-icon> 
+        </md-button>
+    </div>
+</div>
+<div layout="row">
+    <div flex layout="column">
+        <md-list flex>
+            <md-list-item ng-show="productsAvailable.length == 0">
+                No products are currently available.
+            </md-list-item>
+            <md-list-item class="md-1-line"
+                ng-repeat="item in productsAvailable">
+                <md-checkbox
+                    ng-click="toggle(item, selected)"
+                    ng-checked="exists(item, selected)"
+                    ng-show="!isEnabled(item, productsList)"
+                    aria-label="Select {{ item.name }}"></md-checkbox>
+                <div class="md-list-item-text">
+                    <b>{{ item.product_identifier }}</b> {{ item.name }}
+                </div>
+            </md-list-item>
+        </md-list>
+        <div layout="row" layout-align="center center">
+            <md-button ng-click="gotoPreviousPage()"
+                class="md-icon-button"
+                ng-disabled="currentPage == previousPage">
+                <md-icon>chevron_left</md-icon>
+            </md-button>
+            <span flex>Page {{ currentPage}} of {{ numPages }}</span>
+            <md-button ng-click="gotoNextPage()"
+                class="md-icon-button"
+                ng-disabled="currentPage == nextPage">
+                <md-icon>chevron_right</md-icon>
+            </md-button>
+        </div>
+    </div>
+    <div layout="column" layout-align="center center">
+        <md-button ng-click="addToSelected()"
+            class="md-icon-button">
+            <md-icon>arrow_forward</md-icon>
+        </md-button>
+        <md-button ng-click="removeFromSelected()"
+            class="md-icon-button">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
+    </div>
+    <md-list flex="40">
+        <md-list-item ng-show="productsList.length == 0">
+            No products are currently selected to add to workflow.
+        </md-list-item>
+        <md-list-item class="md-1-line"
+            ng-repeat="item in productsList">
+            <md-checkbox
+                ng-click="toggle(item, selectedToUse)"
+                ng-checked="exists(item, selectedToUse)"
+                aria-label="Select {{ item.name }}"></md-checkbox>
+            <div class="md-list-item-text">
+                <b>{{ item.product_identifier }}</b> {{ item.name }}
+            </div>
+        </md-list-item>
+    </md-list>
+</div>

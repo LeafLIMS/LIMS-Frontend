@@ -1,0 +1,29 @@
+<md-dialog aria-label="Add product(s) to a workflow" flex="60">
+    <form ng-submit="add()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>Add products(s) to a workflow</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <md-list>
+                <md-list-item class="md-2-line"
+                    gm-product-list-item item="item"
+                    ng-repeat="item in productsAvailable">
+                    <md-checkbox class="md-secondary" 
+                        ng-click="toggle(item, selected)"
+                        ng-checked="exists(item, selected)"></md-checkbox>
+                </md-list-item>
+            </md-list>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Add</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

@@ -1,0 +1,59 @@
+<md-dialog aria-label="Create a new product" flex="60">
+    <form ng-submit="create()" novalidate>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Create a new product</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <md-input-container>
+                <label>Name</label>
+                <input ng-model="product.name" required>
+            </md-input-container>
+            <md-input-container>
+                <label>Product type</label>
+                <md-select ng-model="product.product_type"
+                    aria-label="Product type" required>
+                    <md-option>DNA</md-option>
+                    <md-option>RNA</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <label>Sequence</label>
+                <textarea ng-model="product.submitted_sequence" 
+                    required></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Product status</label>
+                <md-select ng-model="product.status"
+                    aria-label="Product status" required>
+                    <md-option selected>Submitted</md-option>
+                    <md-option>Added</md-option>
+                    <md-option>Received</md-option>
+                    <md-option>In Progress</md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <label>Optimised sequence</label>
+                <textarea mg-model="product.optimised_sequence"></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Optimised for</label>
+                <md-select ng-model="product.optimised_for"
+                    aria-label="Optimised for" required>
+                    <md-option ng-repeat="org in organisms" ng-value="org.id">
+                        {{ org.name }}</md-option>
+                </md-select>
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Create</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

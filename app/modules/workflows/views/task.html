@@ -1,0 +1,140 @@
+<md-dialog aria-label="Workflow task" flex="95" ng-cloak>
+    <form name="form" ng-submit="form.$valid && complete()" novalidate>
+        <md-toolbar> 
+            <div class="md-toolbar-tools">
+                <h2>{{ task.name }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Task setup">
+                    <md-content class="md-dialog-content" layout="row" ng-if="!isStarted">
+                        <div flex="30" class="right-padded">
+                            <h3>Input Files</h3>
+                            <div ng-repeat="file in task.input_files">
+                                <span class="field-label">{{ file }}</span>
+                                <md-button ng-disabled="isStarted" ngf-select ng-model="input_files[file]" class="md-raised">
+                                   Select file
+                                </md-button> 
+                                <p class="input-text">{{ input_files[file].name }}</p>
+                            </div>
+                            <h3>Inputs</h3>
+                            <span class="field-label">Input items from products</span>
+                            <div layout="row">
+                                <md-input-container flex="80">
+                                    <label>{{ task.product_input }} amount</label>  
+                                    <input required ng-model="task.product_input_amount">
+                                </md-input-container>
+                                <span class="input-text" flex>{{ task.product_input_measure }}</span>
+                            </div>
+                            <span class="field-label">Labware to use</span>
+                            <md-autocomplete
+                                md-selected-item-change="setLabwareItem(lwItem)"
+                                md-selected-item="lwItem"
+                                md-search-text="lwText"
+                                md-items="item in filterLabwareItems(lwText, task.labware)"
+                                md-item-text="item.name"
+                                md-min-length="0"
+                                md-select-on-match
+                                required
+                                md-floating-label="Choose {{ task.labware }} from inventory">
+                                <md-item-template>
+                                    <span md-highlight-text="lwText"
+                                        md-highlight-flags="^i">
+                                        {{ item.identifier }}: {{ item.name }}
+                                    </span>
+                                </md-item-template>
+                                <md-not-found>
+                                    There where no items found matching your query in the inventory.
+                                </md-not-found>
+                            </md-autocomplete> 
+                            <div ng-repeat="field in task.input_fields">
+                                <span class="field-label">{{ field.label }}</span>
+                                <gtl-input-field is-disabled="isStarted" field="field">
+                                </gtl-input-field>
+                            </div>
+                        </div>
+                        <div flex class="right-padded">
+                            <h3>Steps</h3>
+                            <div ng-repeat="field in task.step_fields">
+                                <span class="field-label">{{ field.label }}</span>
+                                <gtl-step-field is-disabled="isStarted" field="field">
+                                </gtl-step-field>
+                            </div>
+                            <h3>Constants</h3>
+                            <div layout="row" layout-align="start center" layout-wrap>
+                                <div ng-repeat="field in task.variable_fields" flex="33">
+                                    <span class="field-label">{{ field.label }}</span>
+                                    <gtl-variable-field is-disabled="isStarted" field="field">
+                                    </gtl-variable-field>
+                                </div>
+                            </div>
+                            <h3>Calculations</h3>
+                            <div ng-repeat="field in task.calculation_fields">
+                                <span class="field-label">{{ field.label }}</span>
+                                <gtl-calculation-field is-disabled="isStarted" field="field">
+                                </gtl-calculation-field>
+                            </div>
+                        </div>
+                        <div flex="30">
+                            <h3 ng-show="task.output_files.length > 0">Output Files</h3>
+                            <div ng-repeat="file in task.output_files">
+                                <span class="field-label">{{ file }}</span>
+                                <md-button ng-click="getOutputFile(file)">Get {{ file }} file</md-button>
+                            </div>
+                            <h3>Outputs</h3>
+                            <div ng-repeat="field in task.output_fields">
+                                <span class="field-label">{{ field.label }}</span>
+                                <gtl-output-field is-disabled="isStarted" field="field">
+                                </gtl-output-field>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab 
+                    ng-disabled="form.$invalid"
+                    md-on-select="getRequirements()" 
+                    label="Task run requirements">
+                    <md-table-container>
+                        <table md-table> 
+                            <thead md-head> 
+                                <tr md-row>
+                                    <th md-column>Item name</th> 
+                                    <th md-column>Identifier</th> 
+                                    <th md-column>Amount needed</th>
+                                    <th md-column>Amount available</th>
+                                    <th md-column>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="r in requirements">
+                                    <td md-cell>{{ r.item.name }}</td>
+                                    <td md-cell>{{ r.item.identifier }}</td>
+                                    <td md-cell>{{ r.amount_taken }}{{ r.amount_measure.symbol }}</td>
+                                    <td md-cell>{{ r.item.amount_available }}{{ r.item.amount_measure.symbol }}</td>
+                                    <td md-cell>{{ r.item.location.name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button 
+                ng-disabled="form.$invalid"
+                ng-click="startTask()"
+                class="md-primary">
+                <md-icon>play_circle_outline</md-icon>
+                Start
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

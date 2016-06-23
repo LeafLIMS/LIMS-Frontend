@@ -1,0 +1,57 @@
+<md-dialog aria-label="Choose file(s)" flex="60">
+    <form novalidate ng-submit="choose()">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                File Picker
+                <span flex></span>
+                <md-button ng-click="cancel()" class="md-icon-button">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div layout="row">
+                <md-list flex="20">
+                    <md-subheader>Locations</md-subheader>
+                    <md-list-item ng-repeat="loc in locations"
+                        ng-class="{'selected': selectedLocation.name === loc.name}"
+                        ng-click="setLocation(loc)">
+                        {{ loc.name }}
+                    </md-list-item>
+                    <md-list-item class="md-clickable"> 
+                        <md-button class="md-no-style" ngf-select ng-model="chosenFile">
+                            <div class="md-list-item-inner">
+                                Your computer
+                            </div>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <div flex layout="column" layout-padding>
+                    <md-grid-list md-cols="4" 
+                        md-gutter="0.5em"
+                        md-row-height="9em">
+                        <md-grid-tile ng-repeat="f in availableFiles"
+                            ng-click="selectFile(f)"
+                            ng-class="{'selected-border': selectedFile.filename == f.filename}">
+                            <img ng-src="{{ f.filename }}" 
+                                class="responsive-image"
+                                alt="{{ f.file_name }}">
+                            <md-grid-tile-footer layout-padding>
+                                {{ f.file_name }}
+                            </md-grid-tile-footer>
+                        </md-grid-tile>
+                    <md-grid-list>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="cancel()" class="md-secondary">
+                Cancel
+            </md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Choose
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

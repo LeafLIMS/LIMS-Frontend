@@ -1,0 +1,35 @@
+<md-dialog aria-label="Create a group" flex="60">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>Create/update group</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input md-maxlength="255"
+                        required ng-model="group.name">
+                </md-input-container>
+                <gm-multi-select 
+                    available="permissions"
+                    selected="group.permissions"
+                    selected-label="Selected permissions"
+                    available-label="Available permissions">
+                </gm-multi-select>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

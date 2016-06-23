@@ -1,0 +1,24 @@
+<md-dialog aria-label="Rejected items" flex="50">
+    <md-toolbar class="md-warn">
+        <div class="md-toolbar-tools">
+            <h2>Rejected items</h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div layout="column" class="md-dialog-content"> 
+            <p>The following items from your file where NOT imported
+            due to an error.</p>
+            <div ng-repeat="r in rejected" layout="row" 
+                layout-align="start center">
+                <b flex="25">{{ r.name }}</b>
+                <div flex ng-repeat="(field, error) in r.errors">
+                    <p ng-repeat="e in error">{{ field }}: {{ e }}</p>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <span flex></span>
+        <md-button ng-click="hide()">Understood</md-button>
+    </md-dialog-actions>
+</md-dialog>

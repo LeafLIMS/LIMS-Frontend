@@ -1,0 +1,12 @@
+/node_modules
+/dist
+/.tmp
+/.sass-cache
+/bower_components
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+.DS_Store

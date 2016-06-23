@@ -1,0 +1,384 @@
+<md-dialog aria-label="Create a task template" flex="90">
+    <form name="taskForm" ng-submit="save()" novalidate ng-show"task">
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Create a new task template</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <div layout="row">
+                    <md-input-container flex="40">
+                        <label>Name of template</label>
+                        <input required ng-model="task.name">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Description of template</label>
+                        <textarea ng-model="task.description"></textarea>
+                    </md-input-container>
+                </div>
+                <h3>Configuration</h3>
+                <div layout="row">
+                    <div layout="row">
+                        <md-autocomplete flex
+                            md-selected-item="inputSelected"
+                            md-search-text="inputSearchText"
+                            md-selected-item-change="inputChanged(item)"
+                            md-items="item in filterInputTypes(inputSearchText)"
+                            md-item-text="item.name"
+                            md-select-on-match
+                            md-floating-label="Input type from product">
+                            <md-item-template>
+                                <span md-highlight-text="inputSearchText" 
+                                    md-highlight-flags="^i">
+                                    {{ item.name }}
+                                </span>
+                            </md-item-template>
+                            <md-not-found>
+                                Sorry, no items where found matching your text
+                            </md-not-found>
+                        </md-autocomplete>
+                        <md-input-container class="task-field-amount">
+                            <label>Amount</label>
+                            <input type="number" step="1" 
+                                ng-disabled="field.from_calculation"
+                                required
+                                aria-label="product input amount"
+                                ng-model="task.product_input_amount">
+                        </md-input-container>
+                        <md-autocomplete flex
+                            md-selected-item-change="setMeasure(mItem)"
+                            md-selected-item="mItem"
+                            md-search-text="mText"
+                            md-items="item in filterMeasures(mText)"
+                            md-item-text="item.symbol"
+                            md-min-length="0"
+                            md-select-on-match
+                            required
+                            md-floating-label="Choose amount measure">
+                            <md-item-template>
+                                <span md-highlight-text="mText"
+                                    md-highlight-flags="^i">
+                                    {{ item.name }} ({{ item.symbol }})
+                                </span>
+                            </md-item-template>
+                        </md-autocomplete> 
+                    </div>
+                    <md-autocomplete flex
+                        md-selected-item-change="setLabware(lbItem)"
+                        md-selected-item="lbItem"
+                        md-search-text="lbText"
+                        md-items="item in filterInputTypes(lbText)"
+                        md-item-text="item.name"
+                        md-min-length="0"
+                        md-select-on-match
+                        required
+                        md-floating-label="Choose type of labware">
+                        <md-item-template>
+                            <span md-highlight-text="lbText"
+                                md-highlight-flags="^i">
+                                {{ item.name }}
+                            </span>
+                        </md-item-template>
+                    </md-autocomplete> 
+                </div>
+                <md-chips flex="50"
+                    ng-model="task.capable_equipment"
+                    md-autocomplete-snap
+                    md-require-match
+                    md-transform-chip="transformChip($chip)">
+                    <md-autocomplete
+                        md-selected-item="ceSelected"
+                        md-search-text="ceText"
+                        md-items="item in filterEquipment(ceText)"
+                        md-item-text="item.name"
+                        md-select-on-match
+                        placeholder="Choose capable equipment">
+                        <span md-highlight-text="ceText">
+                            {{ item.name }}
+                        </span>
+                    </md-autocomplete>
+                </md-chips>
+                <div layout="row">
+                    <md-chips flex
+                        ng-model="task.input_files"
+                        md-autocomplete-snap
+                        md-require-match
+                        md-transform-chip="transformChip($chip)">
+                        <md-autocomplete
+                            md-selected-item="ifSelected"
+                            md-search-text="ifText"
+                            md-items="item in filterFileTemplates(ifText)"
+                            md-item-text="item.name"
+                            md-select-on-match
+                            placeholder="Choose input files">
+                            <span md-highlight-text="ifText">
+                                {{ item.name }}
+                            </span>
+                        </md-autocomplete>
+                    </md-chips>
+                    <md-chips flex
+                        ng-model="task.output_files"
+                        md-autocomplete-snap
+                        md-require-match
+                        md-transform-chip="transformChip($chip)">
+                        <md-autocomplete
+                            md-selected-item="ofSelected"
+                            md-search-text="ofText"
+                            md-items="item in filterFileTemplates(ofText)"
+                            md-item-text="item.name"
+                            md-select-on-match
+                            placeholder="Choose output files">
+                            <span md-highlight-text="ofText">
+                                {{ item.name }}
+                            </span>
+                        </md-autocomplete>
+                    </md-chips>
+                </div>
+                <div ng-show="task.id">
+                    <h3>Fields</h3>
+                    <div layout="row">
+                        <div flex="33" layout="column">
+                            <h4>Inputs</h4> 
+                            <!-- Stuff this; just do it in a directive! -->
+                            <div ng-repeat="field in task.input_fields"
+                                ng-form="fieldForm"
+                                ng-class="{'field-save-required': fieldForm.$dirty}"
+                                layout="row" layout-align="start center">
+                                <gtl-input-config-field flex
+                                    field="field">
+                                </gtl-input-config-field>
+                                <div layout="column">
+                                    <md-button 
+                                        ng-if="field.id && fieldForm.$dirty"
+                                        ng-click="updateField('input', field, fieldForm)"
+                                        class="md-icon-button md-warn">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="field.id"
+                                        ng-click="removeField('input', $index, true)"
+                                        class="md-icon-button">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="saveField('input', field)"
+                                        class="md-icon-button md-primary">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="removeField('input', $index)"
+                                        class="md-icon-button">
+                                        <md-icon>cancel</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row" layout-align="center">
+                                <md-button ng-click="addField('input')"
+                                    class="md-primary">
+                                    <md-icon>add</md-icon>
+                                    Add input
+                                </md-button>
+                            </div>
+                        </div>
+                        <div flex="33">
+                            <h4>Variables</h4> 
+                            <div ng-repeat="field in task.variable_fields"
+                                ng-form="fieldForm"
+                                ng-class="{'field-save-required': fieldForm.$dirty}"
+                                layout="row" layout-align="start center">
+                                <gtl-variable-config-field 
+                                    flex
+                                    field="field"> 
+                                </gtl-variable-config-field>
+                                <div layout="column">
+                                    <md-button 
+                                        ng-if="field.id && fieldForm.$dirty"
+                                        ng-click="updateField('variable', field)"
+                                        class="md-icon-button md-warn">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="field.id"
+                                        ng-click="removeField('variable', $index, true)"
+                                        class="md-icon-button">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="saveField('variable', field)"
+                                        class="md-icon-button md-primary">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="removeField('variable', $index)"
+                                        class="md-icon-button">
+                                        <md-icon>cancel</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row" layout-align="center">
+                                <md-button ng-click="addField('variable')"
+                                    class="md-primary">
+                                    <md-icon>add</md-icon>
+                                    Add variable
+                                </md-button>
+                            </div>
+                        </div>
+                        <div flex="33">
+                            <h4>Calculations</h4> 
+                            <div ng-repeat="field in task.calculation_fields"
+                                ng-form="fieldForm"
+                                ng-class="{'field-save-required': fieldForm.$dirty}"
+                                layout="row" layout-align="start center">
+                                <gtl-calculation-config-field 
+                                    flex
+                                    editable="true"
+                                    measures="measures"
+                                    field="field"> 
+                                </gtl-calculation-config-field>
+                                <div layout="column">
+                                    <md-button 
+                                        ng-if="field.id && fieldForm.$dirty"
+                                        ng-click="updateField('calculation', field)"
+                                        class="md-icon-button md-warn">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="field.id"
+                                        ng-click="removeField('calculation', $index, true)"
+                                        class="md-icon-button">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="saveField('calculation', field)"
+                                        class="md-icon-button md-primary">
+                                        <md-icon>done</md-icon>
+                                    </md-button>
+                                    <md-button 
+                                        ng-if="!field.id"
+                                        ng-click="removeField('calculation', $index)"
+                                        class="md-icon-button">
+                                        <md-icon>cancel</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row" layout-align="center">
+                                <md-button ng-click="addField('calculation')"
+                                    class="md-primary">
+                                    <md-icon>add</md-icon>
+                                    Add calculation
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>Steps</h4>
+                    <div ng-repeat="field in task.step_fields"
+                        ng-form="fieldForm"
+                        ng-class="{'field-save-required': fieldForm.$dirty}"
+                        layout="row" layout-align="start center">
+                        <gtl-step-config-field 
+                            flex
+                            field="field"> 
+                        </gtl-step-config-field>
+                        <div layout="column">
+                            <md-button 
+                                ng-if="field.id && fieldForm.$dirty"
+                                ng-click="updateField('step', field)"
+                                class="md-icon-button md-warn">
+                                <md-icon>done</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="field.id"
+                                ng-click="removeField('step', $index, true)"
+                                class="md-icon-button">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="!field.id"
+                                ng-click="saveField('step', field)"
+                                class="md-icon-button md-primary">
+                                <md-icon>done</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="!field.id"
+                                ng-click="removeField('step', $index)"
+                                class="md-icon-button">
+                                <md-icon>cancel</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <md-button ng-click="addField('step')"
+                            class="md-primary">
+                            <md-icon>add</md-icon>
+                            Add step
+                        </md-button>
+                    </div>
+                    <h4>Outputs</h4> 
+                    <div ng-repeat="field in task.output_fields"
+                        ng-form="fieldForm"
+                        ng-class="{'field-save-required': fieldForm.$dirty}"
+                        layout="row" layout-align="start center">
+                        <gtl-output-config-field 
+                            flex
+                            field="field"> 
+                        </gtl-output-config-field>
+                        <div layout="column">
+                            <md-button 
+                                ng-if="field.id && fieldForm.$dirty"
+                                ng-click="updateField('output', field)"
+                                class="md-icon-button md-warn">
+                                <md-icon>done</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="field.id"
+                                ng-click="removeField('output', $index, true)"
+                                class="md-icon-button">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="!field.id"
+                                ng-click="saveField('output', field)"
+                                class="md-icon-button md-primary">
+                                <md-icon>done</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="!field.id"
+                                ng-click="removeField('output', $index)"
+                                class="md-icon-button">
+                                <md-icon>cancel</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="center">
+                        <md-button ng-click="addField('output')"
+                            class="md-primary">
+                            <md-icon>add</md-icon>
+                            Add output
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button ng-click="!taskForm.$invalid && saveAddFields()" ng-if="!task.id" 
+                class="md-primary">
+                Save and add fields
+            </md-button>
+            <md-button type="submit" class="md-primary" ng-if="task.id">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

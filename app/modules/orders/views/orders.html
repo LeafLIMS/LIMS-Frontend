@@ -1,0 +1,67 @@
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>{{ filters || 'All orders' }}</span>
+            <span flex></span>
+            <md-input-container class="md-body-1 toolbar-input">
+                <md-icon>search</md-icon>
+                <input type="search" ng-model="search">
+            </md-input-container>
+            <md-menu>
+                <md-button aria-label="Table actions"
+                    class="md-icon-button"
+                    ng-click="$mdOpenMenu($event)">
+                    <md-icon md-menu-origin>more_vert</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button>
+                            <md-icon md-menu-align-target>delete</md-icon>
+                            Delete Item(s) 
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button>
+                            <md-icon md-menu-align-target>add_to_photos</md-icon>
+                            Create project(s) from
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table md-row-select ng-model="selected">
+            <thead md-head md-order="query.order">
+                <tr md-row>
+                    <th md-column>Name</th>
+                    <th md-column>Account</th>
+                    <th md-column>Status</th>
+                    <th md-column>Services</th>
+                    <th md-column>Submitted</th>
+                    <th md-column>Last updated</th>
+                    <th md-column>Project</th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="selected" ng-repeat="item in orders"
+                    ui-sref="order_details({id: item.id})">
+                    <td md-cell>{{ item.name }}</td>
+                    <td md-cell>{{ item.crm.account }}</td>
+                    <td md-cell>{{ item.status }}</td>
+                    <td md-cell class="capitalise">{{ item.services.join(", ") }}</td>
+                    <td md-cell>{{ item.date_placed|date:"medium" }}</td>
+                    <td md-cell>{{ item.date_updated|date:"medium" }}</td>
+                    <td md-cell>
+                        <gm-link type="project" 
+                            identifier="item.project.identifier">
+                        </gm-link>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="10" md-page="orders.meta.current"
+        md-total="{{ orders.meta.count }}" md-page-select>
+    </md-table-pagination>
+</md-card>

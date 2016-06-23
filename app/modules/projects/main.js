@@ -1,0 +1,498 @@
+'use strict';
+
+var app = angular.module('limsFrontend');
+
+app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
+    $mdDialog) {
+
+    PageTitle.set('Projects');
+    $scope.removePadding = true;
+
+    $scope.query = {
+        ordering: 'identifier',
+        limit: 10
+    };
+
+    $scope.selected = [];
+
+    var refreshData = function() {
+        ProjectService.projects($scope.query).then(function(data) {
+            $scope.projects = data;
+        });
+    }
+    refreshData();
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    });
+
+    $scope.toggleFilter = function(fieldName, value) {
+        // If value == undefined then boolean toggle
+        if(fieldName in $scope.query) {
+            delete $scope.query[fieldName]
+        } else {
+            if(!value) {
+                var value = 'True';
+            }
+            $scope.query[fieldName] = value;
+        }
+        refreshData();
+    };
+
+    $scope.onSortItems = function(order) {
+        refreshData();
+    };
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.createProject = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/createproject.html',
+            controller: function($scope, $mdDialog, OrderService, 
+                UserService, CRMService, $state) {
+
+                $scope.project = {};
+
+                $scope.filterCRMProjects = function(searchText) {
+                    return CRMService.projects({search: searchText});
+                };
+
+                $scope.fillDetails = function(item) {
+                    $scope.project.name = item.Name;
+                    $scope.project.description = item.Description;
+                    $scope.project_identifier = item.Id;
+                };
+
+                $scope.filterOrders = function(searchText) {
+                    return OrderService.autocomplete(searchText); 
+                };
+
+                $scope.orderChanged = function(itemSelected) {
+                    if(itemSelected.data.products.length > 0) {
+                        $scope.product_count = itemSelected.data.products.length;
+                    }
+                };
+
+                UserService.listStaff().then(function(data) {
+                    $scope.staff = data;
+                });
+
+                $scope.create = function() {
+                    if($scope.orderSelected) {
+                        $scope.project.order = $scope.orderSelected.id;
+                    }
+                    ProjectService.createProject($scope.project).then(function(data) {
+
+                        
+                        CRMService.linkProject(data.id, $scope.project_identifier).then(function(crmData) {
+                            if($scope.orderSelected) {
+                                var products = $scope.orderSelected.data.products;
+                                for(var i=0; i<products.length; i++) {
+                                    products[i]['project'] = data.id;
+                                    ProjectService.addProduct(products[i]);
+                                }
+                            }
+                            $state.go('project_details', {id: data.id}); 
+                            $mdDialog.hide();
+                        });
+
+                    });
+                };
+
+                $scope.cancel = function() {
+                    $mdDialog.cancel();
+                };
+
+            }
+        });
+    };
+
+    $scope.deleteItems = function(selected) {
+        var d = $mdDialog.confirm()
+            .title('Delete '+selected.length+' projects?')
+            .ok('Delete')
+            .cancel('No');
+        $mdDialog.show(d).then(function() {
+            var promises = [];
+            _.each(selected, function(obj) {
+                var p = ProjectService.deleteItem(obj.id);
+                promises.push(p);
+            });
+            $q.all(promises).then(function(data) {
+                $scope.refreshItemData();
+            });
+        });
+    };
+
+});
+
+app.controller('ProjectDetailsCtrl', function($scope, PageTitle, 
+    ProjectService, WorkflowService, $stateParams, $mdDialog, $rootScope, 
+    $q, UserService, OrganismService, $state) {
+
+    $scope.removePadding = true;
+
+    var getProjectData = function() {
+        ProjectService.project_details($stateParams.id).then(function(data) {
+            $scope.project = data;
+            PageTitle.set('Project ' +$scope.project.project_identifier + ': ' + $scope.project.name);
+        });
+    };
+    getProjectData();
+
+    UserService.listStaff().then(function(data) {
+        $scope.staff = data;
+    });
+
+    OrganismService.organisms().then(function(data) {
+        $scope.organisms = data;
+    });
+
+    $scope.selected = [];
+    $scope.currentProductId = undefined;
+
+    $scope.initialProductCount = 0;
+
+    $scope.getProductData = function(searchText) {
+        var params = {
+            project: $stateParams.id,
+            limit: 200,
+            ordering: '-id',
+        }
+        if(searchText)
+            params.search = searchText;
+        return ProjectService.products(params);
+    };
+
+    $scope.$on('$stateChangeSuccess', function(e, toState, toParams) {
+        if(toState.name == 'product_details') {
+            $scope.currentProductId = toParams.productId;
+        }
+    });
+
+    $scope.getProductData().then(function(data) {
+        $scope.products = data;
+        $scope.initialProductCount = data.length;
+        if(data.length > 0) {
+            if($state.params.productId) {
+                $scope.currentProductId = $state.params.productId;
+            } else {
+                $scope.currentProductId = data[0].id;
+                $state.go('product_details', 
+                        {productId: data[0].id}, 
+                        {location: 'replace'}
+                        );
+            }
+        }
+    });
+
+    $scope.$watch('productFilter', function(n,o) {
+        $scope.getProductData(n).then(function(data) {
+            $scope.products = data;
+            if(data.length > 0 && (n !== undefined && o !== undefined)) {
+                $scope.currentProductId = data[0].id;
+            }
+        });
+    });
+
+    $scope.linkCRM = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/linkcrm.html',
+            controller: function($scope, $mdDialog, CRMService, projectId) {
+
+                $scope.cancel = $mdDialog.cancel;
+
+                $scope.filterCRMProjects = function(searchText) {
+                    return CRMService.projects({search: searchText});
+                };
+
+                $scope.setCRMProject = function(item) {
+                    $scope.crm_project = item.Id;
+                    console.log($scope.crm_project, item);
+                };
+
+                $scope.add = function() {
+                    CRMService.linkProject(projectId, $scope.crm_project)
+                        .then(function() {
+                            $mdDialog.hide();
+                        });
+                };
+            },
+            locals: {
+                projectId: $scope.project.id,
+            }
+        }).then(function() {
+            getProjectData();
+        });
+    };
+
+    $scope.createProduct = function(projectId) {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/createproduct.html',
+            controller: 'CreateProductCtrl',
+            locals: {
+                projectId: projectId,
+                designTypes: $scope.designTypes,
+            }
+        });
+
+    };
+
+    $scope.switchWorkflow = function(item, workflowId) {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/switchworkflow.html',
+            controller: 'switchWorkflowCtrl',
+            locals: {
+                items: [item],
+                workflowId: workflowId
+            }
+        });
+    };
+
+    $scope.startWorkflow = function() {
+        var canAddToWorkflow = _.filter($scope.selected,
+            function(obj) {
+            return obj.on_workflow_as.length == 0;
+        });
+        // Use switch workflow instead!
+        $mdDialog.show({
+            templateUrl: 'modules/workflows/views/startworkflow.html',
+            controller: 'startWorkflowCtrl', 
+            locals: {
+                preSelected: canAddToWorkflow,
+            }
+        }).then(function() {
+            $scope.getProductData();
+        });
+    };
+
+    $scope.selectAll = function() {
+        _.each($scope.products, function(obj) {
+            $scope.selected.push(obj);
+        });
+    };
+
+    $scope.deselectAll = function() {
+        _.each($scope.productsAvailable, function(obj) {
+            var idx = $scope.selected.indexOf(obj);
+            if (idx > -1) 
+                $scope.selected.splice(idx, 1);
+        });
+    };
+
+    $scope.toggle = function (item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) list.splice(idx, 1);
+        else list.push(item);
+    };
+
+    $scope.exists = function (item, list) {
+        return list.indexOf(item) > -1;
+    };
+
+    $rootScope.$on('project-product-added', $scope.getProductData);
+    $rootScope.$on('product-design-changed', $scope.getDesigns);
+
+});
+
+app.controller('ProductDetailsCtrl', function($scope, $stateParams, 
+    ProjectService, InventoryService, $mdDialog) {
+
+    var getProduct = function() {
+        ProjectService.getProduct($stateParams.productId).then(function(data) {
+            $scope.product = data; 
+            $scope.pText = data.product_type;
+            $scope.getDesigns();
+        });
+    };
+    getProduct();
+
+    $scope.filterProductType = function(filterText) {
+        return InventoryService.itemTypes({search: filterText});
+    };
+
+    $scope.setProductType = function(item) {
+        $scope.product.product_type = item.name;
+    };
+
+    $scope.updateProduct = function() {
+    };
+
+    $scope.addInventoryItem = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/addinventoryitem.html',
+            controller: function($scope, $mdDialog, ProjectService,
+                InventoryService, product) {
+
+                $scope.cancel = $mdDialog.cancel;
+
+                $scope.filterItems = function(searchText) {
+                    return InventoryService.items({search: searchText});
+                };
+
+                $scope.setItem = function(item) {
+                    $scope.itemId = item.id;
+                };
+
+                $scope.add = function() {
+                    var linked_items = _.map(product.linked_inventory,
+                        function(obj) {
+                            return obj.id;
+                        });
+                    linked_items.push($scope.itemId);
+                    var data = {
+                        linked_inventory: linked_items,
+                    }; 
+                    ProjectService.updateProduct($stateParams.productId, data).then(
+                           function(data) {
+                               $mdDialog.hide();
+                        }); 
+                };
+            },
+            locals: {
+                product: $scope.product,
+            }
+        }).then(function() {
+            getProduct();
+        });
+    };
+
+    $scope.removeInventoryItem = function(index) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .title('Remove this item linkage?')
+            .ok('Yes')
+            .cancel('No')
+        ).then(function() {
+            $scope.product.linked_inventory.splice(index, 1);
+            var linked_items = _.map($scope.product.linked_inventory,
+                function(obj) {
+                    return obj.id;
+                });
+            var data = {
+                linked_inventory: linked_items,
+            }; 
+            ProjectService.updateProduct($stateParams.productId, data).then(
+                   function(data) {
+                       getProduct();
+                }); 
+        });
+    };
+
+    $scope.designs = [];
+    $scope.getDesigns = function() { 
+    };
+});
+
+app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService, 
+    OrganismService, UserService, InventoryService, $rootScope, 
+    projectId, designTypes) {
+
+    OrganismService.organisms().then(function(data) {
+        $scope.organisms = data;
+    });
+
+    InventoryService.itemTypes().then(function(data) {
+        $scope.product_types = data;
+    }); 
+
+    $scope.designTypes = designTypes;
+    $scope.designs = {};
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+
+    $scope.create = function() {
+        $scope.product.created_by = UserService.getUser().id;
+        $scope.product.project = projectId;
+        ProjectService.addProduct($scope.product).then(function(data) {
+            $rootScope.$broadcast('project-product-added');
+            var promises = [];
+            _.each($scope.designs, function(obj, key) {
+                var params = new FormData();
+                params.append('design_type', key);
+                params.append('designfile', obj.designfile);
+                params.append('product', data.id);
+                promises.push(p);
+            });
+            $q.all(promises).then(function(data) {
+                $mdDialog.hide();
+            });
+        });
+    };
+
+});
+
+app.service('ProjectService', function(Restangular) {
+
+    this.projects = function(params) {
+        if(!params)
+            var params = {};
+        return Restangular.all('projects').getList(params);
+    };
+
+    this.project_details = function(identifier) {
+        return Restangular.one('projects', identifier).get();
+    };
+
+    this.createProject = function(data) {
+        return Restangular.all('projects').post(data);
+    };
+
+    this.deleteProject = function(identifier) {
+        return Restangular.one('projects', identifier).remove();
+    };
+
+    this.products = function(params) {
+        if(!params)
+            params = {};
+        return Restangular.all('products').getList(params);
+    };
+
+    this.getProduct = function(productId, params) {
+        if(!params)
+            params = {};
+        return Restangular.one('products', productId).get(params);
+    };
+
+    this.addProduct = function(productData) {
+        return Restangular.all('products').post(productData);
+    };
+
+    this.updateProduct = function(productId, productData) {
+        return Restangular.one('products', productId).patch(productData);
+    };
+
+    this.deleteProduct = function(productId) {
+        return Restangular.one('products', productId).remove();
+    };
+
+    this.productStatuses = function(params) {
+        if(!params)
+            params = {};
+        return Restangular.all('productstatuses').getList(params);
+    };
+
+});
+
+app.service('CRMService', function(Restangular) {
+
+    this.projects = function(params) {
+        if(!params)
+            var params = {};
+        return Restangular.all('crm').customGETLIST('project', params);
+    };
+
+    this.linkProject = function(projectId, crmProjectId) {
+        var data = {identifier: crmProjectId, id: projectId}; 
+        return Restangular.all('crm').customPOST(data, 'link');
+    };
+
+});

@@ -1,0 +1,37 @@
+<div class="gm-task-field" 
+    layout="column" flex>
+    <div layout="row" layout-align="start center">
+        <md-input-container class="task-field-amount">
+            <label>Amount</label>
+            <input type="number" step="1" 
+                ng-disabled="field.from_calculation || isDisabled"
+                ng-required="!field.from_calculation"
+                aria-label="{{ field.name }} amount"
+                ng-model="field.amount">
+        </md-input-container>
+        <span class="field-text">
+            {{ field.measure }}
+        </span>
+        <md-autocomplete flex
+            md-selected-item-change="setLookupItem(lItem)"
+            md-selected-item="lItem"
+            md-search-text="lText"
+            md-items="item in filterLookupItems(lText, field.lookup_type)"
+            md-item-text="item.name"
+            md-min-length="0"
+            md-select-on-match
+            required
+            ng-disabled="isDisabled"
+            md-floating-label="Choose {{ field.lookup_type|lowercase }} from inventory">
+            <md-item-template>
+                <span md-highlight-text="lText"
+                    md-highlight-flags="^i">
+                    {{ item.identifier }}: {{ item.name }}
+                </span>
+            </md-item-template>
+            <md-not-found>
+                There where no items found matching your query in the inventory.
+            </md-not-found>
+        </md-autocomplete> 
+    </div>
+</div>

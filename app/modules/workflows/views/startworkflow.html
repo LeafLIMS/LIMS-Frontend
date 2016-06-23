@@ -1,0 +1,31 @@
+<md-dialog aria-label="Start a workflow" flex="60">
+    <form name="form" ng-submit="form.$valid && start()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Start a workflow</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <md-input-container>
+                <label>Workflow to run</label>
+                <md-select ng-model="workflow.workflow"
+                    aria-label="Workflow to run" required>
+                    <md-option ng-repeat="w in availableWorkflows" 
+                        ng-value="w.id">
+                        {{ w.name }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <gtl-select-product products-list="productsSelected"></gtl-select-product>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

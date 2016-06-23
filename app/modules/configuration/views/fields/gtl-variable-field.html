@@ -1,0 +1,36 @@
+<div class="gm-task-field" layout="column" flex>
+    <md-input-container flex >
+        <label>Field label</label>
+        <input ng-model="field.label" required>
+    </md-input-container>
+    <div layout="row" layout-align="start center">
+        <md-input-container ng-class="{'task-field-amount': !field.measure_not_required}">
+            <label>Value</label>
+            <input type="number" step="1" 
+                required
+                aria-label="{{ field.name }} amount"
+                ng-model="field.amount">
+        </md-input-container>
+        <md-autocomplete flex
+            md-selected-item-change="setMeasure(mItem)"
+            md-selected-item="mItem"
+            md-search-text="mText"
+            md-items="item in filterMeasures(mText)"
+            md-item-text="item.symbol"
+            md-min-length="0"
+            md-select-on-match
+            ng-show="!field.measure_not_required"
+            ng-required="!field.measure_not_required"
+            md-floating-label="Choose amount measure">
+            <md-item-template>
+                <span md-highlight-text="mText"
+                    md-highlight-flags="^i">
+                    {{ item.name }} ({{ item.symbol }})
+                </span>
+            </md-item-template>
+        </md-autocomplete> 
+    </div>
+    <md-checkbox flex ng-model="field.measure_not_required">
+        Measure not required
+    </md-checkbox>
+</div>

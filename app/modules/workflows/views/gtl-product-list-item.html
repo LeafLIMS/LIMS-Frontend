@@ -1,0 +1,13 @@
+<md-icon class="md-avatar-icon">data_usage</md-icon>
+<div class="md-list-item-text">
+    <h4>
+        <b>{{ item.product_identifier }}</b>: 
+        {{ item.name|limitTo:"25" }}<span ng-show="item.name.length > 30">&hellip;</span>
+        </h4>
+    <p>{{ item.status }}</p>
+    <div>
+        <md-icon ng-show="item.on_workflows.length > 0">
+        linear_scale</md-icon>
+    </div>
+</div>
+<div ng-transclude></div>

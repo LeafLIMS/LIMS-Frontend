@@ -1,0 +1,19 @@
+<span class="task-field-label">{{ field.name }}</span>
+<div class="task-fields" layout="row" layout-align="start start">
+    <md-input-container ng-if="field.type == 'input' || field.type == 'output'" 
+        class="task-input-amount">
+        <input type="number" step="1" ng-model="field.amount">
+    </md-input-container>
+    <md-input-container ng-if="field.type == 'variable'">
+        <input type="number" step="1" ng-model="field.value">
+    </md-input-container>
+    <span class="task-calculation" ng-if="field.type == 'calculation'">
+        {{ field.calculation }} = {{ field.result }}
+    </span>
+    <span class="task-input-measure">{{ field.measure }}</span>
+    <md-input-container ng-if="field.type == 'input'">
+        <label>{{ field.lookup }}</label>
+        <input flex class="md-input" ng-model="field.item_code">
+    </md-input-container>
+    <span class="task-output-create">{{ field.create }}</span>
+</div>

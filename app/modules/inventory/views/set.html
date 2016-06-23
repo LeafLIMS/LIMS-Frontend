@@ -1,0 +1,43 @@
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>{{ filters || 'All items in set' }}</span>
+            <span flex></span>
+            <md-button ng-click="deleteItems(selectedItems)"
+                ng-disabled="selectedItems.length == 0">
+                <md-icon>remove_circle</md-icon>
+                Remove Item(s) 
+            </md-button>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table md-row-select ng-model="selectedItems">
+            <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
+                <tr md-row>
+                    <th md-column md-order-by="name">Name</th>
+                    <th md-column md-order-by="item_type__name">Type</th>
+                    <th md-column>Tags</th>
+                    <th md-column md-order-by="in_inventory">Available</th>
+                    <th md-column md-order-by="amount_available">Amount</th>
+                    <th md-column md-order-by="location__name">Location</th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="item" ng-repeat="item in items"
+                    ui-sref="catalog_item({id: item.id})">
+                    <td md-cell>{{ item.name }}</td>
+                    <td md-cell>{{ item.item_type }}</td>
+                    <td md-cell>{{ item.tags.join(', ') }}</td>
+                    <td md-cell>
+                        <md-icon class="positive" 
+                            ng-show="item.in_inventory">check_circle</md-icon>
+                        <md-icon class="negative" 
+                            ng-show="!item.in_inventory">cancel</md-icon>
+                    </td>
+                    <td md-cell>{{ item.amount_available }}{{ item.amount_measure }}</td>
+                    <td md-cell>{{ item.location_path }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+</md-card>

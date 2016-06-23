@@ -1,0 +1,50 @@
+<md-dialog aria-label="Create a location">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>Create a new location</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-input-container flex>
+                    <label>Name of location</label>
+                    <input required ng-model="location.name">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Short code</label>
+                    <input required ng-model="location.code">
+                </md-input-container>
+                <div layout="row" layout="start center">
+                    <md-autocomplete 
+                        flex
+                        md-selected-item="selectedItem"
+                        md-search-text="itemSearchText"
+                        md-items="item in queryItems(itemSearchText)"
+                        md-item-text="item.name"
+                        md-selected-item-change="setParent()"
+                        md-select-on-match
+                        md-min-length="0"
+                        md-floating-label="Select a parent">
+                        <md-item-template>
+                            <span md-highlight-text="itemSearchText">
+                                {{ item.pad }}{{ item.name }}
+                            </span>
+                        </md-item-template>
+                    </md-autocomplete>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

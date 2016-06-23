@@ -1,0 +1,683 @@
+// bower:scss
+@import "nsPopover/sass/ns-popover.scss";
+// endbower
+
+//
+// Colour Palletes
+//
+
+// Primary
+$primary: #8bc34a;  // 500
+$primary1: #aed581; // 300
+$primary2: #558b2f; // 800
+$primary3: #dcedc8; // 100
+
+// Accent
+$accent: #ffd740;   // A200
+$accent1: #ffe57f;  // A100
+$accent2: #ffc400;  // A400
+$accent3: #ffab00;  // A700
+
+// Warning
+$warn: #f44336;
+
+// Highlight
+$highlight: #eee;
+
+// Extra
+$positive: #8bc34a;
+$negative: #f44336;
+
+// Material design measures
+$padding: 8px;
+
+// Font colour
+$fontcolour: rgba(0, 0, 0, 0.87);
+
+// label colour
+$label: rgba(0,0,0,0.54);
+
+// Material element tweaks
+.md-locked-open.md-sidenav-left {
+    border-right: 1px solid #eee;
+    z-index: 1;
+}
+
+md-list-item.active {
+    background: $primary1;
+}
+
+md-list-item.no-margin > a {
+    margin: 0 !important;
+}
+
+md-list-item a.md-button {
+    margin: 0;
+    padding-top: $padding;
+    padding-bottom: $padding;
+}
+
+md-list.sub-nav {
+    border-right: 1px solid $highlight;
+}
+
+md-list.sub-nav md-list-item .md-list-item-inner {
+    font-weight: normal;
+}
+
+md-input-container.toolbar-input input {
+    font-size: 1em !important;
+}
+
+md-input-container.toolbar-input .md-errors-spacer, md-input-container.no-error .md-errors-spacer {
+    min-height: 0;
+}
+
+md-input-container.compact {
+    margin: 0.25em;
+    margin-top: 0.75em;
+}
+
+md-icon.positive {
+    color: $positive;
+}
+
+md-icon.negative {
+    color: $negative;
+}
+
+tr[ui-sref] {
+    cursor: pointer;
+}
+
+tr[ui-sref]:hover {
+    background: $primary2;
+}
+
+.md-subheader.with-buttons .md-subheader-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.md-chips .md-chip {
+    border-radius: 0;
+}
+
+.md-chip {
+    background: $primary1 !important;
+}
+
+md-chips .md-chip.md-focused {
+    background: $primary !important;
+}
+
+md-grid-tile-footer {
+    word-break: break-all;
+    font-size: 0.8em;
+    background: rgba($primary, 0.9) !important;
+}
+
+md-autocomplete[md-floating-label] md-input-container {
+    padding-bottom: 0;
+}
+
+md-checkbox.align-to-list {
+    margin: 0;
+    margin-right: -10px;
+    padding: 0 $padding;
+}
+
+md-checkbox.not-a-button {
+    width: 20px !important;
+}
+
+// Loading bar tweaks
+#loading-bar .bar {
+    background: $accent;
+}
+
+// App-wide elements
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.padded {
+    padding: $padding;
+}
+
+.side-padded {
+    padding: 0 $padding;
+}
+
+.top-padded {
+    padding-top: $padding;
+}
+
+.right-padded {
+    padding-right: $padding;
+}
+
+.full-height {
+    min-height: 100%;
+}
+
+.subtoolbar {
+    padding: 0.25em;
+    background: $primary3;
+}
+
+.responsive-image {
+    width: 100%;
+}
+
+.selected-border {
+    border: 2px solid $primary;
+}
+
+md-divider.section-divider {
+    margin: 0.5em 0;
+}
+
+.section-subheader {
+    color: $primary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+}
+
+h3.section-subheader {
+    margin: 0.5em 0;
+}
+
+.subsection-header {
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin: 0.25em 0;
+}
+
+.coloured-section {
+    padding: $padding; 
+    background: $primary3;
+    min-height: auto !important;
+    h1, h2, h3, h4, h5 {
+        color: black !important;
+    }
+}
+
+md-list.detail-list md-list-item {
+    text-align: right;
+}
+
+.error-message {
+    display: block;
+    padding: 0.25em;
+    //color: $warn;
+    text-align: center;
+}
+
+.dialog-error-message {
+    padding: 0.5em;
+    background: $warn;
+    text-align: center;
+    color: white;
+    white-space: pre-line;
+}
+
+.outline-message {
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 2px solid $accent;
+}
+
+.outline-block {
+    border: 1px solid $accent;
+    margin: $padding; 
+}
+
+.review-block {
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.review-block-value {
+    display: block;
+    font-size: 2em;
+}
+
+.read-only {
+    input {
+        color: $fontcolour !important;
+        cursor: not-allowed;
+    }
+    md-select {
+        cursor: not-allowed;
+    }
+    .md-errors-spacer {
+        display: none;
+    }
+}
+
+input.noedit {
+    color: $fontcolour !important; 
+}
+
+.top-padding {
+    padding-top: $padding * 2;
+}
+
+.input-text {
+    margin-top: 18px;
+    padding-top: $padding + 8px;
+}
+
+.right-border {
+    border-right: 1px solid $highlight;
+}
+
+.in-page-nav {
+    height: 100%;
+    border-right: 1px solid $highlight;
+}
+
+.label {
+    color: $label;
+}
+
+// View animations
+
+[ui-view].ng-enter {
+    transition: .5s;
+    opacity: 0;
+}
+
+[ui-view].ng-enter-active {
+    opacity: 1;
+}
+
+
+// Section specific
+
+.welcome {
+    background: $primary1;
+    font-size: 2em;
+}
+
+.sidebar-logo {
+    background: url(/images/temp_sidebar_logo.svg) no-repeat;
+    background-size: cover;
+    .md-toolbar-tools {
+        font-size: 2em;
+        font-weight: 200;
+    }
+}
+
+.tab-toolbar {
+    padding: 0 1em;
+    md-input-container {
+        margin-bottom: 0;
+        .md-errors-spacer {
+            display: none;
+        }
+    }
+    .input-text {
+        margin-top: $padding;
+    }
+}
+
+// Inventory
+
+.created-from {
+    md-list-item {
+        min-height: 0 !important;
+        font-size: 0.9em !important;
+        .md-button {
+            min-height: 0 !important;
+            line-height: 1em !important;
+            ._md-list-item-inner {
+                min-height: 1em;
+                md-icon {
+                    margin-right: 1em;
+                }
+            }
+        }
+    }
+}
+
+// Workflows section
+
+.no-workflows-message {
+    display: block;
+    width: 100%;
+    padding: 4em;
+    margin: 1em;
+    background: $highlight;
+    border: 1px dashed silver;
+    text-align: center;
+}
+
+.active-workflows {
+    .md-subheader {
+        display: flex;
+        min-height: 3em;
+        flex-direction: row;
+        align-items: center;
+    }
+    .md-subheader-inner {
+        width: 100%;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        text-transform: uppercase;
+    }
+    .md-subheader-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.workflow-preview {
+    padding: 0 $padding;
+    overflow: hidden;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+    h4 {
+        font-weight: normal;
+        margin: 0.5em 0;
+        color: $label;
+    }
+    .workflow-preview-container {
+        width: 100%;
+        height: 5.1em;
+        overflow: hidden;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .gm-workflow-task-preview {
+        position: relative;
+        max-height: 4.5em;
+        color: black;
+        min-width: 15em;
+        margin: 0 !important;
+        display: inline-block;
+    }
+    .gm-workflow-task-preview:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 2.25em solid transparent;
+        border-bottom: 2.25em solid transparent;
+        border-left: 1.5em solid $primary1;
+        position: absolute;
+        top: 50%;
+        margin-top: -2.25em;
+        left: 100%;
+        z-index: 2;
+    }
+    .gm-workflow-task-preview:before {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 2.25em solid transparent;
+        border-bottom: 2.25em solid transparent;
+        border-left: 1.5em solid white;
+        position: absolute;
+        top: 50%;
+        margin-top: -2.25em;
+        left: 0.1em;
+        z-index: 1;
+    }
+    .gm-workflow-task-preview:first-child:before {
+        border: 0;
+    }
+    .gm-workflow-task-preview:last-child:after {
+        border: 0;
+    }
+}
+
+.active-workflow-product-container {
+    padding: 0; //0.25em 8px 0 8px;
+}
+
+.active-workflow-product-container:last-child {
+    padding-bottom: 8px;
+}
+
+.active-workflow-product {
+    width: 10em;
+    padding: 0 $padding;
+    font-size: 0.9em;
+    min-height: 4.5em;
+    span {
+        padding-left: 0.5em;
+    }
+    a {
+        color: $fontcolour;
+        text-decoration: none;
+    }
+    .workflow-product-identifier {
+        font-size: 0.9em;
+        font-weight: bold;
+    }
+    .md-button {
+        margin: 0;
+    }
+    .workflow-product-content {
+        padding: 0.5em;
+    }
+}
+
+.product-count {
+    margin-left: 0.5em;
+    padding: 0.25em;
+    display: inline-block;
+    color: $label;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.task {
+    padding: 0 !important;
+    h3, h4 {
+        margin: 0.5em 0;
+        font-weight: normal;
+        text-transform: uppercase;
+        //color: $primary;
+    }
+    .task-fields {
+        margin-right: 0.5em;
+    }
+    //.task-fields md-input-container {
+    //    margin-top: 0;
+    //}
+    .task-input-measure {
+        display: block;
+        padding: 0.5em 0.5em 0 0;
+        height: 1em;
+    }
+    .task-output-create {
+        display: block;
+        padding: 0.5em 0.5em 0 0;
+        height: 1em;
+    }
+}
+
+// Experiments section
+md-list-item.selected {
+    background: $primary1;
+}
+
+// Shared directives
+.gm-colour-button {
+    margin: 0.5em;
+    padding: 0.5em 0 0 0;
+    text-align: center;
+    background: $accent;
+    cursor: pointer;
+    md-icon {
+        width: 1em;
+        height: 1em;
+        font-size: 4em;
+        margin-bottom: 0.15em;
+    }
+    .text {
+        display: block;
+        padding: 0.5em;
+        background: rgba(255,255,255,0.6);
+    }
+}
+
+.gm-product {
+    padding: 0.5em;
+    margin: 0.5em;
+    font-size: 1em;
+    background: $accent1;
+    md-icon {
+        margin-right: 0.25em;
+    }
+    .gm-product-id {
+        font-size: 0.7em;
+        font-weight: bold;
+    }
+}
+
+.gm-workflow-task-preview {
+    margin: 0 0 0.5em 0;
+    min-height: 4.5em;
+    text-transform: uppercase;
+    background: $primary1;
+    color: white;
+    font-size: 0.9em;
+    padding: 0.5em;
+    position: relative;
+    .task-preview-header {
+        background: transparent !important;
+        position: absolute;
+        right: 0.25em;
+        bottom: -0.25em;
+        color: white; //rgba(255,255,255,0.4);
+        font-size: 3em;
+    }
+    .task-preview-content {
+        position: relative;
+        z-index: 2;
+        padding: 0.5em;
+    }
+    .task-preview-end {
+        font-size: 1.2em;
+        color: white;
+        text-align: center;
+    }
+    &:not(.current-task) {
+        margin-right: 0.5em;
+    }
+}
+
+.gm-workflow-task-preview.current-task {
+    color: black;
+    background: $primary;
+    .task-preview-header {
+        background: $primary;
+    }
+    &:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 2.25em solid transparent;
+        border-bottom: 2.25em solid transparent;
+        border-left: 1.5em solid $primary;
+        position: absolute;
+        top: 50%;
+        margin-top: -2.25em;
+        left: 100%;
+        z-index: 2;
+    }
+    &.has-previous-task:before {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 2.25em solid transparent;
+        border-bottom: 2.25em solid transparent;
+        border-left: 1.5em solid $primary1;
+        position: absolute;
+        top: 50%;
+        margin-top: -2.25em;
+        left: 0;
+        z-index: 1;
+    }
+}
+
+.gm-workflow-task-preview.workflow-ended {
+    background: $highlight;
+    color: silver; 
+    position: relative;
+    margin-right: 0;
+    div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+.field-label {
+    color: $label;
+    font-size: 0.9em;
+}
+
+.task .field-label {
+    display: block;
+}
+
+.gm-task-field {
+    margin: 0.25em;
+    margin-left: 0;
+    padding: 0.25em;
+    //md-input-container {
+    //    margin-bottom: 0.25em;
+    //}
+    .md-errors-spacer {
+        min-height: 0;
+    }
+    .task-field-label, .task-field-step-label {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 0.8em;
+        margin-bottom: 0.25em;
+    }
+    .task-field-step-label {
+        width: 10em;
+        font-size: 0.9em;
+    }
+    .task-field-amount input {
+        width: 4em;
+    }
+    .using-element-label {
+        display: block;
+        padding: 0.5em 0.5em 0 1em;
+        height: 1em;
+        color: $label;
+        font-size: 0.9em;
+        font-style: italic;
+    }
+}
+
+.field-save-required {
+}
+
+.gm-task-field.editable {
+    border-left: 0.25em solid $highlight;
+}
+
+.gm-multi-select {
+    height: 20em;
+}

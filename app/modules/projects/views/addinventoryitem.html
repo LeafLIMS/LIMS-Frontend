@@ -1,0 +1,39 @@
+<md-dialog aria-label="Add an item from the inventory" flex="60">
+    <form ng-submit="add()">
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Add an item from the inventory</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" layout="column">
+                <md-autocomplete flex
+                    md-selected-item-change="setItem(pItem)"
+                    md-selected-item="pItem"
+                    md-search-text="pText"
+                    md-items="item in filterItems(pText)"
+                    md-item-text="item.name"
+                    md-min-length="0"
+                    md-select-on-match
+                    required
+                    md-floating-label="Choose item from inventory"
+                    <md-item-template>
+                        <span md-highlight-text="pText"
+                            md-highlight-flags="^i">
+                            {{ item.identifier }}: {{ item.name }}
+                        </span>
+                    </md-item-template>
+                </md-autocomplete> 
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Add</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

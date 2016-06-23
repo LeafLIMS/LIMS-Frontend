@@ -1,0 +1,64 @@
+<div layout="column" class="relative" layout-fill role="main">
+    <md-toolbar class="md-whiteframe-z1">
+        <div class="md-toolbar-tools">
+            <md-button ng-click="toggleSidenav('left')" hide-gt-lg 
+                aria-label="Menu" class="md-icon-button">
+                <md-icon>menu</md-icon>
+            </md-button>
+            <h1 page-title></h1>
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Show user information"
+                    ng-click="$mdOpenMenu($event)">
+                    <md-icon md-menu-origin>account_circle</md-icon>
+                    {{ user.username || 'Anonymous' }}
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ui-sref="account(user.id)">
+                            <md-icon md-menu-align-target>settings</md-icon>
+                            Account settings
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="logout()">
+                            <md-icon md-menu-align-target>exit_to_app</md-icon>
+                            Log out
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <div layout="row" flex>
+        <md-sidenav layout="column" class="md-sidenav-left"
+            md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')">
+            <md-toolbar class="md-tall md-primary sidebar-logo">
+                <div class="md-toolbar-tools">
+                    GET LIMS
+                </div>
+            </md-toolbar>
+            <md-list>
+                <md-list-item ui-sref-active="active" ng-repeat="item in navigationItems" 
+                    ui-sref="{{ item.state }}" ng-click="toggleSidenav('left')" ng-disabled="item.disabled">
+                    <md-item-content layout="row" layout-align="start center">
+                        <div class="inset">
+                            <md-icon>{{ item.icon }}</md-icon>
+                        </div>
+                        <div class="inset">
+                            {{ item.text }}
+                        </div>
+                    </md-icon-content>
+                </md-list-item>
+            </md-list>
+        </md-sidenav>
+        <md-content flex md-scoll-y>
+            <div ui-view="content" layout="column" 
+                class="full-height"
+                flex
+                layout-padding ng-class="{'no-padding': removePadding}">
+                <h1>Oh, hi there!</h1>
+            </div>
+        </md-content>
+    </div>
+</div>

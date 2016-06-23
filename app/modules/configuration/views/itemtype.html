@@ -1,0 +1,48 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createItemType()">
+            <md-icon>add</md-icon>
+            Create an item type
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-card>
+    <md-list flex class="padded">
+        <md-list-item 
+            class="md-1-line"
+            layout="row"
+            flex-offset="{{ 5 * item.level }}"
+            ng-show="item.level == 0 || item.show"
+            ng-repeat="item in itemtypes">
+            <md-button 
+                ng-show="!item.expanded && item.has_children"
+                class="md-icon-button"
+                ng-click="showChildren(item)">
+                <md-icon>expand_more</md-icon>
+            </md-button>
+            <md-button
+                ng-show="item.expanded && item.has_children"
+                class="md-icon-button"
+                ng-click="hideChildren(item)">
+                <md-icon>expand_less</md-icon>
+            </md-button>
+            <span flex="5" 
+                ng-show="!item.has_children"></span>
+            <div class="md-list-item-text">
+                <span>{{ item.name }}</span>
+            </div>
+            <span flex></span>
+            <md-button class="md-icon-button"
+                aria-label="Edit item"
+                ng-click="editItem(item.id)">
+                <md-icon>edit</md-icon>
+            </md-button>
+            <md-button class="md-icon-button"
+                aria-label="Delete item"
+                ng-click="deleteItem(item.id)">
+                <md-icon>delete</md-icon>
+            </md-button>
+        </md-list-item>
+    </md-list>
+</md-card>

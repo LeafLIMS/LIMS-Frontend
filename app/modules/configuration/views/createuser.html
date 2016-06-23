@@ -1,0 +1,82 @@
+<md-dialog aria-label="Create a user" flex="60">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>Create/update user</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="row">
+                <div layout="column" flex>
+                    <md-input-container flex>
+                        <label>Username</label>
+                        <input md-maxlength="255"
+                            required ng-model="user.username">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Email</label>
+                        <input type="email" required ng-model="user.email">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Password</label>
+                        <input type="password" 
+                            ng-required="!user.id"
+                            ng-model="user.password">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>First name</label>
+                        <input ng-model="user.first_name">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Last name</label>
+                        <input ng-model="user.last_name">
+                    </md-input-container>
+                    <md-checkbox ng-model="user.is_staff">
+                        User has staff access
+                    </md-checkbox>
+                </div>
+                <div layout="column" flex>
+                    <md-autocomplete
+                        md-selected-item="selectedItem"
+                        md-search-text="searchText"
+                        md-selected-item-change="addGroup()"
+                        md-items="item in getItems(searchText)"
+                        md-item-text="item.name"
+                        md-min-length="0"
+                        md-select-on-match
+                        placeholder="Select group to add">
+                        <md-item-template>
+                            <span md-highlight-text="searchText"
+                                md-highlight-flags="^i">
+                            {{ item.name }}
+                            </span>
+                        </md-item-template>
+                    </md-autocomplete> 
+                    <md-list>
+                        <md-subheader>Groups part of</md-subheader>
+                        <md-list-item ng-repeat="g in user.groups">
+                            <md-list-item-text>
+                                {{ g }}
+                            </md-list-item-text>
+                            <md-button class="md-icon-button md-secondary"
+                                ng-click="removeGroup(g)">
+                                <md-icon>remove_circle</md-icon>
+                            </md-button>
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

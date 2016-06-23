@@ -1,0 +1,50 @@
+<div layout="row" flex class="gm-multi-select">
+    <md-content flex>
+        <md-list>
+            <md-list-item>
+                <md-checkbox aria-label="select/deselect all" 
+                    ng-model="selectAvailableStatus"
+                    ng-click="toggleAll(selectAvailableStatus, selectedAvailable, filtered)">
+                </md-checkbox>
+                Select/deselect all
+            </md-list-item>
+            <md-subheader>Available items ({{ filtered.length }})</md-subheader>
+            <md-list-item ng-repeat="item in filtered track by $index">
+                <md-checkbox aria-label="select {{ item }}"
+                    ng-checked="isSelected(item, selectedAvailable)"
+                    ng-click="toggle(item, selectedAvailable)">
+                </md-checkbox>
+                {{ item }}
+            </md-list-item>
+        </md-list>
+    </md-content>
+    <div layout="column" layout-align="center center">
+        <md-button ng-click="addToSelected(selectedAvailable)"
+            class="md-icon-button">
+            <md-icon>arrow_forward</md-icon>
+        </md-button>
+        <md-button ng-click="removeFromSelected(selectedSelected)"
+            class="md-icon-button">
+            <md-icon>arrow_back</md-icon>
+        </md-button>
+    </div>
+    <md-content flex>
+        <md-list>
+            <md-list-item>
+                <md-checkbox aria-label="select/deselect all" 
+                    ng-model="selectSelectedStatus"
+                    ng-click="toggleAll(selectSelectedStatus, selectedSelected, selected)">
+                </md-checkbox>
+                Select/deselect all
+            </md-list-item>
+            <md-subheader>Selected items ({{ selected.length }})</md-subheader>
+            <md-list-item ng-repeat="item in selected track by $index">
+                <md-checkbox aria-label="select {{ item }}" 
+                    ng-checked="isSelected(item, selectedSelected)"
+                    ng-click="toggle(item, selectedSelected)">
+                </md-checkbox>
+                {{ item }}
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>

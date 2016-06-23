@@ -1,0 +1,28 @@
+<md-input-container >
+    <label>Originating organism</label>
+    <md-select ng-model="item.originating_organism" required>
+        <md-option 
+            ng-repeat="option in organisms" 
+            ng-value="option.name">
+            {{ option.name }} ({{ option.common_name }})
+        </md-option>
+    </md-select>
+</md-input-container>
+<md-input-container >
+    <label>Optimised for organism</label>
+    <md-select ng-model="item.optimised_for_organism">
+        <md-option 
+            ng-repeat="option in organisms" 
+            ng-value="option.name">
+            {{ option.name }} ({{ option.common_name }})
+        </md-option>
+    </md-select>
+</md-input-container>
+<md-input-container >
+    <label>Sequence</label>
+    <textarea required ng-model="item.sequence"></textarea>
+</md-input-container>
+<md-input-container >
+    <label>Usage</label>
+    <input required ng-model="item.usage" type="number"> 
+</md-input-container>

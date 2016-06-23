@@ -1,0 +1,71 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createProject()">
+            <md-icon>add</md-icon>
+            Create new project
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>{{ filters || 'All projects' }}</span>
+            <span flex></span>
+            <md-input-container class="md-body-1 toolbar-input">
+                <md-icon>search</md-icon>
+                <input type="search" ng-model="query.search">
+            </md-input-container>
+            <md-menu>
+                <md-button aria-label="Table actions"
+                    class="md-icon-button"
+                    ng-click="$mdOpenMenu($event)">
+                    <md-icon md-menu-origin>more_vert</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button 
+                            ng-disabled="selected.length == 0"
+                            ng-click="deleteItems(selected)">
+                            <md-icon md-menu-align-target>delete</md-icon>
+                            Delete Item(s) 
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table md-row-select ng-model="selected">
+            <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
+                <tr md-row>
+                    <th md-column md-order-by="identifier">Identifier</th>
+                    <th md-column md-order-by="name">Name</th>
+                    <th md-column>Description</th>
+                    <th md-column md-order-by="primary_lab_contact__username">
+                        Lab contact</th>
+                    <th md-column md-order-by="status">Status</th>
+                    <th md-column>Order</th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="item" ng-repeat="item in projects"
+                    ui-sref="project_details({id: item.id})">
+                    <td md-cell>{{ item.project_identifier }}</td>
+                    <td md-cell><b>{{ item.name }}</b></td>
+                    <td md-cell>{{ item.description }}</td>
+                    <td md-cell>{{ item.primary_lab_contact }}</td>
+                    <td md-cell>{{ item.status }}</td>
+                    <td md-cell>
+                        <a sref="app.orders.order_detail({id: item.order})">{{ item.order }}</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-page="projects.meta.current"
+        md-options="[10,20,50,100]"
+        md-on-paginate="onPaginateItems"
+        md-total="{{ projects.meta.count }}" md-page-select>
+    </md-table-pagination>
+</md-card>

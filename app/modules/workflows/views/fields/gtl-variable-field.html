@@ -1,0 +1,15 @@
+<div class="gm-task-field" layout="column" flex>
+    <div layout="row" layout-align="start center">
+        <md-input-container ng-class="{'task-field-amount': !field.measure_not_required}">
+            <label>Value</label>
+            <input type="number" step="1" 
+                required
+                ng-disabled="isDisabled"
+                aria-label="{{ field.name }} amount"
+                ng-model="field.amount">
+        </md-input-container>
+        <span class="field-text">
+            {{ field.measure }}
+        </span>
+    </div>
+</div>

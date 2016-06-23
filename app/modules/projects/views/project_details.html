@@ -1,0 +1,111 @@
+<div layout="column" layout-fill flex class="no-padding">
+    <md-toolbar class="md-primary md-hue-1">
+        <div class="md-toolbar-tools">
+            <md-button ng-click="createProduct(project.id)">
+                <md-icon md-svg-icon="alt:package"></md-icon>
+                Create product
+            </md-button>
+            <span flex></span>
+            <md-menu>
+                <md-button aria-label="Open product options menu"
+                    class="md-icon-button"
+                    ng-click="$mdOpenMenu()">
+                    <md-icon md-menu-origin>more_horiz</md-icon>
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="startWorkflow()"
+                            ng-disabled="selected.length == 0">
+                            <md-icon md-menu-align-target>
+                                play_arrow</md-icon>
+                            Start workflow
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="delete(selected)">
+                            <md-icon md-menu-align-target>
+                                delete_sweep</md-icon>
+                            Delete selected
+                        </md-button>
+                    </md-menu-item>
+                    <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-button ng-click="delete(selected)"
+                            class="md-warn">
+                            <md-icon md-menu-align-target>
+                                delete</md-icon>
+                            Delete project
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <div layout="row" flex>
+        <div layout="column" flex="33" class="side-padded top-padded coloured-section">
+            <md-input-container class="read-only">
+                <label>Date started</label>
+                <input disabled value="{{ project.date_started|date:'medium' }}">
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model="project.description"></textarea>
+            </md-input-container>
+            <md-input-container>
+                <label>Primary lab contact</label>
+                <md-select ng-model="project.primary_lab_contact">
+                    <md-option ng-repeat="member in staff" 
+                        ng-value="member.username">{{ member.username }}</md-option>
+                </md-select>
+            </md-input-container>
+            <div ng-if="project.crm_project">
+                <h3 layout="row" layout-align="start center" 
+                    class="section-subheader">
+                    CRM details
+                    <span flex></span>
+                    <md-button class="md-icon-button"
+                        ng-click="linkCRM()">
+                        <md-icon>edit</md-icon>
+                    </md-button>
+                </h3>
+                <p><b>{{ project.crm_project.name }}</b></p>
+                <p>{{ project.crm_project.account.user.first_name }} {{ project.crm_project.account.user.last_name }}</p>
+                <p>{{ project.crm_project.account.account_name }}</p>
+                <div layout="row">
+                    <md-button
+                        flex
+                        href="{{ project.crm_project.project_url }}">
+                        View on CRM system
+                    </md-button>
+                </div>
+            </div>
+
+        </div>
+        <div layout="column" flex>
+            <div layout="row" class="tab-toolbar">
+                <span class="input-text label">Showing {{ products.length }} of {{ initialProductCount }} products</span> 
+                <span flex></span>
+                <md-icon class="input-text">search</md-icon>
+                <md-input-container>
+                    <label>Filter products</label>
+                    <input ng-model="productFilter" type="search">
+                </md-input-container>
+            </div>
+            <md-tabs md-selected="selectedTab">
+                <md-tab 
+                    ui-sref="product_details({productId: item.id})"
+                    md-active="currentProductId == item.id"
+                    ng-repeat="item in products">
+                    <md-tab-label>
+                        <md-icon ng-if="item.on_workflow">linear_scale</md-icon>
+                        {{ item.product_identifier }}: {{ item.name|limitTo:'25' }}
+                    </md-tab-label>
+                </md-tab>
+            </md-tabs> 
+            <div ui-view="product"
+                layout="column"
+                class="side-padded">
+            </div>
+        </div>
+    </div>
+</div>

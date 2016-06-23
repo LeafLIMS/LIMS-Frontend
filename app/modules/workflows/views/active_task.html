@@ -1,0 +1,74 @@
+<md-dialog aria-label="Workflow task" flex="95" ng-cloak>
+    <form name="form" ng-submit="form.$valid && complete()" novalidate>
+        <md-toolbar> 
+            <div class="md-toolbar-tools">
+                <h2>{{ task.name }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <md-content class="md-dialog-content">
+                <md-table-container>
+                    <table md-table ng-model="selected">
+                        <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
+                            <tr md-row>
+                                <th></th>
+                                <th md-column>Name</th> 
+                                <th md-column 
+                                    ng-repeat="header in table_column_headers">
+                                    {{ header }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody md-body ng-repeat="(product_name,items) in task.items">
+                            <tr md-row> 
+                                <td md-cell>
+                                    <md-checkbox
+                                        ng-click="toggle(items[0].id, selected)"
+                                        ng-checked="exists(items[0].id, selected)"
+                                        aria-label="Select {{ product_name }}">
+                                    </md-checkbox>
+                                </td>
+                                <td md-cell colspan="{{ items[0].fields.length + 1 }}">
+                                    {{ product_name }}
+                                </td>
+                            </tr>
+                            <tr md-row ng-repeat="item in items">
+                                <td md-cell></td>
+                                <td md-cell>{{ item.item_name }}</td>
+                                <td md-cell 
+                                    ng-repeat="field in item.fields">
+                                    {{ field.value }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-content>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button 
+                ng-click="retrySelected()"
+                class="md-warn">
+                <md-icon>repeat</md-icon>
+                Repeat selected
+            </md-button>
+            <md-button 
+                ng-click="completeAll()"
+                class="md-primary">
+                <md-icon>done_all</md-icon>
+                Complete all
+            </md-button>
+            <md-button
+                ng-click="completeSelected()">
+                <md-icon>done</md-icon>
+                Complete selected
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

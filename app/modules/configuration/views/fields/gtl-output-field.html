@@ -1,0 +1,50 @@
+<div class="gm-task-field" layout="column" flex>
+    <md-input-container flex >
+        <label>Field label</label>
+        <input ng-model="field.label" required>
+    </md-input-container>
+    <div layout="row" layout-align="start center">
+        <md-input-container class="task-field-amount">
+            <label>Amount</label>
+            <input type="number" step="1" 
+                ng-disabled="field.from_calculation"
+                ng-required="!field.from_calculation"
+                aria-label="{{ field.name }} amount"
+                ng-model="field.amount">
+        </md-input-container>
+        <md-autocomplete flex
+            md-selected-item-change="setMeasure(mItem)"
+            md-selected-item="mItem"
+            md-search-text="mText"
+            md-items="item in filterMeasures(mText)"
+            md-item-text="item.symbol"
+            md-min-length="0"
+            md-select-on-match
+            required
+            md-floating-label="Choose amount measure">
+            <md-item-template>
+                <span md-highlight-text="mText"
+                    md-highlight-flags="^i">
+                    {{ item.name }} ({{ item.symbol }})
+                </span>
+            </md-item-template>
+        </md-autocomplete> 
+        <md-autocomplete flex
+            md-selected-item-change="setLookupType(ltItem)"
+            md-selected-item="ltItem"
+            md-search-text="ltText"
+            md-items="item in filterLookupType(ltText)"
+            md-item-text="item.name"
+            md-min-length="0"
+            md-select-on-match
+            required
+            md-floating-label="Choose type of output item">
+            <md-item-template>
+                <span md-highlight-text="ltText"
+                    md-highlight-flags="^i">
+                {{ item.name }}
+                </span>
+            </md-item-template>
+        </md-autocomplete> 
+    </div>
+</div>

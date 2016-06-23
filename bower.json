@@ -1,0 +1,38 @@
+{
+  "name": "lims-frontend",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "^1.4.0",
+    "angular-animate": "^1.4.0",
+    "angular-sanitize": "^1.4.0",
+    "angular-touch": "^1.4.0",
+    "angular-material": "^1.0.7",
+    "angular-ui-router": "ui-router#~0.2.15",
+    "ng-token-auth": "~0.0.28",
+    "angular-material-data-table": "~0.9.11",
+    "restangular": "~1.5.1",
+    "satellizer": "~0.13.3",
+    "ngstorage": "~0.3.10",
+    "angular-messages": "~1.4.9",
+    "lodash": "^4.5.1",
+    "tinymce": "tinymce-dist#^4.3.3",
+    "angular-ui-tinymce": "^0.0.12",
+    "ng-file-upload": "^11.2.3",
+    "angular-ui-sortable": "^0.13.4",
+    "angular-tree-repeat": "^0.0.1",
+    "nsPopover": "^0.6.8",
+    "drop-ng": "https://github.com/stevenh77/drop-ng.git#b3f30fb",
+    "angular-loading-bar": "^0.9.0",
+    "angular-datetime": "^3.2.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "limsFrontend",
+  "resolutions": {
+    "angular": "1.5.0",
+    "lodash": "^4.5.1",
+    "angular-mocks": "^1.4.0"
+  }
+}

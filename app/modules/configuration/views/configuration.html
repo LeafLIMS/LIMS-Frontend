@@ -1,0 +1,17 @@
+<div layout="row" class="no-padding" layout-fill>
+    <md-list flex="25" class="sub-nav">
+        <div ng-repeat="group in availableConfigs">
+            <md-subheader>{{ group.name }}</md-subheader>
+            <md-list-item 
+                class="no-margin"
+                ui-sref-active="selected"
+                ng-repeat="item in group.sections"
+                ui-sref="app.configuration.section({sectionName: item.ctrl})">
+                {{ item.name }}
+                <span flex></span>
+                <md-icon>chevron_right</md-icon>
+            </md-list-item>
+        </div>
+    </md-list>
+    <div flex ui-view="configuration-section"></div>
+</div>

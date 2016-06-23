@@ -1,0 +1,80 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createItemType()">
+            <md-icon>add</md-icon>
+            Create an item type
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-list>
+    <md-list-item 
+        class="md-3-line"
+        ng-repeat="item in itemtypes">
+    </md-list-item>
+</md-list>
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>Item types</span>
+            <span flex></span>
+            <md-input-container class="md-body-1 toolbar-input">
+                <md-icon>search</md-icon>
+                <input type="search" ng-model="search">
+            </md-input-container>
+            <md-menu>
+                <md-button aria-label="Table actions"
+                    class="md-icon-button"
+                    ng-click="$mdOpenMenu($event)">
+                    <md-icon md-menu-origin>more_vert</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button>
+                            <md-icon md-menu-align-target>content_copy</md-icon>
+                            Duplicate Item(s) 
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button>
+                            <md-icon md-menu-align-target>delete</md-icon>
+                            Delete Item(s) 
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table md-row-select ng-model="selectedItems">
+            <thead md-head md-order="query.ordering" md-on-redorder="onSortItems">
+                <tr md-row>
+                    <th md-column md-order-by="symbol">Symbol</th>
+                    <th md-column md-order-by="name">Name</th>
+                    <th md-column></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="item" ng-repeat="item in itemtypes">
+                    <td md-cell>{{ item.symbol }}</td>
+                    <td md-cell>{{ item.name }}</td>
+                    <td md-cell>
+                        <md-button class="md-icon-button"
+                            aria-label="Edit item"
+                            ng-click="editItem(item.id)">
+                            <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                            aria-label="Delete item"
+                            ng-click="deleteItem(item.id)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="10" md-page="itemtypes.meta.current"
+        md-total="{{ itemtypes.meta.count }}" md-page-select>
+    </md-table-pagination>
+</md-card>

@@ -1,0 +1,57 @@
+<md-dialog aria-label="Workflow task" flex="100">
+    <form ng-submit="save()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>{{ task.of_type }}: {{ task.name }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task md-dialog-content" layout="column">
+            <div layout-padding layout="row">
+                <div flex="33">
+                    <h4>Inputs</h4> 
+                    <gm-task-field field="field" ng-repeat="field in task.fields['input']">
+                    </gm-task-field>
+                </div>
+                <div flex="33">
+                    <h4>Variables</h4> 
+                    <gm-task-field field="field" ng-repeat="field in task.fields['variable']">
+                    </gm-task-field>
+                </div>
+                <div flex="33">
+                    <h4>Calculations</h4> 
+                    <gm-task-field field="field" ng-repeat="field in task.fields['calculation']">
+                    </gm-task-field>
+                </div>
+            </div>
+            <div class="coloured-section">
+                <h4>Steps</h4>
+            </div>
+            <div layout-padding>
+                <h4>Outputs</h4>
+                <gm-task-field field="field" ng-repeat="field in task.fields['output']">
+                </gm-task-field>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button>
+                <md-icon>note_add</md-icon>
+                Generate files
+            </md-button>
+            <span flex></span>
+            <md-button>
+                <md-icon>repeat</md-icon>
+                Retry
+            </md-button>
+            <md-button type="submit" class="md-primary">
+                <md-icon>done</md-icon>
+                Complete
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

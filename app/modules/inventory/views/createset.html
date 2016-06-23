@@ -1,0 +1,38 @@
+<md-dialog aria-label="Create set for items" flex="50">
+    <form name="form" ng-submit="form.$valid && add()" novalidate>
+        <md-toolbar class="md-accent">
+            <div class="md-toolbar-tools">
+                <h2>Create a set for items</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout="column">
+            <div layout="column" class="md-dialog-content"> 
+                <md-input-container>
+                    <label>Name</label>
+                    <input ng-model="set.name" required>
+                </md-input-container>
+                <md-checkbox ng-model="set.is_public"
+                    aria-label="Make set public"
+                    ng-true-value="true"
+                    ng-false-value="false">
+                    Make set public
+                </md-checkbox> 
+                <md-checkbox ng-model="set.is_partset"
+                    aria-label="This is a set of parts"
+                    ng-true-value="true"
+                    ng-false-value="false">
+                    This is a set of parts
+                </md-checkbox> 
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Add</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

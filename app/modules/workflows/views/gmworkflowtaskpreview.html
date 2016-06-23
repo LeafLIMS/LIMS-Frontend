@@ -1,0 +1,19 @@
+<div class="gm-workflow-task-preview" 
+    layout="column"
+    layout-align="center center"
+    ng-class="{'current-task': isCurrent, 'workflow-ended': taskNum > taskCount, 'has-previous-task': taskNum > 1}">
+    <div ng-if="taskCount >= taskNum">
+        <div class="task-preview-header" layout="row">
+            <span flex></span>
+            <span>{{ taskNum }}</span>
+        </div>
+        <div class="task-preview-content" layout-fill layout="column" 
+            layout-align="center center">
+            <span>{{ task.name }}</span>
+        </div>
+    </div>
+    <div ng-if="taskNum > taskCount" layout-fill layout="column" 
+        layout-align="center center">
+        All tasks complete
+    </div>
+</div>

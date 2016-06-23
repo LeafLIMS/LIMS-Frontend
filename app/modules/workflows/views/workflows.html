@@ -1,0 +1,35 @@
+<div layout="row" class="no-padding" flex>
+    <div flex="30" layout="column" layout-fill> 
+        <md-toolbar class="md-primary md-hue-1 no-padding">
+            <div class="md-toolbar-tools">
+                <md-button ng-click="startWorkflow()">
+                    <md-icon>play_arrow</md-icon>
+                    Start new workflow
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-list class="in-page-nav">
+            <md-subheader>Active workflows</md-subheader>
+            <md-list-item ng-show="activeWorkflows.length == 0">
+                <div class="no-workflows-message"> 
+                    There are no workflows currently in progress.
+                </div>
+            </md-list-item>
+            <md-list-item ng-repeat="w in activeWorkflows" 
+                ui-sref-active="selected"
+                ui-sref="app.workflows.workflow({id: w.id})"
+                class="md-3-line">
+                <div class="md-list-item-text">
+                    <h3>
+                        {{ w.workflow_data.name }}
+                        <span class="product-count">{{ w.product_statuses.length }} products</span>
+                    </h3>
+                    <h4>Started: {{ w.workflow_data.date_created|date:"medium" }}</h4>
+                    <p>Started by: {{ w.started_by }}</p>
+                </div>
+                <span flex></span>
+            </md-list-item>
+        </md-list>
+    </div>
+    <div ui-view="workflow" flex layout-fill></div>
+</div>

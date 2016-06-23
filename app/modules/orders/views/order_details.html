@@ -1,0 +1,151 @@
+<div layout="column" class="no-padding">
+    <md-toolbar class="md-primary md-hue-1">
+        <div class="md-toolbar-tools">
+            <span flex></span>
+            <md-button ng-click="delete()" class="md-raised md-warn">Delete</md-button>
+        </div>
+    </md-toolbar>
+    <div layout="row" layout-padding flex>
+        <div flex layout="column">
+            <h3 class="section-subheader">Details</h3>
+            <md-input-container class="compact">
+                <label>Date placed</label> 
+                <input disabled value="{{order.date_placed|date:'medium' }}">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>Date last updated</label> 
+                <input disabled value="{{order.date_updated|date:'medium' }}">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>Name</label>
+                <input ng-model="order.data.order.name">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>Address 1</label>
+                <input ng-model="order.data.order.address_1">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>Address 2</label>
+                <input ng-model="order.data.order.address_2">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>City</label>
+                <input ng-model="order.data.order.city">
+            </md-input-container>
+            <md-input-container class="compact">
+                <label>Postcode</label>
+                <input ng-model="order.data.order.postcode">
+            </md-input-container>
+            <md-input-container flex>
+                <label>Country</label>
+                <md-select ng-model="order.data.order.country">
+                    <md-option ng-repeat="c in countries">{{ c }}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div flex layout="column">
+            <h3 class="section-subheader">Status</h3>
+            <md-input-container class="compact">
+                <label>Status</label>
+                <md-select ng-model="order.status">
+                    <md-option ng-repeat="st in order_bar_statuses">{{ st }}</md-option>
+                </md-select>
+            </md-input-container>
+            <md-switch ng-model="order.is_quote" aria-label="Is a quote">
+                Is quote
+            </md-switch>
+            <md-switch ng-model="order.quote_sent" aria-label="Quote sent">
+                Quote sent
+            </md-switch>
+            <md-switch ng-model="order.po_received" aria-label="Purchase order received">
+                Purchase order received
+            </md-switch>
+            <md-input-container class="compact" ng-show="order.po_received">
+                <label>Purchase order reference</label>
+                <input ng-model="order.po_reference">
+            </md-input-container>
+            <md-switch ng-model="order.invoice_sent" aria-label="Invoice sent">
+                Invoice sent
+            </md-switch>
+            <md-switch ng-model="order.has_paid" aria-label="Has paid">
+                Has paid
+            </md-switch>
+            <md-input-container flex>
+                <label>Order notes</label>
+                <textarea ng-model="order.notes"></textarea>
+            </md-input-container>
+        </div>
+    </div>
+    <div flex layout-padding>
+        <h3 class="section-subheader">Quotations and accounts</h3>
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column>Quote number</th>
+                        <th md-column>Quote name</th>
+                        <th md-column>Subtotal</th>
+                        <th md-column>Discount</th>
+                        <th md-column>Total</th>
+                        <th md-column></th>
+                    </th>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="quote in order.crm.quotes">
+                        <td md-cell>{{ quote.quote_number }}</td>
+                        <td md-cell>{{ quote.quote_name }}</td>
+                        <td md-cell>£{{ quote.subtotal }}</td>
+                        <td md-cell>£{{ quote.discount }}</td>
+                        <td md-cell>£{{ quote.total }}</td>
+                        <td md-cell>
+                            <md-button ng-click="goSalesforce(quote.quote_url)">
+                                View on salesforce
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <div layout="row">
+            <span flex></span>
+            <md-button ng-click="refreshQuotes()">
+                <md-icon>refresh</md-icon>
+                Refresh quote information
+            </md-button>
+        </div>
+    </div>
+    <div class="coloured-section">
+        <h3 class="section-subheader">Services</h3>
+        <md-table-container flex>
+            <table md-table>                         
+                <thead md-head>                                   
+                    <tr md-row>                                  
+                        <th md-column>Sample name</th>
+                        <th md-column>Service name</th>             
+                        <th md-column>Service Code</th>             
+                        <th md-column>Quantity</th>                 
+                        <th md-column>Price</th>                    
+                        <th md-column>Total</th>                    
+                    </tr>                                 
+                </thead>                                  
+                <tbody md-body ng-repeat="sample in order.data.samples"> 
+                    <tr md-row ng-repeat="s in sample.services"> 
+                        <td md-cell 
+                            ng-if="$index == 0" 
+                            rowspan="{{ ($index == 0 ? sample.services.length : 0) }}"> 
+                            {{ sample.name }}                  
+                        </td>                             
+                        <td md-cell>
+                            {{ s.name }}
+                            <span ng-show="s.extra" class="order-item-extra">{{ s.extra }}</span>
+                        </td>
+                        <td md-cell>{{ s.code }}</td>             
+                        <td md-cell>{{ s.quantity }}</td>         
+                        <td md-cell>£{{ s.price|number:"2" }}</td>
+                        <td md-cell>£{{ s.cost|number:"2" }}</td> 
+                    </tr>                                 
+                </tbody>                                  
+            </table>                                      
+        </md-table-container>
+    </div>
+</div>

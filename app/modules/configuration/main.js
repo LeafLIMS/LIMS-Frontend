@@ -1,0 +1,1243 @@
+'use strict';
+
+var app = angular.module('limsFrontend');
+
+app.controller('ConfigurationCtrl', function($scope, PageTitle) {
+
+    PageTitle.set('Configuration');
+    $scope.removePadding = true;
+
+    $scope.availableConfigs = [
+        {
+            name: 'Projects',
+            sections: [
+                {
+                    name: 'Workflow templates',
+                    ctrl: 'Workflows',
+                },
+                {
+                    name: 'Workflow task templates',
+                    ctrl: 'WorkflowTasks',
+                }
+            ]
+        },
+        {
+            name: 'Inventory',
+            sections: [
+                {
+                    name: 'Item types',
+                    ctrl: 'ItemType',
+                },
+                {
+                    name: 'Measures',
+                    ctrl: 'Measures',
+                },
+                {
+                    name: 'Locations',
+                    ctrl: 'Locations',
+                },
+                {
+                    name: 'Organisms',
+                    ctrl: 'Organisms',
+                }
+            ]
+        },
+        {
+            name: 'Equipment',
+            sections: [
+                {
+                    name: 'Available equipment',
+                    ctrl: 'Equipment',
+                },
+            ]
+        },
+        {
+            name: 'Attachments',
+            sections: [
+                {
+                    name: 'Attachments',
+                    ctrl: 'Attachments',
+                }
+            ]
+        },
+        {
+            name: 'Users and permissions',
+            sections: [
+                {
+                    name: 'Users',
+                    ctrl: 'Users',
+                },
+                {
+                    name: 'Groups',
+                    ctrl: 'Groups',
+                },
+            ]
+        },
+    ];
+
+});
+
+app.controller('WorkflowsConfigurationCtrl', function($scope, PageTitle, 
+            WorkflowService, $mdDialog) {
+    PageTitle.set('Workflow templates configuration');
+    
+    $scope.selected = [];
+
+    $scope.query = {
+        ordering: '-created_on',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        WorkflowService.availableWorkflows($scope.query).then(function(data) {
+            $scope.workflows = data;
+        });
+    };
+    refreshData();
+
+    WorkflowService.availableTasks().then(function(data) {
+        $scope.availableTasks = data;
+    });
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createWorkflowTemplate = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createworkflowtemplate.html',
+            controller: 'WorkflowDialogCtrl',
+            locals: {
+                tasks: $scope.availableTasks,
+                workflowId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(workflowId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createworkflowtemplate.html',
+            controller: 'WorkflowDialogCtrl',
+            locals: {
+                tasks: $scope.availableTasks,
+                workflowId: workflowId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(workflowId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this workflow?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            WorkflowService.deleteWorkflowTemplate(workflowId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+    $scope.duplicateItem = function(item) {
+        item.id = undefined;
+        item.name = item.name + ' (copy)';
+        WorkflowService.saveWorkflowTemplate(item).then(function() {
+            refreshData();
+        }); 
+    };
+
+});
+
+app.controller('WorkflowDialogCtrl', function($scope, $mdDialog, 
+    WorkflowService, UserService, tasks, workflowId) {
+
+    var getWorkflow = function(workflowId) {
+        if(workflowId) {
+            WorkflowService.getWorkflowWithTasks(workflowId).then(function(data) {
+                $scope.order = [];
+                var order = data.order.split(',');
+                if(!order[0] == "") {
+                    _.each(order, function(taskId) {
+                        $scope.order.push(_.find(data.tasks, function(obj) {
+                            return obj.id == taskId;
+                        }));
+                    });
+                }
+                $scope.workflow = data;
+                $scope.workflow_name = data.name;
+            });
+        } else {
+            $scope.workflow = {};
+            $scope.order = [];
+        }
+    };
+    getWorkflow(workflowId);
+
+    $scope.addTask = function() {
+        if($scope.selectedTask) {
+            $scope.order.push($scope.selectedTask);
+            $scope.taskSearchText = '';
+            $scope.selectedTask = undefined;
+        }
+    };
+
+    $scope.queryTasks = function(searchText) {
+        var searchText = searchText.toLowerCase();
+        return _.filter(tasks, function(obj) {
+            if(obj.name.toLowerCase().indexOf(searchText) > -1)
+                return obj
+        });
+    };
+
+    $scope.removeTask = function(index) {
+        $scope.order.splice(index, 1);
+    };
+
+    $scope.save = function() {
+        var order = _.map($scope.order, 'id').join(',');
+
+        $scope.workflow.name = $scope.workflow_name;
+        $scope.workflow.order = order;
+        if(!workflowId) {
+            $scope.workflow.created_by = UserService.getUser().username;
+        }
+        if(workflowId) {
+            WorkflowService.updateWorkflowTemplate(workflowId, $scope.workflow).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            WorkflowService.saveWorkflowTemplate($scope.workflow).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('WorkflowTasksConfigurationCtrl', function($scope, PageTitle, WorkflowService,
+            $mdDialog, $rootScope) {
+    PageTitle.set('Workflow task templates configuration');
+
+    $scope.query = {
+        ordering: '-created_on',
+        limit: 10
+    };
+
+    var refreshData = function(params) {
+        WorkflowService.availableTasks($scope.query).then(function(data) {
+            $scope.tasks = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createWorkflowTaskTemplate = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createtasktemplate.html',
+            controller: 'WorkflowTasksDialogCtrl',
+            locals: {
+                taskId: undefined,
+            }
+        }).then(function() {
+            refreshData();
+        });
+    }; 
+
+    $scope.editItem = function(taskId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createtasktemplate.html',
+            controller: 'WorkflowTasksDialogCtrl',
+            locals: {
+                taskId: taskId,
+            }
+        }).then(function() {
+            refreshData();
+        });
+    }; 
+
+    $scope.deleteItem = function(taskId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this task?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            WorkflowService.deleteTaskTemplate(taskId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+    $scope.duplicateItem = function(item) {
+        item.id = undefined;
+        item.name = item.name + ' (copy)';
+        WorkflowService.saveTaskTemplate(item).then(function() {
+            refreshData();
+        }); 
+    };
+
+});
+
+app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog, 
+    WorkflowService, InventoryService, UserService, 
+    EquipmentService, FileTemplateService, taskId) {
+
+    if(taskId) {
+        WorkflowService.task(taskId).then(function(data) {
+            $scope.task = data;
+            $scope.inputSearchText = $scope.task.product_input;
+            $scope.mText = $scope.task.product_input_measure;
+            $scope.lbText = $scope.task.labware;
+        });
+    } else {
+        $scope.task = {
+            capable_equipment: [],
+            input_files: [],
+            output_files: []
+        };
+    }
+
+    $scope.transformChip = function(chip) {
+        if(angular.isObject(chip)) {
+            return chip.name;
+        }
+        return chip;
+    };
+
+    InventoryService.measures({limit: 100}).then(function(data) {
+        $scope.measures = data;
+    }); 
+
+    $scope.filterInputTypes = function(filterText) {
+        return InventoryService.itemTypes({search: filterText});
+    };
+
+    $scope.filterEquipment = function(filterText) {
+        return EquipmentService.equipment({search: filterText});
+    };
+
+    $scope.filterFileTemplates = function(filterText) {
+        return FileTemplateService.templates({search: filterText});
+    };
+
+    $scope.filterMeasures = function(filterText) {
+        return InventoryService.measures({search: filterText});
+    };
+
+    $scope.setMeasure = function(item) {
+        $scope.task.product_input_measure = item.symbol;
+    };
+
+    $scope.setLabware = function(item) {
+        $scope.task.labware = item.name;
+    };
+
+    $scope.addField = function(fieldType) {
+        $scope.task[fieldType+'_fields'].push({});
+    };
+
+    $scope.saveField = function(fieldType, field) {
+        field.template = $scope.task.id;
+        WorkflowService.saveTaskField(field, fieldType).then(function(data) {
+            field.id = data.id;
+        });
+    };
+
+    $scope.updateField = function(fieldType, field, frm) {
+        WorkflowService.updateTaskField(field.id, field, fieldType).then(function() {
+            frm.$setPristine();
+        });
+    };
+
+    $scope.removeField = function(fieldType, index, isSaved) {
+        if(isSaved) {
+            var field = $scope.task[fieldType+'_fields'][index]; 
+            WorkflowService.deleteTaskField(field.id, fieldType);
+        }
+        $scope.task[fieldType+'_fields'].splice(index, 1);
+    };
+
+    $scope.saveAddFields = function() {
+        $scope.task.product_input = $scope.inputSelected.name;
+        $scope.task.created_by = UserService.getUser().username;
+        WorkflowService.saveTaskTemplate($scope.task).then(function(data) {
+            $scope.task = data;
+            taskId = data.id;
+        });
+    };
+
+    $scope.save = function() {
+        var fields = _.reduce($scope.taskFields, 
+                function(array, obj) {
+                    return array.concat(obj);
+                });
+        $scope.task.product_input = $scope.inputSelected.name;
+        if(taskId) {
+            WorkflowService.updateTaskTemplate(taskId, $scope.task).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            WorkflowService.saveTaskTemplate($scope.task).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('MeasuresConfigurationCtrl', function($scope, PageTitle, 
+            InventoryService, $mdDialog) {
+    PageTitle.set('Measures configuration');
+    
+    $scope.selectedItems = [];
+
+    $scope.query = {
+        ordering: '-created_on',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        InventoryService.measures($scope.query).then(function(data) {
+            $scope.measures = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createMeasure = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createmeasure.html',
+            controller: 'MeasureDialogCtrl',
+            locals: {
+                measureId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(measureId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createmeasure.html',
+            controller: 'MeasureDialogCtrl',
+            locals: {
+                measureId: measureId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(measureId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this measure?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            InventoryService.deleteMeasure(measureId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('MeasureDialogCtrl', function($scope, $mdDialog, 
+    InventoryService, UserService, measureId) {
+
+    var getMeasure = function(measureId) {
+        if(measureId) {
+            InventoryService.getMeasure(measureId).then(function(data) {
+                $scope.measure = data;
+            });
+        } else {
+            $scope.measure = {};
+        }
+    };
+    getMeasure(measureId);
+
+    $scope.save = function() {
+        if(measureId) {
+            InventoryService.updateMeasure(measureId, $scope.measure).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            InventoryService.saveMeasure($scope.measure).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('ItemTypeConfigurationCtrl', function($scope, PageTitle, 
+            InventoryService, $mdDialog) {
+    PageTitle.set('Item types configuration');
+    
+    $scope.selectedItems = [];
+
+    var getAvailableItemTypes = function() {
+        InventoryService.itemTypes({limit: 500}).then(function(data) {
+            $scope.itemtypes = data;
+            _.each($scope.itemtypes, function(obj) {
+                obj.show = true;
+                obj.expanded = true;
+            });
+        });
+    };
+    getAvailableItemTypes();
+
+    $scope.showChildren = function(item) {
+        // go through until hit same level!!
+        // from index until level == item.level
+        var index = _.indexOf($scope.itemtypes, item);
+        $scope.itemtypes[index].expanded = true;
+        for(var i = index+1; i < $scope.itemtypes.length; i++) {
+            if($scope.itemtypes[i].level == item.level)
+                break;
+            if($scope.itemtypes[i].level == $scope.itemtypes[index].level + 1)
+                $scope.itemtypes[i].show = true;
+        } 
+    };
+
+    $scope.hideChildren = function(item) {
+        var index = _.indexOf($scope.itemtypes, item);
+        console.log(index);
+        $scope.itemtypes[index].expanded = false;
+        for(var i = index+1; i < $scope.itemtypes.length; i++) {
+            if($scope.itemtypes[i].level == item.level)
+                break;
+            $scope.itemtypes[i].show = false;
+            $scope.itemtypes[i].expanded = false;
+        } 
+    };
+
+    $scope.createItemType = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createitemtype.html',
+            controller: 'ItemTypeDialogCtrl',
+            locals: {
+                itemtypes: $scope.itemtypes,
+                itemtypeId: undefined
+            }
+        }).then(function() {
+            getAvailableItemTypes();
+        });
+    };
+
+    $scope.editItem = function(itemtypeId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createitemtype.html',
+            controller: 'ItemTypeDialogCtrl',
+            locals: {
+                itemtypes: $scope.itemtypes,
+                itemtypeId: itemtypeId
+            }
+        }).then(function() {
+            getAvailableItemTypes();
+        });
+    };
+
+    $scope.deleteItem = function(itemtypeId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this item type?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            InventoryService.deleteItemType(itemtypeId)
+                .then(function() {
+                    getAvailableItemTypes();
+                });
+        });
+    };
+
+});
+
+app.controller('ItemTypeDialogCtrl', function($scope, $mdDialog, 
+    InventoryService, UserService, itemtypes, itemtypeId) {
+
+    var getItemType = function(itemtypeId) {
+        if(itemtypeId) {
+            InventoryService.getItemType(itemtypeId).then(function(data) {
+                $scope.itemtype = data;
+                $scope.selectedItem = _.find(itemtypes, {name: data.parent});
+            });
+        } else {
+            $scope.itemtype = {};
+        }
+    };
+    getItemType(itemtypeId);
+
+    // ng-show when open == parent
+    $scope.setParent = function() {
+        if($scope.selectedItem) {
+            $scope.itemtype.parent = $scope.selectedItem.name;
+        }
+    };
+
+    $scope.queryItems = function(searchText) {
+        var searchText = searchText.toLowerCase();
+        return _.filter(itemtypes, function(obj) {
+            if(obj.level > 0) {
+                obj.pad = Array(obj.level + 1).join(' -- ');
+            }
+            if(obj.name.toLowerCase().indexOf(searchText) > -1)
+                return obj
+        });
+    };
+
+    $scope.save = function() {
+        if(itemtypeId) {
+            InventoryService.updateItemType(itemtypeId, $scope.itemtype).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            InventoryService.saveItemType($scope.itemtype).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('LocationsConfigurationCtrl', function($scope, PageTitle, 
+            InventoryService, $mdDialog) {
+    PageTitle.set('Locations configuration');
+    
+    $scope.selectedItems = [];
+
+    var getAvailableLocations = function() {
+        InventoryService.locations({limit: 200}).then(function(data) {
+            $scope.locations = data;
+            _.each($scope.locations, function(obj) {
+                obj.show = true;
+                obj.expanded = true;
+            });
+        });
+    };
+    getAvailableLocations();
+
+    $scope.showChildren = function(item) {
+        // go through until hit same level!!
+        // from index until level == item.level
+        var index = _.indexOf($scope.locations, item);
+        $scope.locations[index].expanded = true;
+        for(var i = index+1; i < $scope.locations.length; i++) {
+            if($scope.locations[i].level == item.level)
+                break;
+            if($scope.locations[i].level == $scope.locations[index].level + 1)
+                $scope.locations[i].show = true;
+        } 
+    };
+
+    $scope.hideChildren = function(item) {
+        var index = _.indexOf($scope.locations, item);
+        $scope.locations[index].expanded = false;
+        for(var i = index+1; i < $scope.locations.length; i++) {
+            if($scope.locations[i].level == item.level)
+                break;
+            $scope.locations[i].show = false;
+            $scope.locations[i].expanded = false;
+        } 
+    };
+
+    $scope.createLocation = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createlocation.html',
+            controller: 'LocationDialogCtrl',
+            locals: {
+                locations: $scope.locations,
+                locationId: undefined
+            }
+        }).then(function() {
+            getAvailableLocations();
+        });
+    };
+
+    $scope.editItem = function(locationId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createlocation.html',
+            controller: 'LocationDialogCtrl',
+            locals: {
+                locations: $scope.locations,
+                locationId: locationId
+            }
+        }).then(function() {
+            getAvailableLocations();
+        });
+    };
+
+    $scope.deleteItem = function(locationId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this location?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            InventoryService.deleteLocation(locationId)
+                .then(function() {
+                    getAvailableLocations();
+                });
+        });
+    };
+
+});
+
+app.controller('LocationDialogCtrl', function($scope, $mdDialog, 
+    InventoryService, UserService, locations, locationId) {
+
+    console.log(locations, locationId);
+
+    var getLocation = function(locationId) {
+        if(locationId) {
+            InventoryService.getLocation(locationId).then(function(data) {
+                $scope.location = data;
+                $scope.selectedItem = _.find(locations, {code: data.parent});
+            });
+        } else {
+            $scope.location = {};
+        }
+    };
+    getLocation(locationId);
+
+    // ng-show when open == parent
+    $scope.setParent = function() {
+        if($scope.selectedItem) {
+            $scope.location.parent = $scope.selectedItem.code;
+        }
+    };
+
+    $scope.queryItems = function(searchText) {
+        var searchText = searchText.toLowerCase();
+        return _.filter(locations, function(obj) {
+            if(obj.level > 0) {
+                obj.pad = Array(obj.level + 1).join(' -- ');
+            }
+            if(obj.name.toLowerCase().indexOf(searchText) > -1)
+                return obj
+        });
+    };
+
+    $scope.save = function() {
+        if(locationId) {
+            InventoryService.updateLocation(locationId, $scope.location).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            InventoryService.saveLocation($scope.location).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('OrganismsConfigurationCtrl', function($scope, PageTitle, 
+            OrganismService, $mdDialog) {
+    PageTitle.set('Organisms configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        OrganismService.organisms($scope.query).then(function(data) {
+            $scope.organisms = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createOrganism = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createorganism.html',
+            controller: 'OrganismDialogCtrl',
+            locals: {
+                organismId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(organismId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createorganism.html',
+            controller: 'OrganismDialogCtrl',
+            locals: {
+                organismId: organismId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(organismId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this organism?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            OrganismService.deleteOrganism(organismId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('OrganismDialogCtrl', function($scope, $mdDialog, 
+    OrganismService, UserService, organismId) {
+
+    var getOrganism = function(organismId) {
+        if(organismId) {
+            OrganismService.getOrganism(organismId).then(function(data) {
+                $scope.organism = data;
+            });
+        } else {
+            $scope.organism = {};
+        }
+    };
+    getOrganism(organismId);
+
+    $scope.save = function() {
+        if(organismId) {
+            OrganismService.updateOrganism(organismId, $scope.organism).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            OrganismService.saveOrganism($scope.organism).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('UsersConfigurationCtrl', function($scope, PageTitle, 
+            UserService, $mdDialog) {
+    PageTitle.set('Users configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        UserService.users($scope.query).then(function(data) {
+            $scope.users = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createUser = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createuser.html',
+            controller: 'UserDialogCtrl',
+            locals: {
+                userId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(userId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createuser.html',
+            controller: 'UserDialogCtrl',
+            locals: {
+                userId: userId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(userId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this user?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            UserService.deleteUser(userId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('UserDialogCtrl', function($scope, $mdDialog, 
+    UserService, GroupService, userId) {
+
+    GroupService.groups().then(function(data) {
+        $scope.groups = data;
+    });
+
+    $scope.getItems = function(searchText) {
+        var st = searchText.toLowerCase();
+        return _.filter($scope.groups, function(obj) {
+            return obj.name.toLowerCase().indexOf(st) > -1;
+        });
+    };
+
+    $scope.addGroup = function() {
+        if($scope.selectedItem) {
+            if(!$scope.user.groups) {
+                $scope.user.groups = [];
+            }
+            if($scope.user.groups.indexOf($scope.selectedItem.name) == -1) {
+                $scope.user.groups.push($scope.selectedItem.name);
+            }
+            $scope.selectedItem = undefined;
+            $scope.searchText = undefined;
+        }
+    };
+
+    $scope.removeGroup = function(name) {
+        var loc = $scope.user.groups.indexOf(name);
+        $scope.user.groups.splice(loc, 1);
+    };
+
+    var getUser = function(userId) {
+        if(userId) {
+            UserService.getUserDetails(userId).then(function(data) {
+                $scope.user = data;
+            });
+        } else {
+            $scope.user = {};
+        }
+    };
+    getUser(userId);
+
+    $scope.save = function() {
+        if($scope.user.password == '') {
+            delete $scope.user.password;
+        }
+        if(userId) {
+            UserService.updateUserDetails(userId, $scope.user).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            UserService.saveUser($scope.user).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('GroupsConfigurationCtrl', function($scope, PageTitle, 
+            GroupService, $mdDialog) {
+    PageTitle.set('Groups configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        GroupService.groups($scope.query).then(function(data) {
+            $scope.groups = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createGroup = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/creategroup.html',
+            controller: 'GroupDialogCtrl',
+            locals: {
+                groupId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(groupId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/creategroup.html',
+            controller: 'GroupDialogCtrl',
+            locals: {
+                groupId: groupId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(groupId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this group?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            GroupService.deleteGroup(groupId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('GroupDialogCtrl', function($scope, $mdDialog, 
+    GroupService, groupId) {
+
+    $scope.permissions = [];
+    GroupService.permissions({limit: 200}).then(function(data) {
+        _.each(data, function(obj) {
+            $scope.permissions.push(obj.name);
+        });
+    });
+
+    $scope.getItems = function(searchText) {
+        var st = searchText.toLowerCase();
+        return _.filter($scope.groups, function(obj) {
+            return obj.name.toLowerCase().indexOf(st) > -1;
+        });
+    };
+
+    var getGroup = function(groupId) {
+        if(groupId) {
+            GroupService.getGroup(groupId).then(function(data) {
+                $scope.group = data;
+            });
+        } else {
+            $scope.group = {};
+            $scope.group.permissions = [];
+        }
+    };
+    getGroup(groupId);
+
+    $scope.save = function() {
+        if(groupId) {
+            GroupService.updateGroup(groupId, $scope.group).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            GroupService.saveGroup($scope.group).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('EquipmentConfigurationCtrl', function($scope, PageTitle, 
+            EquipmentService, $mdDialog) {
+    PageTitle.set('Equipment configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10
+    };
+
+    var refreshData = function() {
+        EquipmentService.equipment($scope.query).then(function(data) {
+            $scope.equipments = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n,o) {
+        if(n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createEquipment = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createequipment.html',
+            controller: 'EquipmentDialogCtrl',
+            locals: {
+                equipmentId: undefined
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(equipmentId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createequipment.html',
+            controller: 'EquipmentDialogCtrl',
+            locals: {
+                equipmentId: equipmentId
+            }
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(equipmentId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this equipment?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            EquipmentService.deleteEquipment(equipmentId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('EquipmentDialogCtrl', function($scope, $mdDialog, 
+    EquipmentService, InventoryService, equipmentId) {
+
+    InventoryService.locations({limit: 200}).then(function(data) {
+        $scope.locations = data;
+    });
+
+    $scope.getItems = function(searchText) {
+        var st = searchText.toLowerCase();
+        return _.filter($scope.equipments, function(obj) {
+            return obj.name.toLowerCase().indexOf(st) > -1;
+        });
+    };
+
+    var getEquipment = function(equipmentId) {
+        if(equipmentId) {
+            EquipmentService.getEquipment(equipmentId).then(function(data) {
+                $scope.equipment = data;
+            });
+        } else {
+            $scope.equipment = {};
+            $scope.equipment.permissions = [];
+        }
+    };
+    getEquipment(equipmentId);
+
+    $scope.save = function() {
+        if(equipmentId) {
+            EquipmentService.updateEquipment(equipmentId, $scope.equipment).then(function() {
+                $mdDialog.hide();
+            }); 
+        } else {
+            $scope.equipment.status = 'idle';
+            EquipmentService.saveEquipment($scope.equipment).then(function() {
+                $mdDialog.hide();
+            }); 
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
