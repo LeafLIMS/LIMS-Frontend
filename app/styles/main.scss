@@ -304,8 +304,15 @@ input.noedit {
 // Section specific
 
 .welcome {
-    background: $primary1;
+    background: $primary1 url(/images/temp_sidebar_logo.svg) no-repeat;
+    background-size: cover;
     font-size: 2em;
+    .welcome-title {
+        font-size: 3em;
+        font-weight: 200;
+        text-align: center;
+        color: white;
+    }
 }
 
 .sidebar-logo {
