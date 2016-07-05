@@ -5,8 +5,9 @@ var app = angular.module('limsFrontend');
 app.service('FileTemplateService', function(Restangular) {
 
     this.templates = function(params) {
-        if(!params)
-            var params = {}
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('filetemplates').getList(params);
     };
 

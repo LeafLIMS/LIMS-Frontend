@@ -3,7 +3,6 @@
 var app = angular.module('limsFrontend');
 
 app.controller('LoginModalCtrl', function($scope, UserService, $mdDialog) {
-    
     $scope.cancel = $mdDialog.hide;
 
     $scope.submit = function(username, password) {
@@ -27,7 +26,7 @@ app.service('loginModal', function(UserService, $mdDialog) {
         $mdDialog.cancel();
         var instance = $mdDialog.show({
             templateUrl: 'modules/auth/views/loginmodal.html',
-            controller: 'LoginModalCtrl'
+            controller: 'LoginModalCtrl',
         });
         return instance;
         /*
@@ -51,15 +50,16 @@ app.service('UserService', function(Restangular, $localStorage) {
     }
 
     this.isLoggedIn = function() {
-        if(typeof $localStorage.user !== 'undefined') {
+        if (typeof $localStorage.user !== 'undefined') {
             return true;
         }
         return false;
     };
 
     this.users = function(params) {
-        if(!params)
-            var params = {}
+        if (!params) {
+            params = {}
+        }
         return Restangular.all('users').getList(params);
     };
 
@@ -94,7 +94,7 @@ app.service('UserService', function(Restangular, $localStorage) {
 
     this.login = function(username, password) {
         var params = {username: username, password: password}
-        return Restangular.one('users').customPOST(params, 'token'); 
+        return Restangular.one('users').customPOST(params, 'token');
     };
 
     this.logout = function() {
@@ -106,8 +106,9 @@ app.service('UserService', function(Restangular, $localStorage) {
 app.service('GroupService', function(Restangular) {
 
     this.groups = function(params) {
-        if(!params)
-            var params = {}
+        if (!params) {
+            params = {}
+        }
         return Restangular.all('groups').getList(params);
     };
 
@@ -128,8 +129,9 @@ app.service('GroupService', function(Restangular) {
     };
 
     this.permissions = function(params) {
-        if(!params)
-            var params = {}
+        if (!params) {
+            params = {}
+        }
         return Restangular.all('permissions').getList(params);
     };
 

@@ -5,6 +5,7 @@
   "asi": true,
   "globals": {
     "angular": false,
-    "_": false
+    "_": false,
+    "$q": false
   }
 }

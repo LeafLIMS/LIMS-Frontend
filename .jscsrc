@@ -3,5 +3,5 @@
   "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
   "disallowQuotedKeysInObjects": "allButReserved",
   "validateIndentation": 4,
-  "maximumLineLength": 100,
+  "maximumLineLength": 100
 }

@@ -14,28 +14,28 @@ app.controller('OrdersCtrl', function($scope, PageTitle, OrderService) {
 
 });
 
-app.controller('OrderDetailsCtrl', function($scope, PageTitle, 
+app.controller('OrderDetailsCtrl', function($scope, PageTitle,
     OrderService, $stateParams, $state) {
 
     $scope.removePadding = true;
     OrderService.order_details($stateParams.id).then(function(data) {
         $scope.order = data;
-        PageTitle.set('Order #' +$scope.order.id + ': ' + $scope.order.name);
+        PageTitle.set('Order #' + $scope.order.id + ': ' + $scope.order.name);
 
-        var services = {};                                                
-        _.each($scope.order.data.samples, function(obj) {                    
-            services[obj.name] = obj.services;                            
-        });                                                               
-        $scope.total = _.reduce(services, function(total, n) {            
-            return total + _.reduce(n, function(subtotal, m) {            
-                return subtotal + m.cost;                                 
-            }, 0);                                                        
+        var services = {};
+        _.each($scope.order.data.samples, function(obj) {
+            services[obj.name] = obj.services;
+        });
+        $scope.total = _.reduce(services, function(total, n) {
+            return total + _.reduce(n, function(subtotal, m) {
+                return subtotal + m.cost;
+            }, 0);
         }, 0);
 
     });
 
-    OrderService.statusBarOptions().then(function(data) {                 
-        $scope.order_bar_statuses = data;                                 
+    OrderService.statusBarOptions().then(function(data) {
+        $scope.order_bar_statuses = data;
     });
 
     $scope.delete = function() {
@@ -54,8 +54,9 @@ app.service('OrderService', function(Restangular) {
     };
 
     this.orders = function(params) {
-        if(!params)
+        if (!params) {
             params = {}
+        }
         return Restangular.all('orders').getList(params);
     };
 
@@ -63,16 +64,16 @@ app.service('OrderService', function(Restangular) {
         return Restangular.one('orders', identifier).get();
     };
 
-    this.update = function(order_id, data) {                              
-        return Restangular.one('orders', order_id).patch(data);           
-    };                                                                    
-                                                                          
-    this.remove = function(order_id) {                                    
-        return Restangular.one('orders', order_id).remove();              
-    };                                                                    
-                                                                          
-    this.statusBarOptions = function() {                                  
-        return Restangular.all('orders').all('statuses').getList();       
+    this.update = function(orderId, data) {
+        return Restangular.one('orders', orderId).patch(data);
+    };
+
+    this.remove = function(orderId) {
+        return Restangular.one('orders', orderId).remove();
+    };
+
+    this.statusBarOptions = function() {
+        return Restangular.all('orders').all('statuses').getList();
     };
 
 });
