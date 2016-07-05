@@ -10,3 +10,6 @@ Session.vim
 .netrwhist
 *~
 .DS_Store
+
+# WebStorm
+.idea/
