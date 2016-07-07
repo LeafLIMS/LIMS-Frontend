@@ -227,7 +227,7 @@ module.exports = function (grunt) {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
       }
-    }, 
+    },
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
@@ -466,11 +466,13 @@ module.exports = function (grunt) {
         },
         dev: {
             constants: {
+                // Update API URL here before deploying in dev via 'grunt serve'
                 'API_URL': 'http://localhost:8000'
             }
         },
         dist: {
             constants: {
+              // Update API URL here before deploying in production via 'grunt build'
                 'API_URL': 'https://gm.liv.ac.uk:8080/'
             }
         }
