@@ -46,7 +46,7 @@ module.exports = function (grunt) {
         }
       },
       jsTest: {
-        files: ['test/spec/{,*/}*.js'],
+        files: ['tests/*.js'],
         tasks: ['newer:jshint:test', 'newer:jscs:test', 'karma']
       },
       compass: {
@@ -74,8 +74,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
+        hostname: "0.0.0.0",
         livereload: 35729
       },
       livereload: {
@@ -134,10 +133,7 @@ module.exports = function (grunt) {
         ]
       },
       test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
-        src: ['test/spec/{,*/}*.js']
+        src: ['tests/*.js']
       }
     },
 
@@ -154,7 +150,7 @@ module.exports = function (grunt) {
         ]
       },
       test: {
-        src: ['test/spec/{,*/}*.js']
+        src: ['tests/*.js']
       }
     },
 
@@ -227,7 +223,7 @@ module.exports = function (grunt) {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
       }
-    }, 
+    },
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
@@ -454,7 +450,7 @@ module.exports = function (grunt) {
     // Test settings
     karma: {
       unit: {
-        configFile: 'test/karma.conf.js',
+        configFile: 'karma.conf.js',
         singleRun: true
       }
     },
@@ -466,11 +462,13 @@ module.exports = function (grunt) {
         },
         dev: {
             constants: {
+                // Update API URL here before deploying in dev via 'grunt serve'
                 'API_URL': 'http://localhost:8000'
             }
         },
         dist: {
             constants: {
+              // Update API URL here before deploying in production via 'grunt build'
                 'API_URL': 'https://gm.liv.ac.uk:8080/'
             }
         }

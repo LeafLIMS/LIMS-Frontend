@@ -10,6 +10,10 @@ Session.vim
 .netrwhist
 *~
 .DS_Store
+limsweb.tar
 
 # WebStorm
 .idea/
+
+# Auto-generated config from Grunt
+/app/modules/config.js

@@ -20,7 +20,6 @@
     "grunt-filerev": "^2.1.2",
     "grunt-google-cdn": "^0.4.3",
     "grunt-jscs": "^1.8.0",
-    "grunt-karma": "*",
     "grunt-newer": "^1.1.0",
     "grunt-ng-annotate": "^0.9.2",
     "grunt-ng-constant": "^2.0.0",
@@ -30,9 +29,12 @@
     "grunt-wiredep": "^2.0.0",
     "jit-grunt": "^0.9.1",
     "jshint-stylish": "^1.0.0",
+    "time-grunt": "^1.0.0",
+    "karma": "*",
+    "grunt-karma": "*",
     "karma-jasmine": "*",
-    "karma-phantomjs-launcher": "*",
-    "time-grunt": "^1.0.0"
+    "jasmine-core": "*",
+    "karma-firefox-launcher": "*"
   },
   "engines": {
     "node": ">=0.10.0"
