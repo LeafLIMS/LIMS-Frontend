@@ -8,3 +8,4 @@ before_script:
   - 'npm install'
   - 'npm install -g grunt-cli bower'
   - 'bower install'
+  - 'gem install compass'

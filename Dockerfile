@@ -13,6 +13,9 @@ WORKDIR /usr/src/app/limsweb
 RUN npm install
 RUN npm install -g grunt-cli bower
 RUN bower --allow-root install
+RUN apt-get update
+RUN apt-get install -y ruby
+RUN gem install compass
 
 # BEFORE GOING ANY FURTHER
 # Need to set API_URL in Gruntfile.js ngconstant section - default Docker setup might be http://app:8000
