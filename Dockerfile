@@ -14,7 +14,7 @@ RUN npm install
 RUN npm install -g grunt-cli bower
 RUN bower --allow-root install
 RUN apt-get update
-RUN apt-get install -y ruby
+RUN apt-get install -y ruby ruby-dev
 RUN gem install compass
 
 # BEFORE GOING ANY FURTHER
