@@ -1,11 +1,12 @@
 <div class="gm-task-field" 
     layout="column" flex>
-    <div layout="row" layout-align="start center">
+    <div ng-if="field.from_input_file" class="field-label">From input file</div>
+    <div layout="row" layout-align="start center" ng-if="!field.from_input_file">
         <md-input-container class="task-field-amount">
             <label>Amount</label>
             <input type="number" step="1" 
-                ng-disabled="field.from_calculation || isDisabled"
-                ng-required="!field.from_calculation"
+                ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
+                ng-required="!field.from_calculation && !field.from_input_file"
                 aria-label="{{ field.name }} amount"
                 ng-model="field.amount">
         </md-input-container>
@@ -20,8 +21,8 @@
             md-item-text="item.name"
             md-min-length="0"
             md-select-on-match
-            required
-            ng-disabled="isDisabled"
+            ng-required="!field.from_input_file"
+            ng-disabled="isDisabled || field.from_input_file"
             md-floating-label="Choose {{ field.lookup_type|lowercase }} from inventory">
             <md-item-template>
                 <span md-highlight-text="lText"
@@ -34,4 +35,5 @@
             </md-not-found>
         </md-autocomplete> 
     </div>
+    <div ng-if="field.from_calculation" class="field-label">Using <i>{{ calc.label }}</i> to calculate amount</div>
 </div>

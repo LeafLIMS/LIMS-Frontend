@@ -2,7 +2,7 @@
     <form name="taskForm" ng-submit="save()" novalidate ng-show="task">
         <md-toolbar class="md-primary">
             <div class="md-toolbar-tools">
-                <h2>Create a new task template</h2>
+                <h2>Edit task template</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon aria-label="Close dialog">close</md-icon>
@@ -150,6 +150,7 @@
                                 ng-class="{'field-save-required': fieldForm.$dirty}"
                                 layout="row" layout-align="start center">
                                 <gtl-input-config-field flex
+                                    calculations="task.calculation_fields"
                                     field="field">
                                 </gtl-input-config-field>
                                 <div layout="column">
@@ -287,6 +288,7 @@
                         layout="row" layout-align="start center">
                         <gtl-step-config-field 
                             flex
+                            calculations="task.calculation_fields"
                             field="field"> 
                         </gtl-step-config-field>
                         <div layout="column">

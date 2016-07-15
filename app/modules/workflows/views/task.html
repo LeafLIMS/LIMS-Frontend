@@ -11,7 +11,7 @@
         </md-toolbar>
         <md-dialog-content class="task" layout="column">
             <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
-            <md-tabs md-dynamic-height md-border-bottom>
+            <md-tabs md-dynamic-height md-border-bottom md-selected="taskPaneSelected">
                 <md-tab label="Task setup">
                     <md-content class="md-dialog-content" layout="row" ng-if="!isStarted">
                         <div flex="30" class="right-padded">
@@ -55,7 +55,10 @@
                             </md-autocomplete> 
                             <div ng-repeat="field in task.input_fields">
                                 <span class="field-label">{{ field.label }}</span>
-                                <gtl-input-field is-disabled="isStarted" field="field">
+                                <gtl-input-field 
+                                    is-disabled="isStarted" 
+                                    field="field"
+                                    calculations="task.calculation_fields">
                                 </gtl-input-field>
                             </div>
                         </div>
@@ -63,7 +66,9 @@
                             <h3>Steps</h3>
                             <div ng-repeat="field in task.step_fields">
                                 <span class="field-label">{{ field.label }}</span>
-                                <gtl-step-field is-disabled="isStarted" field="field">
+                                <gtl-step-field is-disabled="isStarted" 
+                                    calculations="task.calculation_fields"
+                                    field="field">
                                 </gtl-step-field>
                             </div>
                             <h3>Constants</h3>
@@ -129,7 +134,16 @@
             <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
             <span flex></span>
             <md-button 
+                class="md-primary"
+                ng-show="taskPaneSelected == 0"
                 ng-disabled="form.$invalid"
+                ng-click="taskPaneSelected = 1">
+                <md-icon>arrow_forward</md-icon>
+                Check task
+            </md-button>
+            <md-button 
+                ng-disabled="form.$invalid || errorMessage"
+                ng-show="taskPaneSelected == 1"
                 ng-click="startTask()"
                 class="md-primary">
                 <md-icon>play_circle_outline</md-icon>

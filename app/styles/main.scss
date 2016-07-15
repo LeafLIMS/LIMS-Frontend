@@ -496,7 +496,7 @@ input.noedit {
         margin: 0.5em 0;
         font-weight: normal;
         text-transform: uppercase;
-        //color: $primary;
+        color: $primary;
     }
     .task-fields {
         margin-right: 0.5em;
@@ -653,6 +653,9 @@ md-list-item.selected {
     //md-input-container {
     //    margin-bottom: 0.25em;
     //}
+    .field-label {
+        color: $primary;
+    }
     .md-errors-spacer {
         min-height: 0;
     }

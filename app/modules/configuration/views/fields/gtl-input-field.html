@@ -5,12 +5,15 @@
         <input ng-model="field.label" required>
     </md-input-container>
     <div layout="row" layout-align="start center">
-        <md-input-container class="task-field-amount">
+        <md-input-container 
+            ng-hide="field.from_calculation"
+            class="task-field-amount">
             <label>Amount</label>
             <input type="number" step="1" 
-                ng-disabled="field.from_calculation"
-                ng-required="!field.from_calculation"
+                ng-disabled="field.from_calculation || field.from_input_file"
+                ng-required="!field.from_calculation && !field.from_input_file"
                 aria-label="{{ field.name }} amount"
+                ng-init="field.amount = 0"
                 ng-model="field.amount">
         </md-input-container>
         <md-autocomplete flex
@@ -54,7 +57,10 @@
     <md-select ng-model="field.calculation_used"
         ng-show="field.from_calculation"
         ng-required="field.from_calculation">
-        <md-option ng-repeat="calc in availableCalculations"
+        <md-option ng-repeat="calc in calculations"
             ng-value="calc.id">{{ calc.label }}</md-option>
     </md-select>
+    <md-checkbox ng-model="field.from_input_file">
+        Amount from file, ignore amount set here 
+    </md-checkbox>
 </div>
