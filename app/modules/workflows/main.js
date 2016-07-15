@@ -313,6 +313,8 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
     $scope.input_files = {};
     $scope.output_files = {};
 
+    $scope.taskPaneSelected = 0;
+
     if(!taskPositionId) {
         var taskPositionId = selected[0].current_task;
     }
@@ -320,30 +322,24 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
     WorkflowService.getTaskByPosition(workflowId, taskPositionId)
         .then(function(data) {
 
-        $scope.task = data;
+        $scope.task = data.plain();
         // The core fields - operations on these propogate through
         // to the individual component fields.
-        if(selectedWorkflow.saved) {
-            $scope.task = selectedWorkflow.saved;
-        } 
 
         $scope.selected = selected;
-
-        var retrieve = _.reduce(selected, function(result, value) {
-            if(result == '') 
-                return result + value.product.id; 
-            return result + ',' + value.product.id; 
-        }, '');
-
     });
 
     $scope.isStarted = selected[0].task_in_progress;  
 
     $scope.cancel = $mdDialog.cancel;
 
-    $scope.range = function(n) {
-        return new Array(n);
-    };
+    $scope.$on('field-amount-changed', function(e, data) {
+        console.log(e, data);
+        WorkflowService.recalculate($scope.task.id, $scope.task).then(function(data) {
+            $scope.task = data.plain();
+            console.log('TASK DATA', $scope.task);
+        });
+    });
 
     $scope.filterLabwareItems = function(filterText, lookupType) {
         if(!lookupType)
@@ -374,9 +370,16 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
             } else {
                 $scope.requirements = data;
             }
+            $scope.errorMessage = '';
         }).catch(function(err) {
             console.log(err);
-            $scope.errorMessage = err.data.message;
+            if(err.data.message) { 
+                $scope.errorMessage = err.data.message;
+            } else if(err.status == 400) {
+                $scope.errorMessage = 'Please ensure all fields contain valid data';
+            } else {
+                $scope.errorMessage = err.status + ' ' + err.statusText;
+            }
         });
     };
 

@@ -131,9 +131,11 @@ app.directive('gtlStepConfigField', function(InventoryService) {
                 }
             } else {
                 for(var i = 0; i < $scope.field.properties.length; i++) {
-                    $scope.field.properties[i].mText = $scope.field.properties.measure;
+                    $scope.field.properties[i].mText = $scope.field.properties[i].measure;
                 }
             }
+
+            console.log($scope.field);
 
             $scope.filterMeasures = function(filterText) {
                 return InventoryService.measures({search: filterText});
@@ -141,7 +143,6 @@ app.directive('gtlStepConfigField', function(InventoryService) {
 
             $scope.setMeasure = function(prop, item) {
                 prop.measure = item.symbol;
-                console.log($scope.field.properties);
             };
 
             $scope.addParameter = function(step) {
