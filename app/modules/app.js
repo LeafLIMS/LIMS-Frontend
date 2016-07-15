@@ -235,7 +235,7 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
         })
 
     $mdIconProvider
-        .iconSet('alt', 'fonts/mdi.svg');
+        .iconSet('alt', 'images/mdi.svg');
 
     $mdThemingProvider.theme('default')
         .primaryPalette('light-green')
