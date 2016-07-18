@@ -73,8 +73,8 @@ module.exports = function (grunt) {
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
-        hostname: "0.0.0.0",
+        port: '<%= listen_port %>',
+        hostname: '<%= listen_host %>',
         livereload: 35729
       },
       livereload: {
@@ -460,16 +460,14 @@ module.exports = function (grunt) {
             name: 'config',
             dest: 'app/modules/config.js',
         },
-        dev: {
-            constants: {
-                // Update API URL here before deploying in dev via 'grunt serve'
-                'API_URL': 'http://localhost:8000'
-            }
-        },
         dist: {
             constants: {
-              // Update API URL here before deploying in production via 'grunt build'
-                'API_URL': 'https://gm.liv.ac.uk:8080/'
+                'API_URL': '<%= api_url %>'
+            }
+        },
+        dev: {
+            constants: {
+                'API_URL': '<%= api_url %>'
             }
         }
     }
@@ -532,4 +530,11 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  var api_url = grunt.option('api_url') || 'http://localhost:8000/';
+  var listen_host = grunt.option('listen_host') || '0.0.0.0';
+  var listen_port = grunt.option('listen_port') || '9000';
+  grunt.config.set('api_url',api_url);
+  grunt.config.set('listen_host',listen_host);
+  grunt.config.set('listen_port',listen_port);
 };

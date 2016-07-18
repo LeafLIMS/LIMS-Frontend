@@ -3,11 +3,12 @@
 - First install and run the Docker container for LIMS-Backend as `app` (see LIMS-Backend for details)
 
 - Build the Frontend image (`getlims/limsweb:v<version>`) from a Dockerfile in the current working directory
-   - NB. Edit the Dockerfile first to specify key environment variables and the `app` server URL relative to the user's browser
+   - NB. Edit the Dockerfile first to specify API URL relative to the user's browser, and server environment variables
    - `docker build --no-cache -t getlims/limsweb:v<version> .`
 
-- Run the Frontend container (`web`) 
-   - NB. it has no need to connect to the `app` server itself as that is done from the browser
+- Run the Frontend container (`web`) - make sure the `app` backed is running first and that 9000 matches
+- the listen port set in the ENV in the frontend Dockerfile
+- no need to link the app server as all comms with it is from the browser, not the server side
    - `docker run -p 9000:9000 --name web -d getlims/limsweb:v<version>`
 
 - Package Frontend image, bundling in GetLIMS-Frontend:

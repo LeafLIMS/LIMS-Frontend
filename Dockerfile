@@ -18,11 +18,10 @@ RUN apt-get install -y ruby ruby-dev
 RUN gem install compass
 
 # BEFORE GOING ANY FURTHER
-# Need to set API_URL in Gruntfile.js ngconstant section - default Docker setup might be http://app:8000
-#  For production (grunt build): update ngconstant:dist
-#  For dev (grunt serve): update ngconstant:dev
+# Need to set API_URL for 'app' server - otherwise default of http://localhost:8000 will be used
+ENV API_URL http://localhost:8000
+ENV LISTEN_HOST 0.0.0.0
+ENV LISTEN_PORT 9000
 
-# Production server:
-#CMD ["grunt", "build", "--force"]
-# Dev server:
-CMD ["grunt", "serve", "--force"]
+# Start the server using sh to pick up the ENV settings above:
+CMD ["sh", "-c", "grunt serve --api_url=$API_URL --listen_host=$LISTEN_HOST --listen_port=$LISTEN_PORT"]
