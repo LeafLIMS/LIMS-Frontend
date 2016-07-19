@@ -473,8 +473,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test', [
-      'newer:jshint',
-      'newer:jscs',
+      'jshint',
+      'jscs',
       'clean:server',
       'wiredep',
       'concurrent:test',
