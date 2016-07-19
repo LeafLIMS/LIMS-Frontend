@@ -304,8 +304,15 @@ input.noedit {
 // Section specific
 
 .welcome {
-    background: $primary1;
+    background: $primary1 url(/images/temp_sidebar_logo.svg) no-repeat;
+    background-size: cover;
     font-size: 2em;
+    .welcome-title {
+        font-size: 3em;
+        font-weight: 200;
+        text-align: center;
+        color: white;
+    }
 }
 
 .sidebar-logo {
@@ -489,7 +496,7 @@ input.noedit {
         margin: 0.5em 0;
         font-weight: normal;
         text-transform: uppercase;
-        //color: $primary;
+        color: $primary;
     }
     .task-fields {
         margin-right: 0.5em;
@@ -646,6 +653,9 @@ md-list-item.selected {
     //md-input-container {
     //    margin-bottom: 0.25em;
     //}
+    .field-label {
+        color: $primary;
+    }
     .md-errors-spacer {
         min-height: 0;
     }

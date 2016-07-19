@@ -421,17 +421,23 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.product.project = projectId;
         ProjectService.addProduct($scope.product).then(function(data) {
             $rootScope.$broadcast('project-product-added');
-            var promises = [];
-            _.each($scope.designs, function(obj, key) {
+            // jscs:disable
+            /*
+            if($scope.design_file) {
                 var params = new FormData();
-                params.append('design_type', key);
-                params.append('designfile', obj.designfile);
+                //params.append('design_type', key);
+                params.append('designfile', obj.design_file);
                 params.append('product', data.id);
-                promises.push(params);
-            });
-            $q.all(promises).then(function(data) {
+                    promises.push(p);
+                $q.all(promises).then(function(data) {
+                    $mdDialog.hide();
+                });
+            } else {
                 $mdDialog.hide();
-            });
+            }
+            */
+            // jscs:enable
+            $mdDialog.hide();
         });
     };
 

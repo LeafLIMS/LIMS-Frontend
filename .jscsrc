@@ -3,5 +3,6 @@
   "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
   "disallowQuotedKeysInObjects": "allButReserved",
   "validateIndentation": 4,
+  "requireCapitalizedComments": { "allExcept": ["jshint"] },
   "maximumLineLength": 100
 }

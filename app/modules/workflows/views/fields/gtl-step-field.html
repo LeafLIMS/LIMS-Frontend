@@ -2,7 +2,7 @@
     <div layout="row" layout-align="start center">
         <div
             layout="column"
-            layout-align="start center"
+            layout-align="start top"
             flex="25" 
             ng-repeat="prop in field.properties">
             <span class="field-label">{{ prop.label }}</span>
@@ -11,12 +11,13 @@
                     <label>Amount</label>
                     <input type="number" step="1" 
                         required
-                        ng-disabled="isDisabled"
+                        ng-disabled="isDisabled || prop.from_calculation"
                         aria-label="{{ prop.label }} amount"
                         ng-model="prop.amount">
                 </md-input-container>
                 <span class="field-text">{{ prop.measure }}</span>
             </div>
+            <div ng-if="prop.from_calculation" class="field-label">Using <i>{{ prop.calc.label }}</i> to calculate amount</div>
         </div>
     </div>
     <p ng-if="field.description" class="field-text">{{ field.description }}</p>
