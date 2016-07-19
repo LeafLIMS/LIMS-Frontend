@@ -421,6 +421,7 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.product.project = projectId;
         ProjectService.addProduct($scope.product).then(function(data) {
             $rootScope.$broadcast('project-product-added');
+            // jscs:disable
             /*
             if($scope.design_file) {
                 var params = new FormData();
@@ -435,6 +436,7 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
                 $mdDialog.hide();
             }
             */
+            // jscs:enable
             $mdDialog.hide();
         });
     };
