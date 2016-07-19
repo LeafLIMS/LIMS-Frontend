@@ -319,7 +319,7 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
     $scope.taskPaneSelected = 0;
 
     if (!taskPositionId) {
-        var taskPositionId = selected[0].current_task;
+        taskPositionId = selected[0].current_task;
     }
 
     WorkflowService.getTaskByPosition(workflowId, taskPositionId)
