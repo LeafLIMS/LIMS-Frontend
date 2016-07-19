@@ -1,6 +1,7 @@
 {
-  "requireCamelCaseOrUpperCaseIdentifiers": true,
-  "requireCapitalizedConstructors": true,
-  "requireParenthesesAroundIIFE": true,
-  "validateQuoteMarks": "'"
+  "preset": "node-style-guide",
+  "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
+  "disallowQuotedKeysInObjects": "allButReserved",
+  "validateIndentation": 4,
+  "maximumLineLength": 100
 }

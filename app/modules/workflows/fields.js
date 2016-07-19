@@ -15,9 +15,9 @@ app.directive('gtlInputField', function($rootScope, InventoryService) {
 
             $scope.filterLookupItems = function(filterText, lookupType) {
                 var params = {
-                    'item_type__name': lookupType,
-                    'search': filterText,
-                    'in_inventory': 'True',
+                    item_type__name: lookupType,
+                    search: filterText,
+                    in_inventory: 'True',
                 }
                 return InventoryService.items(params);
             };
@@ -68,7 +68,7 @@ app.directive('gtlVariableField', function(InventoryService, $rootScope) {
                 }
             }, 500), true);
 
-        }
+        },
     }
 });
 
@@ -81,7 +81,7 @@ app.directive('gtlOutputField', function(InventoryService) {
         },
         templateUrl: 'modules/workflows/views/fields/gtl-output-field.html',
         link: function($scope, elem, attrs) {
-        }
+        },
     }
 });
 
@@ -94,7 +94,7 @@ app.directive('gtlCalculationField', function(WorkflowService) {
         },
         templateUrl: 'modules/workflows/views/fields/gtl-calculation-field.html',
         link: function($scope, elem, attrs) {
-        }
+        },
     }
 });
 
@@ -104,16 +104,16 @@ app.directive('gtlStepField', function(InventoryService, $rootScope) {
         scope: {
             field: '=',
             isDisabled: '=',
-            calculations: '='
+            calculations: '=',
         },
         templateUrl: 'modules/workflows/views/fields/gtl-step-field.html',
         link: function($scope, elem, attrs) {
-            if(!$scope.field || !$scope.field.properties) {
+            if (!$scope.field || !$scope.field.properties) {
                 $scope.field = {
-                    properties: []
+                    properties: [],
                 }
             } else {
-                for(var i = 0; i < $scope.field.properties.length; i++) {
+                for (var i = 0; i < $scope.field.properties.length; i++) {
                     $scope.field.properties[i].mText = $scope.field.properties.measure;
                     if($scope.field.properties[i].from_calculation) {
                         var calc = _.find($scope.calculations, function(obj) {

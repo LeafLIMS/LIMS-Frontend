@@ -12,7 +12,7 @@ app.directive('gtlInputConfigField', function($rootScope, InventoryService) {
         templateUrl: 'modules/configuration/views/fields/gtl-input-field.html',
         link: function($scope, elem, attrs) {
 
-            if(!$scope.field) {
+            if (!$scope.field) {
                 $scope.field = {};
             } else {
                 $scope.mText = $scope.field.measure;
@@ -35,7 +35,7 @@ app.directive('gtlInputConfigField', function($rootScope, InventoryService) {
                 $scope.field.measure = item.symbol;
             };
 
-        }
+        },
     }
 });
 
@@ -48,7 +48,7 @@ app.directive('gtlVariableConfigField', function(InventoryService) {
         templateUrl: 'modules/configuration/views/fields/gtl-variable-field.html',
         link: function($scope, elem, attrs) {
 
-            if(!$scope.field) {
+            if (!$scope.field) {
                 $scope.field = {};
             } else {
                 $scope.mText = $scope.field.measure;
@@ -62,7 +62,7 @@ app.directive('gtlVariableConfigField', function(InventoryService) {
                 $scope.field.measure = item.symbol;
             };
 
-        }
+        },
     }
 });
 
@@ -77,7 +77,7 @@ app.directive('gtlOutputConfigField', function(InventoryService) {
         templateUrl: 'modules/configuration/views/fields/gtl-output-field.html',
         link: function($scope, elem, attrs) {
 
-            if(!$scope.field) {
+            if (!$scope.field) {
                 $scope.field = {};
             } else {
                 $scope.mText = $scope.field.measure;
@@ -100,7 +100,7 @@ app.directive('gtlOutputConfigField', function(InventoryService) {
                 $scope.field.measure = item.symbol;
             };
 
-        }
+        },
     }
 });
 
@@ -112,7 +112,7 @@ app.directive('gtlCalculationConfigField', function(WorkflowService) {
         },
         templateUrl: 'modules/configuration/views/fields/gtl-calculation-field.html',
         link: function($scope, elem, attrs) {
-        }
+        },
     }
 });
 
@@ -121,16 +121,16 @@ app.directive('gtlStepConfigField', function(InventoryService) {
         restrict: 'E',
         scope: {
             field: '=',
-            calculations: '='
+            calculations: '=',
         },
         templateUrl: 'modules/configuration/views/fields/gtl-step-field.html',
         link: function($scope, elem, attrs) {
-            if(!$scope.field || !$scope.field.properties) {
+            if (!$scope.field || !$scope.field.properties) {
                 $scope.field = {
-                    properties: []
+                    properties: [],
                 }
             } else {
-                for(var i = 0; i < $scope.field.properties.length; i++) {
+                for (var i = 0; i < $scope.field.properties.length; i++) {
                     $scope.field.properties[i].mText = $scope.field.properties[i].measure;
                 }
             }
@@ -152,6 +152,6 @@ app.directive('gtlStepConfigField', function(InventoryService) {
             $scope.removeParameter = function(step, index) {
                 $scope.field.properties.splice(index, 1);
             };
-        }
+        },
     }
 });

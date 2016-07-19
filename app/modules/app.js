@@ -25,7 +25,7 @@ var app = angular
     'sf.treeRepeat',
     'drop-ng',
     'datetime',
-    'config'
+    'config',
   ]);
 
 app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
@@ -43,7 +43,7 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
 
         return {
             responseError: function(rejection) {
-                if(rejection.status !== 401) {
+                if (rejection.status !== 401) {
                     return $q.reject(rejection);
                 }
 
@@ -57,7 +57,7 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 });
 
                 return deferred.promise;
-            }
+            },
         };
     });
 
@@ -67,7 +67,7 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
     RestangularProvider.addResponseInterceptor(function(data, operation,
         what, url, response, deferred) {
         var extractedData;
-        if(operation == "getList" && data.meta) {
+        if (operation == 'getList' && data.meta) {
             extractedData = data.results;
             extractedData.meta = data.meta;
         } else {
@@ -83,16 +83,16 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
             url: '/error',
             template: 'An wild error has appeared.',
             data: {
-                requireLogin: false
-            }
+                requireLogin: false,
+            },
         })
         .state('welcome', {
             url: '/welcome',
             templateUrl: 'modules/shared/views/welcome.html',
             controller: 'WelcomeCtrl',
             data: {
-                requireLogin: false
-            }
+                requireLogin: false,
+            },
         })
         .state('app', {
             abstract: true,
@@ -100,27 +100,27 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
             templateUrl: 'modules/shared/views/layout.html',
             controller: 'AppCtrl',
             data: {
-                requireLogin: true
-            }
+                requireLogin: true,
+            },
         })
         .state('app.dashboard', {
             url: '/dashboard',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/dashboard/views/dashboard.html',
-                    controller: 'DashboardCtrl'
-                }
-            }
+                    controller: 'DashboardCtrl',
+                },
+            },
         })
         // Orders states
         .state('app.orders', {
             url: '/orders',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/orders/views/orders.html',
-                    controller: 'OrdersCtrl'
-                }
-            }
+                    controller: 'OrdersCtrl',
+                },
+            },
         })
         .state('order_details', {
             parent: 'app.orders',
@@ -128,19 +128,19 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
             views: {
                 'content@app': {
                     templateUrl: 'modules/orders/views/order_details.html',
-                    controller: 'OrderDetailsCtrl'
-                }
-            }
+                    controller: 'OrderDetailsCtrl',
+                },
+            },
         })
         // Projects states
         .state('app.projects', {
             url: '/projects',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/projects/views/projects.html',
-                    controller: 'ProjectsCtrl'
-                }
-            }
+                    controller: 'ProjectsCtrl',
+                },
+            },
         })
         .state('project_details', {
             parent: 'app.projects',
@@ -148,48 +148,48 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
             views: {
                 'content@app': {
                     templateUrl: 'modules/projects/views/project_details.html',
-                    controller: 'ProjectDetailsCtrl'
-                }
-            }
+                    controller: 'ProjectDetailsCtrl',
+                },
+            },
         })
         .state('product_details', {
             parent: 'project_details',
             url: '/product/:productId',
             views: {
-                'product': {
+                product: {
                     templateUrl: 'modules/projects/views/product_details.html',
-                    controller: 'ProductDetailsCtrl'
-                }
-            }
+                    controller: 'ProductDetailsCtrl',
+                },
+            },
         })
         // Workflow states
         .state('app.workflows', {
             url: '/workflows',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/workflows/views/workflows.html',
-                    controller: 'WorkflowsCtrl'
-                }
-            }
+                    controller: 'WorkflowsCtrl',
+                },
+            },
         })
         .state('app.workflows.workflow', {
             url: '/:id',
             views: {
-                'workflow': {
+                workflow: {
                     templateUrl: 'modules/workflows/views/workflow_partial.html',
-                    controller: 'WorkflowSelectedCtrl'
-                }
-            }
+                    controller: 'WorkflowSelectedCtrl',
+                },
+            },
         })
         // Inventory states
         .state('app.inventory', {
             url: '/inventory',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/inventory/views/inventory.html',
-                    controller: 'InventoryCtrl'
-                }
-            }
+                    controller: 'InventoryCtrl',
+                },
+            },
         })
         .state('inventory_item', {
             parent: 'app.inventory',
@@ -197,41 +197,42 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
             views: {
                 'content@app': {
                     templateUrl: 'modules/inventory/views/inventory_item.html',
-                    controller: 'InventoryItemCtrl'
-                }
-            }
+                    controller: 'InventoryItemCtrl',
+                },
+            },
         })
         .state('app.inventory.set', {
             url: '/set/:id',
             views: {
                 'content@app': {
                     templateUrl: 'modules/inventory/views/set.html',
-                    controller: 'SetCtrl'
-                }
-            }
+                    controller: 'SetCtrl',
+                },
+            },
         })
         // Configuration states
         .state('app.configuration', {
             url: '/configuration',
             views: {
-                'content': {
+                content: {
                     templateUrl: 'modules/configuration/views/configuration.html',
-                    controller: 'ConfigurationCtrl'
-                }
-            }
+                    controller: 'ConfigurationCtrl',
+                },
+            },
         })
         .state('app.configuration.section', {
             url: '/:sectionName',
             views: {
                 'configuration-section': {
                     templateUrl: function($stateParams) {
-                        return 'modules/configuration/views/'+$stateParams.sectionName.toLowerCase()+'.html';
+                        return 'modules/configuration/views/' +
+                            $stateParams.sectionName.toLowerCase() + '.html';
                     },
                     controllerProvider: function($stateParams) {
                         return $stateParams.sectionName + 'ConfigurationCtrl';
-                    }
-                }
-            }
+                    },
+                },
+            },
         })
 
     $mdIconProvider
@@ -245,20 +246,20 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
 
 app.run(function($rootScope, Restangular, UserService, loginModal, $state) {
 
-    Restangular.addFullRequestInterceptor(function(el, op, what, url, 
+    Restangular.addFullRequestInterceptor(function(el, op, what, url,
         headers) {
-        if(UserService.isLoggedIn()) {
-            headers['Authorization'] = 'Token '+UserService.getUser().token; 
+        if (UserService.isLoggedIn()) {
+            headers.Authorization = 'Token ' + UserService.getUser().token;
         }
         return {
-            headers: headers
+            headers: headers,
         }
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
         var requireLogin = toState.data.requireLogin;
 
-        if(requireLogin && !UserService.isLoggedIn()) {
+        if (requireLogin && !UserService.isLoggedIn()) {
             event.preventDefault();
 
             loginModal().then(function() {

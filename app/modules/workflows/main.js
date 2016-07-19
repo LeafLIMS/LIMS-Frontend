@@ -11,13 +11,13 @@ app.controller('WorkflowsCtrl', function($scope, PageTitle, WorkflowService,
     var getActiveWorkflows = function() {
         WorkflowService.activeWorkflows().then(function(data) {
             $scope.activeWorkflows = data;
-            if(data.length > 0 && !$state.params.id) {
-                $state.go('app.workflows.workflow', 
-                        {id: data[0].id}, 
+            if (data.length > 0 && !$state.params.id) {
+                $state.go('app.workflows.workflow',
+                        {id: data[0].id},
                         {location: 'replace'});
                 $scope.selectedWorkflow = data[0].id;
             } else {
-                $state.go('app.workflows.workflow', 
+                $state.go('app.workflows.workflow',
                         {id: $state.params.id},
                         {location: 'replace'});
                 $scope.selectedWorkflow = $stateParams.id;
@@ -29,7 +29,7 @@ app.controller('WorkflowsCtrl', function($scope, PageTitle, WorkflowService,
     var getNewWorkflow = function() {
         WorkflowService.activeWorkflows().then(function(data) {
             $scope.activeWorkflows = data;
-            if(data.length > 0) {
+            if (data.length > 0) {
                 $state.go('app.workflows.workflow', {id: data[0].id});
                 $scope.selectedWorkflow = data[0].id;
             }
@@ -43,10 +43,10 @@ app.controller('WorkflowsCtrl', function($scope, PageTitle, WorkflowService,
     $scope.startWorkflow = function() {
         $mdDialog.show({
             templateUrl: 'modules/workflows/views/startworkflow.html',
-            controller: 'startWorkflowCtrl', 
+            controller: 'startWorkflowCtrl',
             locals: {
                 preSelected: false,
-            }
+            },
         });
     };
 
@@ -63,7 +63,7 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
                 $scope.workflowTasks = data;
             });
             $scope.selected = [];
-            var groupedProducts = _.map(_.groupBy(data.product_statuses, 
+            var groupedProducts = _.map(_.groupBy(data.product_statuses,
                 function(obj) {
                     return obj.current_task + '|' + obj.run_identifier;
                 }), function(obj, key) {
@@ -89,14 +89,14 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
             controller: 'addToWorkflowCtrl',
             locals: {
                 workflowId: workflowId,
-                products: $scope.products
-            }
+                products: $scope.products,
+            },
         });
     };
 
     $scope.removeFromWorkflow = function(workflowId) {
         var d = $mdDialog.confirm()
-            .title('Remove '+$scope.selected.length+' products from workflow?')
+            .title('Remove ' + $scope.selected.length + ' products from workflow?')
             .ariaLabel('Confirm remove products from workflow')
             .ok('Yes')
             .cancel('No');
@@ -118,8 +118,8 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
             controller: 'switchWorkflowCtrl',
             locals: {
                 items: $scope.selected,
-                workflowId: workflowId
-            }
+                workflowId: workflowId,
+            },
         });
     };
 
@@ -138,26 +138,29 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
     };
 
     $scope.selected = [];
-    $scope.toggle = function (item, list) {
+    $scope.toggle = function(item, list) {
         _.each(_.clone(list), function(obj) {
             var itemStatus = item.current_task + '|' + item.run_identifier;
             var objStatus = obj.current_task + '|' + obj.run_identifier;
-            if(obj.hasOwnProperty('current_task') && itemStatus !== objStatus) {
+            if (obj.hasOwnProperty('current_task') && itemStatus !== objStatus) {
                 var idx = list.indexOf(obj)
                 list.splice(idx, 1);
             }
         });
         var idx = list.indexOf(item);
-        if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        } else {
+            list.push(item);
+        }
     };
 
-    $scope.exists = function (item, list) {
+    $scope.exists = function(item, list) {
         return list.indexOf(item) > -1;
     };
 
     $scope.showTask = function(item, isActive) {
-        if(isActive) {
+        if (isActive) {
             $scope.showActiveTask(item.run_identifier, item.current_task);
         } else {
             $scope.doTask(item.taskPositionId);
@@ -172,13 +175,13 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
                 runIdentifier: runIdentifier,
                 taskPositionId: taskPositionId,
                 selectedWorkflow: $scope.selectedWorkflow,
-            }
+            },
         });
     };
 
     $scope.doTask = function(taskPositionId) {
-        if(!taskPositionId) {
-            var taskPositionId = false;
+        if (!taskPositionId) {
+            taskPositionId = false;
         }
         $mdDialog.show({
             templateUrl: 'modules/workflows/views/task.html',
@@ -188,7 +191,7 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
                 workflowId: $scope.selectedWorkflow.workflow,
                 selected: $scope.selected,
                 selectedWorkflow: $scope.selectedWorkflow,
-            }
+            },
         }).then(function() {
             $rootScope.$broadcast('workflow-updated');
         });
@@ -196,7 +199,7 @@ app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowServi
 
 });
 
-app.controller('addToWorkflowCtrl', function($scope, $rootScope, $mdDialog, 
+app.controller('addToWorkflowCtrl', function($scope, $rootScope, $mdDialog,
             $q, WorkflowService, workflowId, products) {
 
     $scope.cancel = function() {
@@ -207,7 +210,7 @@ app.controller('addToWorkflowCtrl', function($scope, $rootScope, $mdDialog,
 
     $scope.add = function() {
         var promises = [];
-        for(var i = 0; i < $scope.productsSelected.length; i++) {
+        for (var i = 0; i < $scope.productsSelected.length; i++) {
             var productId = $scope.productsSelected[i].id;
             var p = WorkflowService.addProduct(workflowId, productId);
             promises.push(p);
@@ -220,7 +223,7 @@ app.controller('addToWorkflowCtrl', function($scope, $rootScope, $mdDialog,
 
 });
 
-app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog, 
+app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog,
             WorkflowService, $q, items, workflowId) {
 
     $scope.workflowId = workflowId;
@@ -232,8 +235,8 @@ app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog,
     WorkflowService.activeWorkflows()
         .then(function(data) {
         _.each(data, function(obj, idx) {
-            if(obj && obj.id === workflowId) {
-               data.splice(idx, 1);
+            if (obj && obj.id === workflowId) {
+                data.splice(idx, 1);
             }
         });
         $scope.activeWorkflows = data;
@@ -249,11 +252,11 @@ app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog,
             var params = {
                 id: itm.id,
             };
-            if($scope.workflow) {
-                params['workflow_id'] = $scope.workflow;
+            if ($scope.workflow) {
+                params.workflow_id = $scope.workflow;
             }
-            if($scope.active_workflow) {
-                params['active_workflow_id'] = $scope.active_workflow;
+            if ($scope.active_workflow) {
+                params.active_workflow_id = $scope.active_workflow;
             }
             var p = WorkflowService.switchWorkflow(workflowId, params);
             promises.push(p);
@@ -265,28 +268,28 @@ app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog,
     };
 });
 
-app.controller('startWorkflowCtrl', function($scope, WorkflowService, 
+app.controller('startWorkflowCtrl', function($scope, WorkflowService,
         UserService, $mdDialog, $rootScope, $q, preSelected) {
 
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
-    
+
     WorkflowService.availableWorkflows().then(function(data) {
         $scope.availableWorkflows = data;
     });
 
     $scope.productsSelected = [];
-    if(preSelected) {
+    if (preSelected) {
         $scope.productsSelected = preSelected;
     }
 
     $scope.start = function() {
         $scope.workflow.started_by = UserService.getUser().username;
         WorkflowService.startWorkflow($scope.workflow).then(function(data) {
-            if($scope.productsSelected.length > 0) {
+            if ($scope.productsSelected.length > 0) {
                 var promises = [];
-                for(var i = 0; i < $scope.productsSelected.length; i++) {
+                for (var i = 0; i < $scope.productsSelected.length; i++) {
                     var productId = $scope.productsSelected[i].id;
                     var p = WorkflowService.addProduct(data.id, productId);
                     promises.push(p);
@@ -303,8 +306,8 @@ app.controller('startWorkflowCtrl', function($scope, WorkflowService,
     };
 });
 
-app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService, 
-    WorkflowService, ProjectService, InventoryService, taskPositionId, workflowId, 
+app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService,
+    WorkflowService, ProjectService, InventoryService, taskPositionId, workflowId,
     selected, selectedWorkflow) {
 
     $scope.product_inputs = [];
@@ -329,7 +332,7 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
         $scope.selected = selected;
     });
 
-    $scope.isStarted = selected[0].task_in_progress;  
+    $scope.isStarted = selected[0].task_in_progress;
 
     $scope.cancel = $mdDialog.cancel;
 
@@ -342,12 +345,13 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
     });
 
     $scope.filterLabwareItems = function(filterText, lookupType) {
-        if(!lookupType)
-            var lookupType = $scope.task.labware;
+        if (!lookupType) {
+            lookupType = $scope.task.labware;
+        }
         var params = {
-            'item_type__name': lookupType,
-            'search': filterText,
-            'in_inventory': 'True',
+            item_type__name: lookupType,
+            search: filterText,
+            in_inventory: 'True',
         }
         return InventoryService.items(params);
     };
@@ -364,9 +368,9 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
             products: $scope.selected,
         }
         WorkflowService.startTask(selectedWorkflow.id, params, isPreview).then(function(data) {
-            if(!isPreview) {
+            if (!isPreview) {
                 $mdDialog.hide();
-                $scope.isStarted = selected[0].task_in_progress;  
+                $scope.isStarted = selected[0].task_in_progress;
             } else {
                 $scope.requirements = data;
             }
@@ -395,20 +399,24 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
         });
     };
 
-    $scope.toggle = function (item, list) {
+    $scope.toggle = function(item, list) {
         var idx = list.indexOf(item);
-        if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        } else {
+            list.push(item);
+        }
     };
 
-    $scope.exists = function (item, list) {
+    $scope.exists = function(item, list) {
         return list.indexOf(item) > -1;
     };
 
 });
 
-app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, UserService, 
-    WorkflowService, ProjectService, InventoryService, runIdentifier, taskPositionId, selectedWorkflow) {
+app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, UserService,
+    WorkflowService, ProjectService, InventoryService, runIdentifier,
+    taskPositionId, selectedWorkflow) {
 
     $scope.product_inputs = [];
     $scope.components = [];
@@ -420,19 +428,19 @@ app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, Use
         WorkflowService.getActiveTaskDetails(selectedWorkflow.id, runIdentifier, taskPositionId)
             .then(function(data) {
 
-            $scope.task = data;
-            $scope.selected = _.map(data.items, function(obj, key) {
+                $scope.task = data;
+                $scope.selected = _.map(data.items, function(obj, key) {
                 return obj[0].id;
             });
-            if(Object.keys(data.items).length > 0) {
-                var first = Object.keys(data.items)[0];
-                $scope.table_column_headers = _.map(data.items[first][0].fields, function(obj) {
+                if (Object.keys(data.items).length > 0) {
+                    var first = Object.keys(data.items)[0];
+                    $scope.table_column_headers = _.map(data.items[first][0].fields, function(obj) {
                     return obj.label;
                 });
-            }
-        }).catch(function(err) {
+                }
+            }).catch(function(err) {
             console.log(err);
-            if(err.status == 410) {
+            if (err.status == 410) {
                 $rootScope.$broadcast('workflow-updated');
                 $mdDialog.hide();
             }
@@ -450,11 +458,11 @@ app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, Use
             $rootScope.$broadcast('workflow-updated');
             $mdDialog.hide();
         }).catch(function(err) {
-            if(err.status == 410) {
+            if (err.status == 410) {
                 $rootScope.$broadcast('workflow-updated');
                 $mdDialog.hide();
             }
-        }); 
+        });
     };
 
     $scope.completeSelected = function() {
@@ -465,11 +473,11 @@ app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, Use
             $rootScope.$broadcast('workflow-updated');
             getTaskData();
         }).catch(function(err) {
-            if(err.status == 410) {
+            if (err.status == 410) {
                 $rootScope.$broadcast('workflow-updated');
                 $mdDialog.hide();
             }
-        }); 
+        });
     };
 
     $scope.retrySelected = function() {
@@ -480,11 +488,11 @@ app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, Use
             $rootScope.$broadcast('workflow-updated');
             $mdDialog.hide();
         }).catch(function(err) {
-            if(err.status == 410) {
+            if (err.status == 410) {
                 $rootScope.$broadcast('workflow-updated');
                 $mdDialog.hide();
             }
-        }); 
+        });
     };
 
     $scope.filterSelected = function(searchText) {
@@ -495,20 +503,22 @@ app.controller('showActiveTaskCtrl', function($scope, $rootScope, $mdDialog, Use
         });
     };
 
-    $scope.toggle = function (item, list) {
+    $scope.toggle = function(item, list) {
         var idx = list.indexOf(item);
-        if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        if (idx > -1) {
+        list.splice(idx, 1); } else {
+            list.push(item);
+        }
     };
 
-    $scope.exists = function (item, list) {
+    $scope.exists = function(item, list) {
         return list.indexOf(item) > -1;
     };
 
 });
 
-app.controller('FullWorkflowCtrl', function($scope, PageTitle, 
-    ProjectService, WorkflowService, $stateParams, $mdDialog, $rootScope, 
+app.controller('FullWorkflowCtrl', function($scope, PageTitle,
+    ProjectService, WorkflowService, $stateParams, $mdDialog, $rootScope,
     $q, UserService) {
 
     $scope.removePadding = true;
@@ -525,7 +535,7 @@ app.controller('FullWorkflowCtrl', function($scope, PageTitle,
     $rootScope.$on('workflow-updated', getWorkflowData);
 
     $scope.notOnWorkflow = function(value, index, array) {
-        if(value.on_workflow.length > 0) {
+        if (value.on_workflow.length > 0) {
             return false;
         }
         return true;
@@ -537,8 +547,8 @@ app.controller('FullWorkflowCtrl', function($scope, PageTitle,
             controller: 'addToWorkflowCtrl',
             locals: {
                 workflowId: workflowId,
-                products: $scope.products
-            }
+                products: $scope.products,
+            },
         });
     };
 
@@ -554,8 +564,8 @@ app.controller('FullWorkflowCtrl', function($scope, PageTitle,
             controller: 'switchWorkflowCtrl',
             locals: {
                 items: [item],
-                workflowId: workflowId
-            }
+                workflowId: workflowId,
+            },
         });
     };
 });
@@ -582,22 +592,23 @@ app.directive('gtlSelectProduct', function(ProjectService) {
                 productParams = _.merge(productParams, params);
                 productParams.search = $scope.filterText;
                 ProjectService.products(productParams).then(function(data) {
-                    if(!$scope.currentPage)
+                    if (!$scope.currentPage) {
                         $scope.currentPage = data.meta.current;
+                    }
                     $scope.nextPage = data.meta.next;
                     $scope.previousPage = data.meta.previous;
                     $scope.numPages = data.meta.pages;
-                    $scope.productsAvailable = data; 
-                }); 
+                    $scope.productsAvailable = data;
+                });
             };
             $scope.getProducts();
 
-            $scope.$watch('filterText', function(n,o) {
+            $scope.$watch('filterText', function(n, o) {
                 $scope.getProducts();
             });
 
-            $scope.$watch('currentPage', function(n,o) {
-                if(n && n != o) {
+            $scope.$watch('currentPage', function(n, o) {
+                if (n && n != o) {
                     $scope.getProducts({page: n});
                 }
             }, true);
@@ -622,26 +633,31 @@ app.directive('gtlSelectProduct', function(ProjectService) {
             $scope.deselectAll = function() {
                 _.each($scope.productsAvailable, function(obj) {
                     var idx = $scope.selected.indexOf(obj);
-                    if (idx > -1) 
+                    if (idx > -1) {
                         $scope.selected.splice(idx, 1);
+                    }
                 });
             };
 
-            $scope.toggle = function (item, list) {
+            $scope.toggle = function(item, list) {
                 var idx = list.indexOf(item);
-                if (idx > -1) list.splice(idx, 1);
-                else list.push(item);
+                if (idx > -1) {
+                    list.splice(idx, 1);
+                } else {
+                    list.push(item);
+                }
             };
 
-            $scope.exists = function (item, list) {
+            $scope.exists = function(item, list) {
                 return list.indexOf(item) > -1;
             };
 
             $scope.addToSelected = function() {
-                _.each($scope.selected, function(obj) { 
+                _.each($scope.selected, function(obj) {
                     var idx = $scope.productsList.indexOf(obj);
-                    if (idx == -1)
+                    if (idx == -1) {
                         $scope.productsList.push(obj);
+                    }
                 });
             };
 
@@ -650,13 +666,14 @@ app.directive('gtlSelectProduct', function(ProjectService) {
             };
 
             $scope.removeItem = function() {
-                _.each($scope.selectedToUse, function(obj) { 
+                _.each($scope.selectedToUse, function(obj) {
                     var idx = $scope.productsList.indexOf(obj);
-                    if (idx > -1)
+                    if (idx > -1) {
                         $scope.productsList.splice(idx, 1);
+                    }
                 });
             };
-        }
+        },
     }
 });
 
@@ -673,10 +690,10 @@ app.directive('gtlWorkflowTaskPreview', function() {
         templateUrl: 'modules/workflows/views/gmworkflowtaskpreview.html',
         link: function(scope, elem, attr) {
             scope.taskNum = scope.taskNumber + 1;
-            if(attr.hasOwnProperty('current')) {
+            if (attr.hasOwnProperty('current')) {
                 scope.isCurrent = true;
             }
-        }
+        },
     }
 });
 
@@ -694,8 +711,9 @@ app.directive('gmProductListItem', function() {
 app.service('WorkflowService', function(Restangular) {
 
     this.availableWorkflows = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('workflows').getList(params);
     };
 
@@ -720,8 +738,9 @@ app.service('WorkflowService', function(Restangular) {
     };
 
     this.activeWorkflows = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('activeworkflows').getList(params);
     };
 
@@ -742,12 +761,12 @@ app.service('WorkflowService', function(Restangular) {
     };
 
     this.addProduct = function(workflowId, productId) {
-        return Restangular.one('activeworkflows', workflowId).customPOST({}, 
+        return Restangular.one('activeworkflows', workflowId).customPOST({},
             'add_product', {id: productId});
     };
 
     this.removeProduct = function(workflowId, productId) {
-        return Restangular.one('activeworkflows', workflowId).customPOST({}, 
+        return Restangular.one('activeworkflows', workflowId).customPOST({},
             'remove_product', {id: productId});
     };
 
@@ -762,26 +781,27 @@ app.service('WorkflowService', function(Restangular) {
 
     this.startTask = function(workflowId, data, isPreview) {
         var params = {};
-        if(isPreview)
+        if (isPreview) {
             params.is_preview = 'True';
+        }
         var frmData = new FormData();
-        for(var key in data) {
-            if(key !== 'input_files') {
-                frmData.append(key, JSON.stringify(data[key])); 
+        for (var key in data) {
+            if (key !== 'input_files') {
+                frmData.append(key, JSON.stringify(data[key]));
             } else {
-                for(var fl in data['input_files']) {
-                    frmData.append(key, data['input_files'][fl], fl); 
+                for (var fl in data.input_files) {
+                    frmData.append(key, data.input_files[fl], fl);
                 }
             }
         }
         return Restangular.one('activeworkflows', workflowId)
             .withHttpConfig({transformRequest: angular.identity})
             .customPOST(frmData, 'start_task', params, {
-                'Content-Type': undefined
+                'Content-Type': undefined,
             });
     };
 
-    this.getActiveTaskDetails = function(workflowId, runIdentifier, taskPositionId) { 
+    this.getActiveTaskDetails = function(workflowId, runIdentifier, taskPositionId) {
         return Restangular.one('activeworkflows', workflowId).customGET(
             'task_status', {run_identifier: runIdentifier, task_number: taskPositionId});
     };
@@ -797,8 +817,9 @@ app.service('WorkflowService', function(Restangular) {
     };
 
     this.availableTasks = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('tasks').getList(params);
     };
 

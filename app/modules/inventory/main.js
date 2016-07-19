@@ -11,12 +11,12 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
     $scope.query = {
         in_inventory: 'True',
         ordering: 'name',
-        limit: 10
+        limit: 10,
     };
 
     $scope.set_query = {
         ordering: 'name',
-        limit: 10
+        limit: 10,
     };
 
     $scope.selectedItems = [];
@@ -25,7 +25,7 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
     $scope.refreshItemData = function() {
         InventoryService.items($scope.query).then(function(data) {
             $scope.items = data;
-            if(!$scope.hasFilter('in_inventory')) {
+            if (!$scope.hasFilter('in_inventory')) {
                 $scope.filters = 'All items in inventory';
             } else {
                 $scope.filters = undefined;
@@ -42,27 +42,28 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
     $scope.refreshSetData();
 
     $scope.hasFilter = function(fieldName, scopeQueryName) {
-        if(!scopeQueryName)
-            var scopeQueryName = 'query'
-        if(fieldName in $scope[scopeQueryName]) {
+        if (!scopeQueryName) {
+            scopeQueryName = 'query';
+        }
+        if (fieldName in $scope[scopeQueryName]) {
             return true;
         }
         return false;
     };
 
-    $scope.$watch('query.search', function(n,o) {
-        if(n !== o) {
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
             $scope.refreshItemData();
         }
     });
 
     $scope.toggleFilter = function(fieldName, value) {
         // If value == undefined then boolean toggle
-        if(fieldName in $scope.query) {
+        if (fieldName in $scope.query) {
             delete $scope.query[fieldName]
         } else {
-            if(!value) {
-                var value = 'True';
+            if (!value) {
+                value = 'True';
             }
             $scope.query[fieldName] = value;
         }
@@ -80,19 +81,19 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
         $scope.refreshItemData();
     };
 
-    $scope.$watch('set_query.search', function(n,o) {
-        if(n !== o) {
+    $scope.$watch('set_query.search', function(n, o) {
+        if (n !== o) {
             $scope.refreshSetData();
         }
     });
 
     $scope.toggleSetFilter = function(fieldName, value) {
         // If value == undefined then boolean toggle
-        if(fieldName in $scope.set_query) {
+        if (fieldName in $scope.set_query) {
             delete $scope.set_query[fieldName]
         } else {
-            if(!value) {
-                var value = 'True';
+            if (!value) {
+                value = 'True';
             }
             $scope.set_query[fieldName] = value;
         }
@@ -137,7 +138,7 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
 
     $scope.deleteItems = function(selected) {
         var d = $mdDialog.confirm()
-            .title('Delete '+selected.length+' items?')
+            .title('Delete ' + selected.length + ' items?')
             .ok('Delete')
             .cancel('No');
         $mdDialog.show(d).then(function() {
@@ -169,15 +170,15 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
                         var p = InventoryService.addToSet($scope.setId, obj.id);
                         promises.push(p);
                     });
-                    $q.all(promises).then(function(){
+                    $q.all(promises).then(function() {
                         $mdDialog.hide();
                     });
                 };
             },
             locals: {
                 selected: selected,
-                sets: $scope.inventorysets
-            }
+                sets: $scope.inventorysets,
+            },
         }).then(function() {
             $scope.refreshSetData();
         });
@@ -185,7 +186,7 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
 
 });
 
-app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService, 
+app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
         UserService, OrganismService) {
 
     $scope.item = {
@@ -218,7 +219,7 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
         });
 
     $scope.searchItemTypes = function(searchText) {
-        if(!searchText) {
+        if (!searchText) {
             return $scope.item_types;
         }
         var lSearchText = searchText.toLowerCase();
@@ -233,7 +234,7 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
     };
 
     $scope.removeProperty = function(index) {
-        if($scope.item.properties.length == 1) {
+        if ($scope.item.properties.length == 1) {
             $scope.item.properties = [];
         } else {
             $scope.item.properties.splice(1, index);
@@ -251,7 +252,7 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
 
 });
 
-app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) { 
+app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) {
 
     $scope.cancel = function() {
         $mdDialog.cancel();
@@ -261,7 +262,7 @@ app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) 
         var params = new FormData();
         params.append('items_file', $scope.items_file);
         InventoryService.importItems(params).then(function(data) {
-            if(data.rejected.length > 0) {
+            if (data.rejected.length > 0) {
                 $mdDialog.show({
                     templateUrl: 'modules/inventory/views/rejecteditems.html',
                     controller: function($scope, $mdDialog, rejected) {
@@ -271,8 +272,8 @@ app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) 
                         };
                     },
                     locals: {
-                        rejected: data.rejected
-                    }
+                        rejected: data.rejected,
+                    },
                 });
             } else {
                 $mdDialog.hide();
@@ -296,8 +297,8 @@ app.controller('CreateSetCtrl', function($scope, $mdDialog, InventoryService) {
 
 });
 
-app.controller('InventoryItemCtrl', function($scope, PageTitle, 
-    InventoryService, $stateParams, $mdDialog, $state, InventoryActions, 
+app.controller('InventoryItemCtrl', function($scope, PageTitle,
+    InventoryService, $stateParams, $mdDialog, $state, InventoryActions,
     $timeout, OrganismService) {
 
     $scope.removePadding = true;
@@ -327,7 +328,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
 
     var timeout = null;
     var doUpdate = function() {
-        if($scope.inventoryItemForm.$valid) {
+        if ($scope.inventoryItemForm.$valid) {
             InventoryService.updateItem($stateParams.id, $scope.item);
         } else {
             console.log('INVALID');
@@ -335,8 +336,8 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
     };
 
     var debounceUpdate = function(n, o) {
-        if(n !== o && o !== undefined) {
-            if(timeout) {
+        if (n !== o && o !== undefined) {
+            if (timeout) {
                 $timeout.cancel(timeout);
             }
             timeout = $timeout(doUpdate, 1000);
@@ -346,7 +347,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
     $scope.$watch('item', debounceUpdate, true);
 
     $scope.makeChip = function(chip) {
-        if(angular.isObject(chip)) {
+        if (angular.isObject(chip)) {
             return chip;
         }
         return {name: chip, type: 'new'}
@@ -367,7 +368,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
         $mdDialog.show({
             templateUrl: 'modules/inventory/views/dispense.html',
             controller: function($scope, $mdDialog, InventoryService, itemId, itemMeasure) {
-                
+
                 $scope.cancel = $mdDialog.cancel;
 
                 $scope.measure = itemMeasure;
@@ -382,7 +383,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
             locals: {
                 itemId: $scope.item.id,
                 itemMeasure: $scope.item.amount_measure,
-            }
+            },
         }).then(function() {
             getDetails();
         });
@@ -403,8 +404,8 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
 
     $scope.delete = function() {
         var confirmDelete = $mdDialog.confirm()
-            .title('Delete '+$scope.item.name+'?')
-            .ariaLabel('Confirm deletion of '+$scope.item.name)
+            .title('Delete ' + $scope.item.name + '?')
+            .ariaLabel('Confirm deletion of ' + $scope.item.name)
             .ok('Delete')
             .cancel('Cancel');
         $mdDialog.show(confirmDelete).then(function() {
@@ -416,7 +417,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
 
 });
 
-app.controller('SetCtrl', function($scope, InventoryService, $stateParams, 
+app.controller('SetCtrl', function($scope, InventoryService, $stateParams,
         PageTitle, $mdDialog, $q) {
 
     $scope.removePadding = true;
@@ -436,7 +437,7 @@ app.controller('SetCtrl', function($scope, InventoryService, $stateParams,
 
     $scope.deleteItems = function(selected) {
         var d = $mdDialog.confirm()
-            .title('Remove '+selected.length+' item(s) from set?')
+            .title('Remove ' + selected.length + ' item(s) from set?')
             .ok('Remove')
             .cancel('No');
         $mdDialog.show(d).then(function() {
@@ -462,15 +463,15 @@ app.service('InventoryActions', function(Restangular, InventoryService, $mdDialo
     this.restock = function(item) {
         return $mdDialog.show({
             templateUrl: 'modules/inventory/views/restock.html',
-            controller: function(scope, $mdDialog, InventoryService, 
+            controller: function(scope, $mdDialog, InventoryService,
                 item) {
 
                 scope.item = item;
 
                 scope.restock = function() {
                     var data = {
-                        'amount': scope.amount, 
-                        'is_addition': true,
+                        amount: scope.amount,
+                        is_addition: true,
                     };
                     InventoryService.createTransfer(item.id, data).then(function() {
                         $mdDialog.hide();
@@ -483,7 +484,7 @@ app.service('InventoryActions', function(Restangular, InventoryService, $mdDialo
             },
             locals: {
                 item: item,
-            }
+            },
         });
     };
 });
@@ -491,8 +492,9 @@ app.service('InventoryActions', function(Restangular, InventoryService, $mdDialo
 app.service('InventoryService', function(Restangular) {
 
     this.items = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('inventory').getList(params);
     };
 
@@ -505,8 +507,8 @@ app.service('InventoryService', function(Restangular) {
     };
 
     this.saveItem = function(data) {
-       return Restangular.all('inventory').post(data);
-    }; 
+        return Restangular.all('inventory').post(data);
+    };
 
     this.updateItem = function(id, data) {
         return Restangular.one('inventory', id).patch(data);
@@ -518,7 +520,7 @@ app.service('InventoryService', function(Restangular) {
 
     this.importItems = function(data) {
         var headers = {
-            'Content-Type': undefined
+            'Content-Type': undefined,
         };
         return Restangular.all('inventory')
             .withHttpConfig({transformRequest: angular.identity})
@@ -529,32 +531,33 @@ app.service('InventoryService', function(Restangular) {
         return Restangular.one('inventory', itemId)
             .customPOST(null, 'transfer', {
                 id: transferId,
-                complete: 'True'
-            }); 
+                complete: 'True',
+            });
     };
 
     this.createTransfer = function(itemId, data) {
         return Restangular.one('inventory', itemId)
-            .customPOST(data, 'transfer'); 
+            .customPOST(data, 'transfer');
     };
 
     this.sets = function(params) {
-        if(!params)
+        if (!params) {
             params = {}
+        }
         return Restangular.all('inventorysets').getList(params);
     };
 
     this.getSet = function(id) {
-       return Restangular.one('inventorysets', id).get();
-    }; 
+        return Restangular.one('inventorysets', id).get();
+    };
 
     this.getSetItems = function(id) {
-       return Restangular.one('inventorysets', id).customGETLIST('items');
-    }; 
+        return Restangular.one('inventorysets', id).customGETLIST('items');
+    };
 
     this.saveSet = function(data) {
-       return Restangular.all('inventorysets').post(data);
-    }; 
+        return Restangular.all('inventorysets').post(data);
+    };
 
     this.updateSet = function(id, data) {
         return Restangular.one('inventorysets', id).patch(data);
@@ -575,8 +578,9 @@ app.service('InventoryService', function(Restangular) {
     };
 
     this.measures = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('measures').getList(params);
     };
 
@@ -617,14 +621,16 @@ app.service('InventoryService', function(Restangular) {
     };
 
     this.itemTypes = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('itemtypes').getList(params);
     };
 
     this.locations = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('locations').getList(params);
     };
 
@@ -649,8 +655,9 @@ app.service('InventoryService', function(Restangular) {
 app.service('OrganismService', function(Restangular) {
 
     this.organisms = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('organisms').getList(params);
     };
 

@@ -10,7 +10,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
 
     $scope.query = {
         ordering: 'identifier',
-        limit: 10
+        limit: 10,
     };
 
     $scope.selected = [];
@@ -22,19 +22,19 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
     }
     refreshData();
 
-    $scope.$watch('query.search', function(n,o) {
-        if(n !== o) {
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
             refreshData();
         }
     });
 
     $scope.toggleFilter = function(fieldName, value) {
         // If value == undefined then boolean toggle
-        if(fieldName in $scope.query) {
+        if (fieldName in $scope.query) {
             delete $scope.query[fieldName]
         } else {
-            if(!value) {
-                var value = 'True';
+            if (!value) {
+                value = 'True';
             }
             $scope.query[fieldName] = value;
         }
@@ -54,7 +54,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
     $scope.createProject = function() {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/createproject.html',
-            controller: function($scope, $mdDialog, OrderService, 
+            controller: function($scope, $mdDialog, OrderService,
                 UserService, CRMService, $state) {
 
                 $scope.project = {};
@@ -70,11 +70,11 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                 };
 
                 $scope.filterOrders = function(searchText) {
-                    return OrderService.autocomplete(searchText); 
+                    return OrderService.autocomplete(searchText);
                 };
 
                 $scope.orderChanged = function(itemSelected) {
-                    if(itemSelected.data.products.length > 0) {
+                    if (itemSelected.data.products.length > 0) {
                         $scope.product_count = itemSelected.data.products.length;
                     }
                 };
@@ -84,21 +84,22 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                 });
 
                 $scope.create = function() {
-                    if($scope.orderSelected) {
+                    if ($scope.orderSelected) {
                         $scope.project.order = $scope.orderSelected.id;
                     }
                     ProjectService.createProject($scope.project).then(function(data) {
 
-                        
-                        CRMService.linkProject(data.id, $scope.project_identifier).then(function(crmData) {
-                            if($scope.orderSelected) {
+
+                        CRMService.linkProject(data.id,
+                            $scope.project_identifier).then(function(crmData) {
+                            if ($scope.orderSelected) {
                                 var products = $scope.orderSelected.data.products;
-                                for(var i=0; i<products.length; i++) {
-                                    products[i]['project'] = data.id;
+                                for (var i = 0; i < products.length; i++) {
+                                    products[i].project = data.id;
                                     ProjectService.addProduct(products[i]);
                                 }
                             }
-                            $state.go('project_details', {id: data.id}); 
+                            $state.go('project_details', {id: data.id});
                             $mdDialog.hide();
                         });
 
@@ -109,13 +110,13 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                     $mdDialog.cancel();
                 };
 
-            }
+            },
         });
     };
 
     $scope.deleteItems = function(selected) {
         var d = $mdDialog.confirm()
-            .title('Delete '+selected.length+' projects?')
+            .title('Delete ' + selected.length + ' projects?')
             .ok('Delete')
             .cancel('No');
         $mdDialog.show(d).then(function() {
@@ -132,8 +133,8 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
 
 });
 
-app.controller('ProjectDetailsCtrl', function($scope, PageTitle, 
-    ProjectService, WorkflowService, $stateParams, $mdDialog, $rootScope, 
+app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
+    ProjectService, WorkflowService, $stateParams, $mdDialog, $rootScope,
     $q, UserService, OrganismService, $state) {
 
     $scope.removePadding = true;
@@ -141,7 +142,8 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     var getProjectData = function() {
         ProjectService.project_details($stateParams.id).then(function(data) {
             $scope.project = data;
-            PageTitle.set('Project ' +$scope.project.project_identifier + ': ' + $scope.project.name);
+            PageTitle.set('Project ' +
+                $scope.project.project_identifier + ': ' + $scope.project.name);
         });
     };
     getProjectData();
@@ -165,13 +167,14 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             limit: 200,
             ordering: '-id',
         }
-        if(searchText)
+        if (searchText) {
             params.search = searchText;
+        }
         return ProjectService.products(params);
     };
 
     $scope.$on('$stateChangeSuccess', function(e, toState, toParams) {
-        if(toState.name == 'product_details') {
+        if (toState.name == 'product_details') {
             $scope.currentProductId = toParams.productId;
         }
     });
@@ -179,23 +182,23 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     $scope.getProductData().then(function(data) {
         $scope.products = data;
         $scope.initialProductCount = data.length;
-        if(data.length > 0) {
-            if($state.params.productId) {
+        if (data.length > 0) {
+            if ($state.params.productId) {
                 $scope.currentProductId = $state.params.productId;
             } else {
                 $scope.currentProductId = data[0].id;
-                $state.go('product_details', 
-                        {productId: data[0].id}, 
+                $state.go('product_details',
+                        {productId: data[0].id},
                         {location: 'replace'}
                         );
             }
         }
     });
 
-    $scope.$watch('productFilter', function(n,o) {
+    $scope.$watch('productFilter', function(n, o) {
         $scope.getProductData(n).then(function(data) {
             $scope.products = data;
-            if(data.length > 0 && (n !== undefined && o !== undefined)) {
+            if (data.length > 0 && (n !== undefined && o !== undefined)) {
                 $scope.currentProductId = data[0].id;
             }
         });
@@ -226,7 +229,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             },
             locals: {
                 projectId: $scope.project.id,
-            }
+            },
         }).then(function() {
             getProjectData();
         });
@@ -239,7 +242,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             locals: {
                 projectId: projectId,
                 designTypes: $scope.designTypes,
-            }
+            },
         });
 
     };
@@ -250,23 +253,23 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             controller: 'switchWorkflowCtrl',
             locals: {
                 items: [item],
-                workflowId: workflowId
-            }
+                workflowId: workflowId,
+            },
         });
     };
 
     $scope.startWorkflow = function() {
         var canAddToWorkflow = _.filter($scope.selected,
             function(obj) {
-            return obj.on_workflow_as.length == 0;
+            return obj.on_workflow_as.length === 0;
         });
         // Use switch workflow instead!
         $mdDialog.show({
             templateUrl: 'modules/workflows/views/startworkflow.html',
-            controller: 'startWorkflowCtrl', 
+            controller: 'startWorkflowCtrl',
             locals: {
                 preSelected: canAddToWorkflow,
-            }
+            },
         }).then(function() {
             $scope.getProductData();
         });
@@ -281,18 +284,22 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     $scope.deselectAll = function() {
         _.each($scope.productsAvailable, function(obj) {
             var idx = $scope.selected.indexOf(obj);
-            if (idx > -1) 
+            if (idx > -1) {
                 $scope.selected.splice(idx, 1);
+            }
         });
     };
 
-    $scope.toggle = function (item, list) {
+    $scope.toggle = function(item, list) {
         var idx = list.indexOf(item);
-        if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        } else {
+            list.push(item);
+        }
     };
 
-    $scope.exists = function (item, list) {
+    $scope.exists = function(item, list) {
         return list.indexOf(item) > -1;
     };
 
@@ -301,12 +308,12 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
 });
 
-app.controller('ProductDetailsCtrl', function($scope, $stateParams, 
+app.controller('ProductDetailsCtrl', function($scope, $stateParams,
     ProjectService, InventoryService, $mdDialog) {
 
     var getProduct = function() {
         ProjectService.getProduct($stateParams.productId).then(function(data) {
-            $scope.product = data; 
+            $scope.product = data;
             $scope.pText = data.product_type;
             $scope.getDesigns();
         });
@@ -341,23 +348,23 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
                 };
 
                 $scope.add = function() {
-                    var linked_items = _.map(product.linked_inventory,
+                    var linkedItems = _.map(product.linked_inventory,
                         function(obj) {
                             return obj.id;
                         });
-                    linked_items.push($scope.itemId);
+                    linkedItems.push($scope.itemId);
                     var data = {
-                        linked_inventory: linked_items,
-                    }; 
+                        linked_inventory: linkedItems,
+                    };
                     ProjectService.updateProduct($stateParams.productId, data).then(
                            function(data) {
                                $mdDialog.hide();
-                        }); 
+                           });
                 };
             },
             locals: {
                 product: $scope.product,
-            }
+            },
         }).then(function() {
             getProduct();
         });
@@ -371,27 +378,27 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
             .cancel('No')
         ).then(function() {
             $scope.product.linked_inventory.splice(index, 1);
-            var linked_items = _.map($scope.product.linked_inventory,
+            var linkedItems = _.map($scope.product.linked_inventory,
                 function(obj) {
                     return obj.id;
                 });
             var data = {
-                linked_inventory: linked_items,
-            }; 
+                linked_inventory: linkedItems,
+            };
             ProjectService.updateProduct($stateParams.productId, data).then(
                    function(data) {
                        getProduct();
-                }); 
+                   });
         });
     };
 
     $scope.designs = [];
-    $scope.getDesigns = function() { 
+    $scope.getDesigns = function() {
     };
 });
 
-app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService, 
-    OrganismService, UserService, InventoryService, $rootScope, 
+app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
+    OrganismService, UserService, InventoryService, $rootScope,
     projectId, designTypes) {
 
     OrganismService.organisms().then(function(data) {
@@ -400,7 +407,7 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
 
     InventoryService.itemTypes().then(function(data) {
         $scope.product_types = data;
-    }); 
+    });
 
     $scope.designTypes = designTypes;
     $scope.designs = {};
@@ -437,8 +444,9 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
 app.service('ProjectService', function(Restangular) {
 
     this.projects = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('projects').getList(params);
     };
 
@@ -455,14 +463,16 @@ app.service('ProjectService', function(Restangular) {
     };
 
     this.products = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('products').getList(params);
     };
 
     this.getProduct = function(productId, params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.one('products', productId).get(params);
     };
 
@@ -479,8 +489,9 @@ app.service('ProjectService', function(Restangular) {
     };
 
     this.productStatuses = function(params) {
-        if(!params)
+        if (!params) {
             params = {};
+        }
         return Restangular.all('productstatuses').getList(params);
     };
 
@@ -489,13 +500,14 @@ app.service('ProjectService', function(Restangular) {
 app.service('CRMService', function(Restangular) {
 
     this.projects = function(params) {
-        if(!params)
-            var params = {};
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('crm').customGETLIST('project', params);
     };
 
     this.linkProject = function(projectId, crmProjectId) {
-        var data = {identifier: crmProjectId, id: projectId}; 
+        var data = {identifier: crmProjectId, id: projectId};
         return Restangular.all('crm').customPOST(data, 'link');
     };
 

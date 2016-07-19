@@ -5,8 +5,9 @@ var app = angular.module('limsFrontend');
 app.service('EquipmentService', function(Restangular) {
 
     this.equipment = function(params) {
-        if(!params)
-            var params = {}
+        if (!params) {
+            params = {};
+        }
         return Restangular.all('equipment').getList(params);
     };
 

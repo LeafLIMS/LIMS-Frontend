@@ -10,12 +10,12 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
         {icon: 'assignment', state: 'app.projects', text: 'Projects'},
         {icon: 'linear_scale', state: 'app.workflows', text: 'Workflows'},
         {icon: 'store', state: 'app.inventory', text: 'Inventory'},
-        {icon: 'devices_other', state: 'app.equipment', 
-            text: 'Equipment Status'},
-        {icon: 'build', state: 'app.tools', 
-            text: 'Tools', disabled: true},
-        {icon: 'settings_applications', state: 'app.configuration', 
-            text: 'Configuration'}
+        {icon: 'devices_other', state: 'app.equipment',
+            text: 'Equipment Status', },
+        {icon: 'build', state: 'app.tools',
+            text: 'Tools', disabled: true, },
+        {icon: 'settings_applications', state: 'app.configuration',
+            text: 'Configuration', },
     ];
 
     $scope.toggleSidenav = function(menuLoc) {
@@ -36,7 +36,7 @@ app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
 
     PageTitle.set('GET LIMS');
 
-    if(UserService.isLoggedIn()) {
+    if (UserService.isLoggedIn()) {
         $state.go('app.dashboard');
     } else {
         loginModal().then(function() {
@@ -48,7 +48,7 @@ app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
 
 });
 
-app.controller('FilePickerCtrl', function($scope, $mdDialog, AttachmentService, 
+app.controller('FilePickerCtrl', function($scope, $mdDialog, AttachmentService,
             Upload, UserService) {
 
     $scope.locations = [
@@ -56,8 +56,8 @@ app.controller('FilePickerCtrl', function($scope, $mdDialog, AttachmentService,
             name: 'Uploaded',
         },
         {
-            name: 'Equipment outputs'
-        }
+            name: 'Equipment outputs',
+        },
     ]
 
     $scope.selectedLocation = $scope.locations[0];
@@ -67,28 +67,28 @@ app.controller('FilePickerCtrl', function($scope, $mdDialog, AttachmentService,
 
     AttachmentService.getFiles().then(function(data) {
         $scope.availableFiles = data;
-    }); 
+    });
 
     $scope.selectFile = function(chosenFile) {
         $scope.selectedFile = chosenFile;
     };
 
-    $scope.$watch('chosenFile', function(n,o) {
-        if(n) {
+    $scope.$watch('chosenFile', function(n, o) {
+        if (n) {
             console.log(n);
             var params = new FormData();
             params.append('added_by', UserService.getUser().username);
             params.append('filename', n);
-            AttachmentService.addFile(params).then(function(data) {;
+            AttachmentService.addFile(params).then(function(data) {
                 $scope.selectFile(data);
                 $scope.choose();
             });
-        };
+        }
     });
 
     $scope.filerFiles = function(searchText) {
         var params = {
-            search: searchText
+            search: searchText,
         }
     };
 
@@ -113,7 +113,7 @@ app.directive('gmColourButton', function() {
             elem.attr('layout', 'column');
             elem.attr('layout-align', 'center');
             elem.addClass('gm-colour-button');
-        }
+        },
     }
 });
 
@@ -127,8 +127,8 @@ app.directive('gmMultiSelect', function() {
         templateUrl: 'modules/shared/views/gmmultiselect.html',
         link: function(scope, elem, attr) {
 
-			scope.selectedAvailable = [];
-			scope.selectedSelected = [];
+            scope.selectedAvailable = [];
+            scope.selectedSelected = [];
             scope.filtered = [];
 
             scope.selectAvailableStatus = false;
@@ -140,14 +140,14 @@ app.directive('gmMultiSelect', function() {
                 });
             }
 
-            scope.$watch('selected', function(n,o) {
-                if(n) {
+            scope.$watch('selected', function(n, o) {
+                if (n) {
                     getFiltered();
                 }
             }, true);
 
             scope.$watch('available', function(n) {
-                if(n) {
+                if (n) {
                     getFiltered();
                 }
             }, true);
@@ -158,19 +158,18 @@ app.directive('gmMultiSelect', function() {
                 });
             };
 
-			scope.toggle = function (item, list) {
-			    var idx = list.indexOf(item);
-			    if (idx > -1) {
-			      list.splice(idx, 1);
-			    }
-			    else {
-			      list.push(item);
-			    }
-			};
+            scope.toggle = function(item, list) {
+                var idx = list.indexOf(item);
+                if (idx > -1) {
+                    list.splice(idx, 1);
+                }                else {
+                    list.push(item);
+                }
+            };
 
-			scope.isSelected = function (item, list) {
-				return list.indexOf(item) > -1;
-			};
+            scope.isSelected = function(item, list) {
+                return list.indexOf(item) > -1;
+            };
 
             scope.addToSelected = function(list) {
                 scope.selected = scope.selected.concat(list);
@@ -179,10 +178,10 @@ app.directive('gmMultiSelect', function() {
             scope.removeFromSelected = function(list) {
                 _.each(list, function(obj) {
                     var idx = scope.selected.indexOf(obj)
-			        scope.selected.splice(idx, 1);
+                    scope.selected.splice(idx, 1);
                 });
             };
-        }
+        },
     }
 });
 
@@ -194,7 +193,7 @@ app.directive('pageTitle', function($rootScope) {
             $rootScope.$watch('page_title', function(n) {
                 $scope.title = n;
             });
-        }
+        },
     }
 });
 
@@ -207,7 +206,7 @@ app.service('PageTitle', function($rootScope) {
 app.service('AttachmentService', function(Restangular) {
 
     this.getFiles = function(params) {
-        if(!params) {
+        if (!params) {
             params = {}
         }
         return Restangular.all('attachments').getList(params);
@@ -217,7 +216,7 @@ app.service('AttachmentService', function(Restangular) {
         return Restangular.all('attachments')
             .withHttpConfig({transformRequest: angular.identity})
             .post(data, undefined, {
-                'Content-Type': undefined
+                'Content-Type': undefined,
             });
     };
 
