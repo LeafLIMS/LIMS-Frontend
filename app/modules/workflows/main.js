@@ -318,19 +318,19 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
 
     $scope.taskPaneSelected = 0;
 
-    if(!taskPositionId) {
+    if (!taskPositionId) {
         var taskPositionId = selected[0].current_task;
     }
 
     WorkflowService.getTaskByPosition(workflowId, taskPositionId)
         .then(function(data) {
 
-        $scope.task = data.plain();
-        // The core fields - operations on these propogate through
-        // to the individual component fields.
+            $scope.task = data.plain();
+            // The core fields - operations on these propogate through
+            // to the individual component fields.
 
-        $scope.selected = selected;
-    });
+            $scope.selected = selected;
+        });
 
     $scope.isStarted = selected[0].task_in_progress;
 
@@ -377,9 +377,9 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
             $scope.errorMessage = '';
         }).catch(function(err) {
             console.log(err);
-            if(err.data.message) { 
+            if (err.data.message) {
                 $scope.errorMessage = err.data.message;
-            } else if(err.status == 400) {
+            } else if (err.status == 400) {
                 $scope.errorMessage = 'Please ensure all fields contain valid data';
             } else {
                 $scope.errorMessage = err.status + ' ' + err.statusText;
