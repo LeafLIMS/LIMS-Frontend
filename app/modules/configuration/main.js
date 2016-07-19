@@ -631,7 +631,7 @@ app.controller('ItemTypeDialogCtrl', function($scope, $mdDialog,
         searchText = searchText.toLowerCase();
         return _.filter(itemtypes, function(obj) {
             if (obj.level > 0) {
-                obj.pad = Array(obj.level + 1).join(' -- ');
+                obj.pad = new Array(obj.level + 1).join(' -- ');
             }
             if (obj.name.toLowerCase().indexOf(searchText) > -1) {
                 return obj;
@@ -770,7 +770,7 @@ app.controller('LocationDialogCtrl', function($scope, $mdDialog,
         searchText = searchText.toLowerCase();
         return _.filter(locations, function(obj) {
             if (obj.level > 0) {
-                obj.pad = Array(obj.level + 1).join(' -- ');
+                obj.pad = new Array(obj.level + 1).join(' -- ');
             }
             if (obj.name.toLowerCase().indexOf(searchText) > -1) {
                 return obj;
