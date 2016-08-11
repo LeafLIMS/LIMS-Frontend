@@ -691,3 +691,47 @@ md-list-item.selected {
 .gm-multi-select {
     height: 20em;
 }
+
+//
+// Equipment
+//
+.equipment-card {
+    height: 15em;
+    .md-title {
+        font-weight: normal;
+    }
+    .equipment-reservations {
+        border-top: 1px solid $highlight;
+        border-bottom: 1px solid $highlight;
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .no-reservations {
+            text-align: center;
+            color: #ccc;
+        }
+        .date-start {
+            font-size: 0.8em;
+            font-weight: bold;
+            padding-right: 1em;
+        }
+    }
+}
+
+.equipment-status-active, .equipment-status-active md-icon {
+    color: darken($accent, 20%);
+}
+
+.equipment-status-idle, .equipment-status-idle md-icon {
+    color: $primary;
+}
+
+.equipment-status-error, .equipment-status-error md-icon {
+    color: $warn;
+}
+
+.equipment-status-broken, .equipment-status-broken md-icon {
+    color: #ccc;
+}
