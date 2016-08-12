@@ -1,0 +1,20 @@
+<h3 class="section-subheader">Permissions</h3>
+<md-list class="permission-groups" flex>
+    <md-list-item ng-repeat="group in groups">
+        <md-checkbox ng-model="group.assigned" ng-click="setGroupEnabled(group)"></md-checkbox>
+        <p>{{ group.name }}</p>
+        <div class="md-secondary" 
+            layout="row" 
+            layout-align="center center">
+            r
+            <md-switch ng-model="group.permissions"
+                       ng-disabled="!group.assigned"
+                       ng-change="setPermissionValue(group)"
+                       aria-label="{{ group.name }} permissions switch"
+                       ng-true-value="'rw'"
+                       ng-false-value="'r'">
+            </md-switch>
+            rw
+        </div>
+    </md-list-item>
+</md-list>

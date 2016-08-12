@@ -229,3 +229,119 @@ app.service('AttachmentService', function(Restangular) {
     };
 
 });
+
+app.directive('gtlPermissionsWidget', function(UserService, GroupService, PermissionsService) {
+    return {
+        restrict: 'E',
+        scope: {
+            inputData: '=',
+        },
+        templateUrl: 'modules/shared/views/gtl-permissions-widget.html',
+        link: function($scope, elem, attrs) {
+            $scope.permissions = {};
+
+            // Ignore these groups as they're assigned to every
+            // user created so aren't too useful in this case.
+            var ignoreGroups = ['user'];
+
+            // Get user permissions
+            // Auto assign current user group(s) as rw
+            // Except for user
+            var userId = UserService.getUser().id;
+            var user = undefined;
+            // Get the current user details so we can set the default
+            // permissions for the item.
+            UserService.getUserDetails(userId).then(function(data) {
+                user = data;
+                // Get all available groups.
+                GroupService.groups().then(function(data) {
+                    $scope.groups = data;
+                    var inputDataPerms = $scope.inputData.permissions;
+                    var objectPermissionGroups = Object.keys(inputDataPerms);
+                    if($scope.inputData.id) {
+                        _.each($scope.groups, function(group) {
+                            if(objectPermissionGroups.indexOf(group.name) !== -1) {
+                                group.assigned = true;
+                                var hasChange = _.find(inputDataPerms[group.name], 
+                                    function(o) {
+                                    if(_.startsWith(o, 'change_')) {
+                                        return true;
+                                    }
+                                    return false;
+                                });
+                                if(hasChange) {
+                                    group.permissions = 'rw';
+                                } else {
+                                    group.permissions = 'r';
+                                }
+                                $scope.permissions[group.name] = 'rw';
+                            }
+                        });
+                    } else {
+                        // Set the right permissions/assigned groups
+                        // for the interface to read.
+                        _.each($scope.groups, function(group) {
+                            if(user.groups.indexOf(group.name) !== -1 &&
+                               ignoreGroups.indexOf(group.name) == -1) {
+                                group.assigned = true;
+                                group.permissions = 'rw';
+                                $scope.permissions[group.name] = 'rw';
+                            }
+                        });
+                        $scope.inputData.assign_perms = $scope.permissions;
+                    }
+                });
+            });
+
+            $scope.setGroupEnabled = function(group) {
+                if(group.assigned) {
+                    delete $scope.permissions[group.name];
+                    // Call remove permission API
+                    if($scope.inputData.id) {
+                        PermissionsService.removePermissions($scope.inputData.route,
+                                                             $scope.inputData.id,
+                                                             [group.name]); 
+                    }
+                } else {
+                    $scope.permissions[group.name] = 'r';
+                    group.permissions = 'r';
+                    // Call set permission API
+                    if($scope.inputData.id) {
+                        PermissionsService.setPermissions($scope.inputData.route,
+                                                          $scope.inputData.id,
+                                                          $scope.permissions); 
+                    }
+                }
+            };
+
+            $scope.setPermissionValue = function(group) {
+                if($scope.inputData.id) {
+                    // Use the permisions API to set things as object exists
+                    PermissionsService.setPermissions($scope.inputData.route,
+                                                      $scope.inputData.id,
+                                                      $scope.permissions); 
+                } else {
+                    // Set permissions using the assign_perms part of the
+                    // data to be sent as object does not exist yet.
+                    $scope.permissions[group.name] = group.permissions;
+                }
+            }
+        }
+    }
+});
+
+app.service('PermissionsService', function(Restangular) {
+    // If it has a path you can get it from the Restangular
+    // object and pass it to the service!
+    // You won't need it for unsaved as sent with request :)
+    this.setPermissions = function(sourceUrl, objectId, permissions) {
+        return Restangular.one(sourceUrl, objectId).customPOST(permissions,
+                                                               'set_permissions');
+                                                               
+    }
+
+    this.removePermissions = function(sourceUrl, objectId, groups) {
+        return Restangular.one(sourceUrl, objectId).customDELETE('remove_permissions', 
+                                                                 {groups: groups});
+    }
+});
