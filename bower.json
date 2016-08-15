@@ -31,7 +31,7 @@
   "appPath": "app",
   "moduleName": "limsFrontend",
   "resolutions": {
-    "angular": "1.5.7",
+    "angular": "1.5.8",
     "lodash": "^4.5.1",
     "angular-mocks": "^1.4.0"
   }

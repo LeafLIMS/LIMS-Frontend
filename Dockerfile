@@ -1,27 +1,37 @@
 # Suggest running this as 'web'
 # Before running, the backend server ('app') must first be started
 
-FROM node:latest
+FROM ubuntu:latest
 
-ENV HOME /root
-
-WORKDIR /usr/src/app
-RUN mkdir limsweb
-COPY . limsweb
-
-WORKDIR /usr/src/app/limsweb
-RUN npm install
-RUN npm install -g grunt-cli bower
-RUN bower --allow-root install
-RUN apt-get update
-RUN apt-get install -y ruby ruby-dev
-RUN gem install compass
-
-# BEFORE GOING ANY FURTHER
-# Need to set API_URL for 'app' server - otherwise default of http://localhost:8000 will be used
+# Set API_URL for 'app' server - default http://localhost:8000 will be used
 ENV API_URL http://localhost:8000
-ENV LISTEN_HOST 0.0.0.0
+
+# Set LISTEN_HOST (currently ignored - will respond to any hostname) and LISTEN_PORT for 'web' server - default http://localhost:9000/
+ENV LISTEN_HOST localhost
 ENV LISTEN_PORT 9000
 
-# Start the server using sh to pick up the ENV settings above:
-CMD ["sh", "-c", "grunt serve --api_url=$API_URL --listen_host=$LISTEN_HOST --listen_port=$LISTEN_PORT"]
+ENV HOME /root
+EXPOSE $LISTEN_PORT
+
+# Rest of build continues
+RUN apt-get update
+RUN apt-get install -y --fix-missing --allow-unauthenticated apt-utils ruby ruby-dev nodejs npm nodejs-legacy apt-utils autoconf nasm git apache2
+RUN sed -i.bak "s/:80/:$LISTEN_PORT/g" /etc/apache2/sites-available/000-default.conf
+RUN echo "Listen $LISTEN_PORT\nNameVirtualHost *:$LISTEN_PORT" > /etc/apache2/ports.conf
+
+WORKDIR /usr/src/app
+RUN mkdir getlims
+COPY . getlims
+
+WORKDIR /usr/src/app/getlims
+RUN mkdir -p dist
+RUN ln -sf dist /var/www/html
+
+RUN npm install -g grunt-cli bower 
+RUN npm install 
+RUN bower --allow-root install
+RUN gem install compass
+
+RUN grunt build --api-url=$API_URL --listen-host=$LISTEN_HOST --listen-port=$LISTEN_PORT
+
+CMD ["apachectl","-DFOREGROUND"]
