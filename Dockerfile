@@ -24,14 +24,12 @@ RUN mkdir getlims
 COPY . getlims
 
 WORKDIR /usr/src/app/getlims
-RUN mkdir -p dist
-RUN ln -sf dist /var/www/html
-
 RUN npm install -g grunt-cli bower 
 RUN npm install 
 RUN bower --allow-root install
 RUN gem install compass
 
 RUN grunt build --api-url=$API_URL --listen-host=$LISTEN_HOST --listen-port=$LISTEN_PORT
+RUN mv -f dist/* /var/www/html
 
 CMD ["apachectl","-DFOREGROUND"]
