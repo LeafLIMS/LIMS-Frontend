@@ -10,7 +10,7 @@
     "angular-ui-router": "ui-router#~0.2.15",
     "ng-token-auth": "~0.0.28",
     "angular-material-data-table": "~0.9.11",
-    "restangular": "~1.5.1",
+    "restangular": "~1.5.2",
     "satellizer": "~0.13.3",
     "ngstorage": "~0.3.10",
     "angular-messages": "~1.4.9",
