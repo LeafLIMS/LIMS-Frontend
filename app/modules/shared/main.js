@@ -15,7 +15,7 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
         {icon: 'build', state: 'app.tools',
             text: 'Tools', disabled: true, },
         {icon: 'settings_applications', state: 'app.configuration',
-            text: 'Configuration', },
+            text: 'Configuration', access: ['admin']},
     ];
 
     $scope.toggleSidenav = function(menuLoc) {
@@ -23,6 +23,21 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
     };
 
     $scope.user = UserService.getUser();
+
+    $scope.hasAccess = function(item) {
+        // Check if a user has access to this part of the
+        // system. Defined in navigationItems array.
+        if(item.access) {
+            for(var i=0; i<item.access.length; i++) {
+                if($scope.user.groups.indexOf(item.access[i]) !== -1) {
+                    return true;
+                }
+            }
+        } else {
+            return true;
+        }
+        return false;
+    };
 
     $scope.logout = function() {
         UserService.logout();
@@ -43,6 +58,7 @@ app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
             $state.go('app.dashboard');
         }).catch(function(err) {
             console.log('caught here');
+            $state.go('welcome');
         });
     }
 
@@ -240,6 +256,10 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
         link: function($scope, elem, attrs) {
             $scope.permissions = {};
 
+            if(!$scope.inputData) {
+                $scope.inputData = {};
+            }
+
             // Ignore these groups as they're assigned to every
             // user created so aren't too useful in this case.
             var ignoreGroups = ['user'];
@@ -256,9 +276,9 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
                 // Get all available groups.
                 GroupService.groups().then(function(data) {
                     $scope.groups = data;
-                    var inputDataPerms = $scope.inputData.permissions;
-                    var objectPermissionGroups = Object.keys(inputDataPerms);
                     if($scope.inputData.id) {
+                        var inputDataPerms = $scope.inputData.permissions;
+                        var objectPermissionGroups = Object.keys(inputDataPerms);
                         _.each($scope.groups, function(group) {
                             if(objectPermissionGroups.indexOf(group.name) !== -1) {
                                 group.assigned = true;
@@ -288,7 +308,7 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
                                 $scope.permissions[group.name] = 'rw';
                             }
                         });
-                        $scope.inputData.assign_perms = $scope.permissions;
+                        $scope.inputData.assign_groups = $scope.permissions;
                     }
                 });
             });
@@ -321,7 +341,7 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
                                                       $scope.inputData.id,
                                                       $scope.permissions); 
                 } else {
-                    // Set permissions using the assign_perms part of the
+                    // Set permissions using the assign_groups part of the
                     // data to be sent as object does not exist yet.
                     $scope.permissions[group.name] = group.permissions;
                 }
@@ -335,8 +355,11 @@ app.service('PermissionsService', function(Restangular) {
     // object and pass it to the service!
     // You won't need it for unsaved as sent with request :)
     this.setPermissions = function(sourceUrl, objectId, permissions) {
-        return Restangular.one(sourceUrl, objectId).customPOST(permissions,
-                                                               'set_permissions');
+        return Restangular.one(sourceUrl, objectId).customOperation('patch', 
+                                                                    'set_permissions',
+                                                                    null,
+                                                                    null,
+                                                                    permissions);
                                                                
     }
 
