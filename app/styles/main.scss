@@ -691,3 +691,8 @@ md-list-item.selected {
 .gm-multi-select {
     height: 20em;
 }
+
+.permission-groups {
+    max-height: 20em;
+    overflow-y: auto;
+}

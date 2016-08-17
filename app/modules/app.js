@@ -33,10 +33,11 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
     API_URL) {
 
     $httpProvider.interceptors.push(function($timeout, $q, $injector) {
-        var loginModal, $http, $state;
+        var loginModal, $localStorage, $http, $state;
 
         $timeout(function() {
             loginModal = $injector.get('loginModal');
+            $localStorage = $injector.get('$localStorage');
             $http = $injector.get('$http');
             $state = $injector.get('$state');
         });
@@ -50,10 +51,10 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 var deferred = $q.defer();
 
                 loginModal().then(function(responseData) {
-                    deferred.resolve($http(rejection.config));
+                    deferred.resolve($injector.get('$http')(rejection.config));
                 }).catch(function() {
-                    $state.go('welcome');
                     deferred.reject(rejection);
+                    $injector.get('$state').go('welcome');
                 });
 
                 return deferred.promise;
@@ -248,7 +249,7 @@ app.run(function($rootScope, Restangular, UserService, loginModal, $state) {
 
     Restangular.addFullRequestInterceptor(function(el, op, what, url,
         headers) {
-        if (UserService.isLoggedIn()) {
+        if (UserService.isLoggedIn() && UserService.getUser() !== undefined) {
             headers.Authorization = 'Token ' + UserService.getUser().token;
         }
         return {

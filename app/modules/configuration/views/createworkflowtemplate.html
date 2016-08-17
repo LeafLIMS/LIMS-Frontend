@@ -13,7 +13,7 @@
             <div class="md-dialog-content" layout="column">
                 <md-input-container flex>
                     <label>Name of template</label>
-                    <input required ng-model="workflow_name">
+                    <input required ng-model="workflow.name">
                 </md-input-container>
                 <div layout="row" layout="start center">
                     <md-autocomplete 
@@ -51,6 +51,7 @@
 
                     </md-list-item>
                 </md-list>
+                <gtl-permissions-widget input-data="workflow"></gtl-permissions-widget>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">

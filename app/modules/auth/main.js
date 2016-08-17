@@ -12,6 +12,7 @@ app.controller('LoginModalCtrl', function($scope, UserService, $mdDialog) {
             user.token = data.token;
             user.username = username;
             user.status = data.status;
+            user.groups = data.groups;
             UserService.setUser(user)
             $mdDialog.hide(user);
         }).catch(function(error) {
@@ -20,24 +21,16 @@ app.controller('LoginModalCtrl', function($scope, UserService, $mdDialog) {
     };
 });
 
-app.service('loginModal', function(UserService, $mdDialog) {
+app.service('loginModal', function(UserService, $mdDialog, $localStorage) {
 
     return function() {
+        delete $localStorage.user;
         $mdDialog.cancel();
         var instance = $mdDialog.show({
             templateUrl: 'modules/auth/views/loginmodal.html',
             controller: 'LoginModalCtrl',
         });
         return instance;
-        /*
-            .then(function(data) {
-            console.log(data);
-            console.log('set user data');
-            UserService.setUser(data)
-        }).catch(function(err) {
-            console.log('caught');
-        });
-        */
     }
 
 });

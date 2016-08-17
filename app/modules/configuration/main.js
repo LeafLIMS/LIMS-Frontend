@@ -177,7 +177,6 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
                     });
                 }
                 $scope.workflow = data;
-                $scope.workflow_name = data.name;
             });
         } else {
             $scope.workflow = {};
@@ -210,7 +209,6 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
     $scope.save = function() {
         var order = _.map($scope.order, 'id').join(',');
 
-        $scope.workflow.name = $scope.workflow_name;
         $scope.workflow.order = order;
         if (!workflowId) {
             $scope.workflow.created_by = UserService.getUser().username;

@@ -39,8 +39,12 @@
                 </div>
             </md-toolbar>
             <md-list>
-                <md-list-item ui-sref-active="active" ng-repeat="item in navigationItems" 
-                    ui-sref="{{ item.state }}" ng-click="toggleSidenav('left')" ng-disabled="item.disabled">
+                <md-list-item ui-sref-active="active"
+                              ng-repeat="item in navigationItems"
+                              ui-sref="{{ item.state }}"
+                              ng-click="toggleSidenav('left')"
+                              ng-if="hasAccess(item)"
+                              ng-disabled="item.disabled">
                     <md-item-content layout="row" layout-align="start center">
                         <div class="inset">
                             <md-icon>{{ item.icon }}</md-icon>

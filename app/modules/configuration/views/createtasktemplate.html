@@ -12,132 +12,139 @@
         <md-dialog-content class="task" layout="column">
             <div class="md-dialog-content" layout="column">
                 <div layout="row">
-                    <md-input-container flex="40">
-                        <label>Name of template</label>
-                        <input required ng-model="task.name">
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Description of template</label>
-                        <textarea ng-model="task.description"></textarea>
-                    </md-input-container>
-                </div>
-                <h3>Configuration</h3>
-                <div layout="row">
-                    <div layout="row">
-                        <md-autocomplete flex
-                            md-selected-item="inputSelected"
-                            md-search-text="inputSearchText"
-                            md-selected-item-change="inputChanged(item)"
-                            md-items="item in filterInputTypes(inputSearchText)"
-                            md-item-text="item.name"
-                            md-select-on-match
-                            md-floating-label="Input type from product">
-                            <md-item-template>
-                                <span md-highlight-text="inputSearchText" 
-                                    md-highlight-flags="^i">
+                    <div flex="75">
+                        <div layout="row">
+                            <md-input-container flex="40">
+                                <label>Name of template</label>
+                                <input required ng-model="task.name">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Description of template</label>
+                                <textarea ng-model="task.description"></textarea>
+                            </md-input-container>
+                        </div>
+                        <h3>Configuration</h3>
+                        <div layout="row">
+                            <div layout="row">
+                                <md-autocomplete flex
+                                    md-selected-item="inputSelected"
+                                    md-search-text="inputSearchText"
+                                    md-selected-item-change="inputChanged(item)"
+                                    md-items="item in filterInputTypes(inputSearchText)"
+                                    md-item-text="item.name"
+                                    md-select-on-match
+                                    md-floating-label="Input type from product">
+                                    <md-item-template>
+                                        <span md-highlight-text="inputSearchText" 
+                                            md-highlight-flags="^i">
+                                            {{ item.name }}
+                                        </span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        Sorry, no items where found matching your text
+                                    </md-not-found>
+                                </md-autocomplete>
+                                <md-input-container class="task-field-amount">
+                                    <label>Amount</label>
+                                    <input type="number" step="1" 
+                                        ng-disabled="field.from_calculation"
+                                        required
+                                        aria-label="product input amount"
+                                        ng-model="task.product_input_amount">
+                                </md-input-container>
+                                <md-autocomplete flex
+                                    md-selected-item-change="setMeasure(mItem)"
+                                    md-selected-item="mItem"
+                                    md-search-text="mText"
+                                    md-items="item in filterMeasures(mText)"
+                                    md-item-text="item.symbol"
+                                    md-min-length="0"
+                                    md-select-on-match
+                                    required
+                                    md-floating-label="Choose amount measure">
+                                    <md-item-template>
+                                        <span md-highlight-text="mText"
+                                            md-highlight-flags="^i">
+                                            {{ item.name }} ({{ item.symbol }})
+                                        </span>
+                                    </md-item-template>
+                                </md-autocomplete> 
+                            </div>
+                            <md-autocomplete flex
+                                md-selected-item-change="setLabware(lbItem)"
+                                md-selected-item="lbItem"
+                                md-search-text="lbText"
+                                md-items="item in filterInputTypes(lbText)"
+                                md-item-text="item.name"
+                                md-min-length="0"
+                                md-select-on-match
+                                required
+                                md-floating-label="Choose type of labware">
+                                <md-item-template>
+                                    <span md-highlight-text="lbText"
+                                        md-highlight-flags="^i">
+                                        {{ item.name }}
+                                    </span>
+                                </md-item-template>
+                            </md-autocomplete> 
+                        </div>
+                        <md-chips flex="50"
+                            ng-model="task.capable_equipment"
+                            md-autocomplete-snap
+                            md-require-match
+                            md-transform-chip="transformChip($chip)">
+                            <md-autocomplete
+                                md-selected-item="ceSelected"
+                                md-search-text="ceText"
+                                md-items="item in filterEquipment(ceText)"
+                                md-item-text="item.name"
+                                md-select-on-match
+                                placeholder="Choose capable equipment">
+                                <span md-highlight-text="ceText">
                                     {{ item.name }}
                                 </span>
-                            </md-item-template>
-                            <md-not-found>
-                                Sorry, no items where found matching your text
-                            </md-not-found>
-                        </md-autocomplete>
-                        <md-input-container class="task-field-amount">
-                            <label>Amount</label>
-                            <input type="number" step="1" 
-                                ng-disabled="field.from_calculation"
-                                required
-                                aria-label="product input amount"
-                                ng-model="task.product_input_amount">
-                        </md-input-container>
-                        <md-autocomplete flex
-                            md-selected-item-change="setMeasure(mItem)"
-                            md-selected-item="mItem"
-                            md-search-text="mText"
-                            md-items="item in filterMeasures(mText)"
-                            md-item-text="item.symbol"
-                            md-min-length="0"
-                            md-select-on-match
-                            required
-                            md-floating-label="Choose amount measure">
-                            <md-item-template>
-                                <span md-highlight-text="mText"
-                                    md-highlight-flags="^i">
-                                    {{ item.name }} ({{ item.symbol }})
-                                </span>
-                            </md-item-template>
-                        </md-autocomplete> 
+                            </md-autocomplete>
+                        </md-chips>
+                        <div layout="row">
+                            <md-chips flex
+                                ng-model="task.input_files"
+                                md-autocomplete-snap
+                                md-require-match
+                                md-transform-chip="transformChip($chip)">
+                                <md-autocomplete
+                                    md-selected-item="ifSelected"
+                                    md-search-text="ifText"
+                                    md-items="item in filterFileTemplates(ifText)"
+                                    md-item-text="item.name"
+                                    md-select-on-match
+                                    placeholder="Choose input files">
+                                    <span md-highlight-text="ifText">
+                                        {{ item.name }}
+                                    </span>
+                                </md-autocomplete>
+                            </md-chips>
+                            <md-chips flex
+                                ng-model="task.output_files"
+                                md-autocomplete-snap
+                                md-require-match
+                                md-transform-chip="transformChip($chip)">
+                                <md-autocomplete
+                                    md-selected-item="ofSelected"
+                                    md-search-text="ofText"
+                                    md-items="item in filterFileTemplates(ofText)"
+                                    md-item-text="item.name"
+                                    md-select-on-match
+                                    placeholder="Choose output files">
+                                    <span md-highlight-text="ofText">
+                                        {{ item.name }}
+                                    </span>
+                                </md-autocomplete>
+                            </md-chips>
+                        </div>
                     </div>
-                    <md-autocomplete flex
-                        md-selected-item-change="setLabware(lbItem)"
-                        md-selected-item="lbItem"
-                        md-search-text="lbText"
-                        md-items="item in filterInputTypes(lbText)"
-                        md-item-text="item.name"
-                        md-min-length="0"
-                        md-select-on-match
-                        required
-                        md-floating-label="Choose type of labware">
-                        <md-item-template>
-                            <span md-highlight-text="lbText"
-                                md-highlight-flags="^i">
-                                {{ item.name }}
-                            </span>
-                        </md-item-template>
-                    </md-autocomplete> 
-                </div>
-                <md-chips flex="50"
-                    ng-model="task.capable_equipment"
-                    md-autocomplete-snap
-                    md-require-match
-                    md-transform-chip="transformChip($chip)">
-                    <md-autocomplete
-                        md-selected-item="ceSelected"
-                        md-search-text="ceText"
-                        md-items="item in filterEquipment(ceText)"
-                        md-item-text="item.name"
-                        md-select-on-match
-                        placeholder="Choose capable equipment">
-                        <span md-highlight-text="ceText">
-                            {{ item.name }}
-                        </span>
-                    </md-autocomplete>
-                </md-chips>
-                <div layout="row">
-                    <md-chips flex
-                        ng-model="task.input_files"
-                        md-autocomplete-snap
-                        md-require-match
-                        md-transform-chip="transformChip($chip)">
-                        <md-autocomplete
-                            md-selected-item="ifSelected"
-                            md-search-text="ifText"
-                            md-items="item in filterFileTemplates(ifText)"
-                            md-item-text="item.name"
-                            md-select-on-match
-                            placeholder="Choose input files">
-                            <span md-highlight-text="ifText">
-                                {{ item.name }}
-                            </span>
-                        </md-autocomplete>
-                    </md-chips>
-                    <md-chips flex
-                        ng-model="task.output_files"
-                        md-autocomplete-snap
-                        md-require-match
-                        md-transform-chip="transformChip($chip)">
-                        <md-autocomplete
-                            md-selected-item="ofSelected"
-                            md-search-text="ofText"
-                            md-items="item in filterFileTemplates(ofText)"
-                            md-item-text="item.name"
-                            md-select-on-match
-                            placeholder="Choose output files">
-                            <span md-highlight-text="ofText">
-                                {{ item.name }}
-                            </span>
-                        </md-autocomplete>
-                    </md-chips>
+                    <div flex>
+                        <gtl-permissions-widget input-data="task"></gtl-permissions-widget>
+                    </div>
                 </div>
                 <div ng-show="task.id">
                     <h3>Fields</h3>
