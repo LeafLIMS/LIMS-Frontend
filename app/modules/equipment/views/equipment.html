@@ -1,0 +1,66 @@
+<!--
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createProject()">
+            <md-icon>add</md-icon>
+            Create new project
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+-->
+<div layout="row">
+    <md-card class="equipment-card" 
+        layout="column"
+        flex="25"
+        ng-repeat="equipment in equipment_list">
+        <md-card-header class="equipment-status-{{ equipment.status }}">
+            <md-card-header-text>
+                <span class="md-title">
+                    <md-icon>{{ status_icons[equipment.status] }}</md-icon>
+                    {{ equipment.name }}
+                </span>
+                <span class="md-subhead" layout="row">
+                    {{ equipment.status_display }}
+                    <span flex></span>
+                    {{ equipment.location_display }}
+                </span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content flex class="equipment-reservations">
+            <ul class="reservations-list">
+                <li ng-if="equipment.can_reserve" 
+                    ng-repeat="r in equipment.reservations">
+                    <span class="date-start">{{ r.start|date:'dd/MM HH:mm':'UTC' }}</span>
+                    <span class="booked-for">{{ r.title }}</span>
+                </li>
+                <li class="no-reservations" 
+                    ng-if="equipment.reservations.length == 0 
+                        && equipment.can_reserve">
+                    No reservations
+                </li>
+                <li class="no-reservations"
+                    ng-if="!equipment.can_reserve">
+                    Cannot reserve
+                </li>
+            </ul>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-menu>
+                <md-button class="md-icon-button"
+                    ng-click="$mdOpenMenu()">
+                    <md-icon>notifications</md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item ng-repeat="(code,status) in equipment_statuses">
+                        <md-button
+                            ng-click="changeStatus(code, equipment)">
+                            <md-icon>{{ status_icons[code] }}</md-icon>
+                            {{ status }}
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </md-card-actions>
+    </md-card>
+</div>

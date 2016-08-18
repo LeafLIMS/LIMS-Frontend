@@ -235,6 +235,16 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 },
             },
         })
+        // Equipment
+        .state('app.equipment', {
+            url: '/equipment',
+            views: {
+                content: {
+                    templateUrl: 'modules/equipment/views/equipment.html',
+                    controller: 'EquipmentCtrl',
+                },
+            },
+        })
 
     $mdIconProvider
         .iconSet('alt', 'images/mdi.svg');
