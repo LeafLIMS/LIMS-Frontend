@@ -15,7 +15,7 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
         {icon: 'build', state: 'app.tools',
             text: 'Tools', disabled: true, },
         {icon: 'settings_applications', state: 'app.configuration',
-            text: 'Configuration', access: ['admin']},
+            text: 'Configuration', access: ['admin'], },
     ];
 
     $scope.toggleSidenav = function(menuLoc) {
@@ -27,9 +27,9 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
     $scope.hasAccess = function(item) {
         // Check if a user has access to this part of the
         // system. Defined in navigationItems array.
-        if(item.access) {
-            for(var i=0; i<item.access.length; i++) {
-                if($scope.user.groups.indexOf(item.access[i]) !== -1) {
+        if (item.access) {
+            for (var i = 0; i < item.access.length; i++) {
+                if ($scope.user.groups.indexOf(item.access[i]) !== -1) {
                     return true;
                 }
             }
@@ -256,7 +256,7 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
         link: function($scope, elem, attrs) {
             $scope.permissions = {};
 
-            if(!$scope.inputData) {
+            if (!$scope.inputData) {
                 $scope.inputData = {};
             }
 
@@ -268,7 +268,7 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
             // Auto assign current user group(s) as rw
             // Except for user
             var userId = UserService.getUser().id;
-            var user = undefined;
+            var user;
             // Get the current user details so we can set the default
             // permissions for the item.
             UserService.getUserDetails(userId).then(function(data) {
@@ -276,20 +276,20 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
                 // Get all available groups.
                 GroupService.groups().then(function(data) {
                     $scope.groups = data;
-                    if($scope.inputData.id) {
+                    if ($scope.inputData.id) {
                         var inputDataPerms = $scope.inputData.permissions;
                         var objectPermissionGroups = Object.keys(inputDataPerms);
                         _.each($scope.groups, function(group) {
-                            if(objectPermissionGroups.indexOf(group.name) !== -1) {
+                            if (objectPermissionGroups.indexOf(group.name) !== -1) {
                                 group.assigned = true;
-                                var hasChange = _.find(inputDataPerms[group.name], 
+                                var hasChange = _.find(inputDataPerms[group.name],
                                     function(o) {
-                                    if(_.startsWith(o, 'change_')) {
+                                    if (_.startsWith(o, 'change_')) {
                                         return true;
                                     }
                                     return false;
                                 });
-                                if(hasChange) {
+                                if (hasChange) {
                                     group.permissions = 'rw';
                                 } else {
                                     group.permissions = 'r';
@@ -301,7 +301,7 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
                         // Set the right permissions/assigned groups
                         // for the interface to read.
                         _.each($scope.groups, function(group) {
-                            if(user.groups.indexOf(group.name) !== -1 &&
+                            if (user.groups.indexOf(group.name) !== -1 &&
                                ignoreGroups.indexOf(group.name) == -1) {
                                 group.assigned = true;
                                 group.permissions = 'rw';
@@ -314,39 +314,39 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
             });
 
             $scope.setGroupEnabled = function(group) {
-                if(group.assigned) {
+                if (group.assigned) {
                     delete $scope.permissions[group.name];
                     // Call remove permission API
-                    if($scope.inputData.id) {
+                    if ($scope.inputData.id) {
                         PermissionsService.removePermissions($scope.inputData.route,
                                                              $scope.inputData.id,
-                                                             [group.name]); 
+                                                             [group.name]);
                     }
                 } else {
                     $scope.permissions[group.name] = 'r';
                     group.permissions = 'r';
                     // Call set permission API
-                    if($scope.inputData.id) {
+                    if ($scope.inputData.id) {
                         PermissionsService.setPermissions($scope.inputData.route,
                                                           $scope.inputData.id,
-                                                          $scope.permissions); 
+                                                          $scope.permissions);
                     }
                 }
             };
 
             $scope.setPermissionValue = function(group) {
-                if($scope.inputData.id) {
+                if ($scope.inputData.id) {
                     // Use the permisions API to set things as object exists
                     PermissionsService.setPermissions($scope.inputData.route,
                                                       $scope.inputData.id,
-                                                      $scope.permissions); 
+                                                      $scope.permissions);
                 } else {
                     // Set permissions using the assign_groups part of the
                     // data to be sent as object does not exist yet.
                     $scope.permissions[group.name] = group.permissions;
                 }
             }
-        }
+        },
     }
 });
 
@@ -355,16 +355,15 @@ app.service('PermissionsService', function(Restangular) {
     // object and pass it to the service!
     // You won't need it for unsaved as sent with request :)
     this.setPermissions = function(sourceUrl, objectId, permissions) {
-        return Restangular.one(sourceUrl, objectId).customOperation('patch', 
+        return Restangular.one(sourceUrl, objectId).customOperation('patch',
                                                                     'set_permissions',
                                                                     null,
                                                                     null,
                                                                     permissions);
-                                                               
     }
 
     this.removePermissions = function(sourceUrl, objectId, groups) {
-        return Restangular.one(sourceUrl, objectId).customDELETE('remove_permissions', 
+        return Restangular.one(sourceUrl, objectId).customDELETE('remove_permissions',
                                                                  {groups: groups});
     }
 });
