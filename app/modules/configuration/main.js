@@ -52,11 +52,11 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
             ],
         },
         {
-            name: 'Attachments',
+            name: 'Files and drivers',
             sections: [
                 {
-                    name: 'Attachments',
-                    ctrl: 'Attachments',
+                    name: 'File templates',
+                    ctrl: 'FileTemplates',
                 },
             ],
         },
@@ -1240,6 +1240,140 @@ app.controller('EquipmentDialogCtrl', function($scope, $mdDialog,
         } else {
             $scope.equipment.status = 'idle';
             EquipmentService.saveEquipment($scope.equipment).then(function() {
+                $mdDialog.hide();
+            });
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('FileTemplatesConfigurationCtrl', function($scope, PageTitle,
+            FileTemplateService, $mdDialog) {
+    PageTitle.set('File template configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10,
+    };
+
+    var refreshData = function() {
+        FileTemplateService.templates($scope.query).then(function(data) {
+            $scope.filetemplates = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createFileTemplate = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createfiletemplate.html',
+            controller: 'FileTemplatesDialogCtrl',
+            locals: {
+                filetemplateId: undefined,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(filetemplateId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createfiletemplate.html',
+            controller: 'FileTemplatesDialogCtrl',
+            locals: {
+                filetemplateId: filetemplateId,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.duplicateItem = function(item) {
+        var newItem = _.cloneDeep(item);
+        newItem.name = newItem.name + ' (copy)';
+        delete newItem.id;
+        FileTemplateService.saveTemplate(newItem)
+            .then(function() {
+                refreshData();
+            });
+    };
+
+    $scope.deleteItem = function(filetemplateId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this filetemplate?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            FileTemplateService.deleteTemplate(filetemplateId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('FileTemplatesDialogCtrl', function($scope, $mdDialog,
+    FileTemplateService, InventoryService, filetemplateId) {
+
+    InventoryService.locations({limit: 200}).then(function(data) {
+        $scope.locations = data;
+    });
+
+    $scope.getItems = function(searchText) {
+        var st = searchText.toLowerCase();
+        return _.filter($scope.filetemplates, function(obj) {
+            return obj.name.toLowerCase().indexOf(st) > -1;
+        });
+    };
+
+    var getFileTemplate = function(filetemplateId) {
+        if (filetemplateId) {
+            FileTemplateService.getTemplate(filetemplateId).then(function(data) {
+                $scope.filetemplate = data;
+            });
+        } else {
+            $scope.filetemplate = {};
+            $scope.filetemplate.fields = [];
+        }
+    };
+    getFileTemplate(filetemplateId);
+
+    $scope.addField = function() {
+        $scope.filetemplate.fields.push({name: ''});
+    };
+
+    $scope.removeField = function(index) {
+        if ($scope.filetemplate.fields.length == 1) {
+            $scope.filetemplate.fields = [];
+        } else {
+            $scope.filetemplate.fields.splice(index, 1);
+        }
+    };
+
+    $scope.save = function() {
+        if (filetemplateId) {
+            FileTemplateService.updateTemplate(filetemplateId, $scope.filetemplate)
+                .then(function() {
+                $mdDialog.hide();
+            });
+        } else {
+            FileTemplateService.saveTemplate($scope.filetemplate).then(function() {
                 $mdDialog.hide();
             });
         }
