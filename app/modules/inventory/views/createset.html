@@ -1,6 +1,6 @@
 <md-dialog aria-label="Create set for items" flex="50">
     <form name="form" ng-submit="form.$valid && add()" novalidate>
-        <md-toolbar class="md-accent">
+        <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Create a set for items</h2>
                 <span flex></span>
@@ -27,6 +27,7 @@
                     ng-false-value="false">
                     This is a set of parts
                 </md-checkbox> 
+                <gtl-permissions-widget input-data="set"></gtl-permissions-widget>
             </div>
         </md-dialog-content>
         <md-dialog-actions>
