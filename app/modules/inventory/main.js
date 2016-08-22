@@ -237,7 +237,7 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
         if ($scope.item.properties.length == 1) {
             $scope.item.properties = [];
         } else {
-            $scope.item.properties.splice(1, index);
+            $scope.item.properties.splice(index, 1);
         }
     };
 
@@ -252,15 +252,22 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
 
 });
 
-app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) {
+app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService,
+                                           FileTemplateService) {
 
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
 
+    FileTemplateService.templates({file_for: 'input'}).then(function(data) {
+        $scope.fileTemplates = data;
+    });
+
     $scope.add = function() {
         var params = new FormData();
         params.append('items_file', $scope.items_file);
+        params.append('filetemplate', $scope.import.filetemplate.id);
+        params.append('permissions', JSON.stringify($scope.import.assign_groups));
         InventoryService.importItems(params).then(function(data) {
             if (data.rejected.length > 0) {
                 $mdDialog.show({
@@ -277,6 +284,12 @@ app.controller('ImportItemsCtrl', function($scope, $mdDialog, InventoryService) 
                 });
             } else {
                 $mdDialog.hide();
+            }
+        }).catch(function(err) {
+            if (err.data.message) {
+                $scope.errors = err.data.message;
+            } else {
+                $scope.errors = err.statusText;
             }
         });
     };
@@ -336,7 +349,7 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
     };
 
     var debounceUpdate = function(n, o) {
-        if (n !== o && o !== undefined) {
+        if (n !== o && o !== undefined && 'id' in o) {
             if (timeout) {
                 $timeout.cancel(timeout);
             }
@@ -355,6 +368,18 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
 
     $scope.queryTags = function(searchText) {
         return $scope.item.tags;
+    };
+
+    $scope.addProperty = function() {
+        $scope.item.properties.push({name: '', value: ''});
+    };
+
+    $scope.removeProperty = function(index) {
+        if ($scope.item.properties.length == 1) {
+            $scope.item.properties = [];
+        } else {
+            $scope.item.properties.splice(index, 1);
+        }
     };
 
     $scope.completeTransfer = function(transfer) {

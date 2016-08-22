@@ -1,6 +1,6 @@
 <md-dialog aria-label="Restock items" flex="50">
     <form name="form" ng-submit="form.$valid && add()" novalidate>
-        <md-toolbar class="md-accent">
+        <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Add items from file</h2>
                 <span flex></span>
@@ -9,15 +9,40 @@
                 </md-button>
             </div>
         </md-toolbar>
+        <md-toolbar class="md-warn" ng-if="errors">
+            <div class="md-toolbar-tools" layout-align="start center">
+                {{ errors }}
+            </div>
+        </md-toolbar>
         <md-dialog-content layout="column">
-            <div layout="row" layout-align="start center"
-                class="md-dialog-content"> 
-                <span flex>{{ items_file.name || 'No file selected' }}</span>
-                <md-button 
-                    ngf-select
-                    ng-model="items_file">
-                    Choose file
-                </md-button>
+            <div class="md-dialog-content">
+                <div layout="row">
+                    <md-input-container flex="30">
+                        <label>File template</label>
+                        <md-select required ng-model="import.filetemplate">
+                            <md-option 
+                                ng-value="template"
+                                ng-repeat="template in fileTemplates">
+                                {{ template.name }} 
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <p layout-padding flex>
+                        <strong>Available fields:</strong>
+                        <span ng-repeat="field in import.filetemplate.fields">
+                            {{ field.name }}<span ng-if="!$last">,</span>
+                        </span>
+                    </p>
+                </div>
+                <div layout="row">
+                    <span flex>{{ items_file.name || 'No file selected' }}</span>
+                    <md-button 
+                        ngf-select
+                        ng-model="items_file">
+                        Choose file
+                    </md-button>
+                </div>
+                <gtl-permissions-widget input-data="import"></gtl-permissions-widget>
             </div>
         </md-dialog-content>
         <md-dialog-actions>

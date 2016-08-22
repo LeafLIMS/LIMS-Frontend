@@ -169,6 +169,49 @@
                 </div>
                 <div flex>
                     <h3 class="section-subheader">Properties</h3>
+                    <md-table-container>
+                        <table md-table>
+                            <thead md-head> 
+                                <tr md-row>
+                                    <th md-column>
+                                        Name</th>
+                                    <th md-column>
+                                        Value</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="prop in item.properties">
+                                    <td md-cell>
+                                        <md-input-container ng-show="!prop.id">
+                                            <label>Name</label>
+                                            <input
+                                                required 
+                                                ng-model="prop.name">
+                                        </md-input-container>
+                                        <span ng-show="prop.id">{{ prop.name }}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container>
+                                            <input
+                                                required
+                                                ng-model="prop.value">
+                                        </md-input-container>
+                                    </td>
+                                    <td md-cell>
+                                        <md-button class="md-icon-button"
+                                            ng-click="removeProperty($index)">
+                                            <md-icon>delete</md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <md-button ng-click="addProperty()" flex>
+                        <md-icon>add</md-icon>
+                        Add property
+                    </md-button>
                 </div>
             </div>
         </div>

@@ -83,27 +83,27 @@
                             <span>{{ $chip.name }}</span>
                         </md-chip-template>
                     </md-chips>
-                    <h4>Properties</h4>
-                    <div layout="row" layout-align="start center" 
-                        ng-repeat="prop in item.properties">
-                        <md-input-container flex>
-                            <label>Name</label>
-                            <input ng-model="prop.name" required>
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label>Value</label>
-                            <input ng-model="prop.value" required>
-                        </md-input-container>
-                        <md-button class="md-icon-button"
-                            ng-click="removeProperty($index)">
-                            <md-icon>delete</md-icon>
-                        </md-button>
-                    </div>
-                    <md-button ng-click="addProperty()">
-                        Add property
-                    </md-button>
                 </div>
             </div>
+            <h3 class="section-subheader">Properties</h3>
+            <div layout="row" layout-align="start center" 
+                ng-repeat="prop in item.properties">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input ng-model="prop.name" required>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Value</label>
+                    <input ng-model="prop.value" required>
+                </md-input-container>
+                <md-button class="md-icon-button"
+                    ng-click="removeProperty($index)">
+                    <md-icon>delete</md-icon>
+                </md-button>
+            </div>
+            <md-button ng-click="addProperty()">
+                Add property
+            </md-button>
             <gtl-permissions-widget input-data="item"></gtl-permissions-widget>
         </md-dialog-content>
         <md-dialog-actions>
