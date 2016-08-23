@@ -46,10 +46,10 @@
                 <div layout="row" layout-align="center center">
                     <md-input-container flex>
                         <label>Product design format</label>
-                        <md-select ng-model="designformat">
-                            <md-option>SBOL</md-option>
-                            <md-option>GenBank</md-option>
-                            <md-option>CSV</md-option>
+                        <md-select ng-model="product.design_format">
+                            <md-option disabled>SBOL</md-option>
+                            <md-option value="gb">GenBank</md-option>
+                            <md-option value="csv">CSV</md-option>
                         </md-select>
                     </md-input-container>
                     <div flex>
@@ -57,7 +57,7 @@
                         <md-button 
                             aria-label="Select a design file"
                             ngf-select
-                            ng-model="product.design_file">
+                            ng-model="design_file">
                             Choose file
                         </md-button>
                     </div>

@@ -409,36 +409,32 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.product_types = data;
     });
 
-    $scope.designTypes = designTypes;
-    $scope.designs = {};
-
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
 
-    $scope.create = function() {
-        $scope.product.created_by = UserService.getUser().id;
-        $scope.product.project = projectId;
+    var createNewProduct = function() {
         ProjectService.addProduct($scope.product).then(function(data) {
             $rootScope.$broadcast('project-product-added');
-            // jscs:disable
-            /*
-            if($scope.design_file) {
-                var params = new FormData();
-                //params.append('design_type', key);
-                params.append('designfile', obj.design_file);
-                params.append('product', data.id);
-                    promises.push(p);
-                $q.all(promises).then(function(data) {
-                    $mdDialog.hide();
-                });
-            } else {
-                $mdDialog.hide();
-            }
-            */
-            // jscs:enable
             $mdDialog.hide();
         });
+    };
+
+    $scope.create = function() {
+        // TODO: move to backend!
+        $scope.product.created_by = UserService.getUser().id;
+        $scope.product.project = projectId;
+        console.log($scope.design_file);
+        if ($scope.design_file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $scope.product.design = event.target.result;
+                createNewProduct();
+            }
+            reader.readAsText($scope.design_file);
+        } else {
+            createNewProduct();
+        }
     };
 
 });
