@@ -161,16 +161,25 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     $scope.initialProductCount = 0;
 
-    $scope.getProductData = function(searchText) {
+    $scope.returnProductData = function() {
         var params = {
             project: $stateParams.id,
             limit: 200,
             ordering: '-id',
         }
-        if (searchText) {
-            params.search = searchText;
+        if ($scope.productFilter) {
+            params.search = $scope.productFilter;
         }
         return ProjectService.products(params);
+    };
+
+    $scope.getProductData = function(event) {
+        $scope.returnProductData().then(function(data) {
+            $scope.products = data;
+            if (event) {
+                $scope.initialProductCount = data.length;
+            }
+        });
     };
 
     $scope.$on('$stateChangeSuccess', function(e, toState, toParams) {
@@ -179,7 +188,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }
     });
 
-    $scope.getProductData().then(function(data) {
+    $scope.returnProductData().then(function(data) {
         $scope.products = data;
         $scope.initialProductCount = data.length;
         if (data.length > 0) {
@@ -196,7 +205,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     });
 
     $scope.$watch('productFilter', function(n, o) {
-        $scope.getProductData(n).then(function(data) {
+        $scope.returnProductData().then(function(data) {
             $scope.products = data;
             if (data.length > 0 && (n !== undefined && o !== undefined)) {
                 $scope.currentProductId = data[0].id;
@@ -304,7 +313,6 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     };
 
     $rootScope.$on('project-product-added', $scope.getProductData);
-    $rootScope.$on('product-design-changed', $scope.getDesigns);
 
 });
 
@@ -421,10 +429,7 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
     };
 
     $scope.create = function() {
-        // TODO: move to backend!
-        $scope.product.created_by = UserService.getUser().id;
         $scope.product.project = projectId;
-        console.log($scope.design_file);
         if ($scope.design_file) {
             var reader = new FileReader();
             reader.onload = function(event) {
