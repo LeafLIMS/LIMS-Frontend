@@ -335,15 +335,14 @@ app.directive('gtlPermissionsWidget', function(UserService, GroupService, Permis
             };
 
             $scope.setPermissionValue = function(group) {
+                // Update the permissions scope object with correct
+                // values from group.
+                $scope.permissions[group.name] = group.permissions;
                 if ($scope.inputData.id) {
                     // Use the permisions API to set things as object exists
                     PermissionsService.setPermissions($scope.inputData.route,
                                                       $scope.inputData.id,
                                                       $scope.permissions);
-                } else {
-                    // Set permissions using the assign_groups part of the
-                    // data to be sent as object does not exist yet.
-                    $scope.permissions[group.name] = group.permissions;
                 }
             }
         },
