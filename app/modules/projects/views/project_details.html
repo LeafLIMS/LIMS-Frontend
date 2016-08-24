@@ -84,26 +84,20 @@
 
         </div>
         <div layout="column" flex>
-            <div layout="row" class="tab-toolbar">
-                <span class="input-text label">Showing {{ products.length }} of {{ initialProductCount }} products</span> 
-                <span flex></span>
-                <md-icon class="input-text">search</md-icon>
-                <md-input-container>
-                    <label>Filter products</label>
-                    <input ng-model="productFilter" type="search">
+            <div layout="row" layout-align="start center" class="product-select">
+                <span class="products-available">{{ initialProductCount }} products</span>
+                <md-input-container flex>
+                    <md-select ng-model="selectedProduct"
+                               md-on-close="changeProduct(selectedProduct)">
+                        <md-option ng-repeat="product in products"
+                                   ng-selected="selectedProduct.id == product.id"
+                                   ng-value="product">
+                            <md-icon ng-if="product.on_workflow">linear_scale</md-icon>
+                            {{ product.product_identifier }}: {{ product.name }}
+                        </md-option>
+                    </md-select>
                 </md-input-container>
             </div>
-            <md-tabs md-selected="selectedTab">
-                <md-tab 
-                    ui-sref="product_details({productId: item.id})"
-                    md-active="currentProductId == item.id"
-                    ng-repeat="item in products">
-                    <md-tab-label>
-                        <md-icon ng-if="item.on_workflow">linear_scale</md-icon>
-                        {{ item.product_identifier }}: {{ item.name|limitTo:'25' }}
-                    </md-tab-label>
-                </md-tab>
-            </md-tabs> 
             <div ui-view="product"
                 layout="column"
                 class="side-padded">

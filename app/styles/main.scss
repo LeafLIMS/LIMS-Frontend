@@ -516,6 +516,26 @@ input.noedit {
     }
 }
 
+// Projects section
+.product-select {
+    padding: 0 1em 0em 1em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid $highlight;
+    .products-available {
+        margin-right: 1em;
+        text-transform: uppercase;
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+    .md-select-value {
+        color: $primary2;
+        text-transform: uppercase;
+    }
+    .md-input-focused .md-select-value {
+        color: $primary2 !important;
+    }
+}
+
 // Experiments section
 md-list-item.selected {
     background: $primary1;

@@ -156,7 +156,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         $scope.organisms = data;
     });
 
-    $scope.selected = [];
+    $scope.productFilter = '';
     $scope.currentProductId = undefined;
 
     $scope.initialProductCount = 0;
@@ -194,8 +194,12 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         if (data.length > 0) {
             if ($state.params.productId) {
                 $scope.currentProductId = $state.params.productId;
+                $scope.selectedProduct = _.find($scope.products, function(obj) {
+                    return obj.id == $scope.currentProductId;
+                });
             } else {
                 $scope.currentProductId = data[0].id;
+                $scope.selectedProduct = data[0];
                 $state.go('product_details',
                         {productId: data[0].id},
                         {location: 'replace'}
@@ -204,14 +208,28 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }
     });
 
+    $scope.getSelectedProductText = function(selectedProduct) {
+        if (selectedProduct) {
+            var name = selectedProduct.product_identifier + ': ' + selectedProduct.name;
+            var count = ' (' +
+                        $scope.initialProductCount +
+                        ' products)';
+            return name + count;
+        }
+        return '';
+    };
+
     $scope.$watch('productFilter', function(n, o) {
         $scope.returnProductData().then(function(data) {
             $scope.products = data;
-            if (data.length > 0 && (n !== undefined && o !== undefined)) {
-                $scope.currentProductId = data[0].id;
-            }
         });
     });
+
+    $scope.changeProduct = function(selectedProduct) {
+        if (selectedProduct) {
+            $state.go('product_details', {productId: selectedProduct.id});
+        }
+    };
 
     $scope.linkCRM = function() {
         $mdDialog.show({
