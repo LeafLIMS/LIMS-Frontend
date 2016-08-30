@@ -13,6 +13,7 @@
                     <md-icon md-menu-origin>more_horiz</md-icon>
                 </md-button>
                 <md-menu-content>
+                    <!--
                     <md-menu-item>
                         <md-button ng-click="startWorkflow()"
                             ng-disabled="selected.length == 0">
@@ -21,8 +22,9 @@
                             Start workflow
                         </md-button>
                     </md-menu-item>
+                    -->
                     <md-menu-item>
-                        <md-button ng-click="delete(selected)">
+                        <md-button ng-click="deleteProduct(currentProductId)">
                             <md-icon md-menu-align-target>
                                 delete_sweep</md-icon>
                             Delete selected
@@ -30,7 +32,7 @@
                     </md-menu-item>
                     <md-divider></md-divider>
                     <md-menu-item>
-                        <md-button ng-click="delete(selected)"
+                        <md-button ng-click="deleteProject()"
                             class="md-warn">
                             <md-icon md-menu-align-target>
                                 delete</md-icon>

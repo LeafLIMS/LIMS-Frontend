@@ -186,12 +186,29 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         });
     };
 
+    $scope.getProductDataAfterDelete = function(event) {
+        $scope.returnProductData().then(function(data) {
+            $scope.products = data;
+            if (event) {
+                $scope.initialProductCount = data.length;
+            }
+            $scope.currentProductId = data[0].id;
+            $scope.selectedProduct = data[0];
+            $state.go('product_details',
+                    {productId: data[0].id},
+                    {location: 'replace'}
+                    );
+        });
+    };
+
     $scope.$on('$stateChangeSuccess', function(e, toState, toParams) {
         if (toState.name == 'product_details') {
             $scope.currentProductId = toParams.productId;
         }
     });
 
+    // Get initial product data on page load.
+    // Will only be called if the page is refreshed.
     $scope.returnProductData().then(function(data) {
         $scope.products = data;
         $scope.initialProductCount = data.length;
@@ -278,6 +295,20 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     };
 
+    $scope.deleteProduct = function(productId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this product?')
+            .ariaLabel('Confirm delete product')
+            .ok('Yes')
+            .cancel('No');
+        $mdDialog.show(confirmDelete).then(function() {
+            ProjectService.deleteProduct(productId)
+                .then(function() {
+                    $rootScope.$broadcast('project-product-deleted');
+                });
+        });
+    };
+
     $scope.switchWorkflow = function(item, workflowId) {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/switchworkflow.html',
@@ -306,35 +337,8 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         });
     };
 
-    $scope.selectAll = function() {
-        _.each($scope.products, function(obj) {
-            $scope.selected.push(obj);
-        });
-    };
-
-    $scope.deselectAll = function() {
-        _.each($scope.productsAvailable, function(obj) {
-            var idx = $scope.selected.indexOf(obj);
-            if (idx > -1) {
-                $scope.selected.splice(idx, 1);
-            }
-        });
-    };
-
-    $scope.toggle = function(item, list) {
-        var idx = list.indexOf(item);
-        if (idx > -1) {
-            list.splice(idx, 1);
-        } else {
-            list.push(item);
-        }
-    };
-
-    $scope.exists = function(item, list) {
-        return list.indexOf(item) > -1;
-    };
-
     $rootScope.$on('project-product-added', $scope.getProductData);
+    $rootScope.$on('project-product-deleted', $scope.getProductDataAfterDelete);
 
 });
 
