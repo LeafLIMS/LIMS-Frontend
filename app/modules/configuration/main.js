@@ -399,10 +399,6 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
     };
 
     $scope.save = function() {
-        var fields = _.reduce($scope.taskFields,
-                function(array, obj) {
-                    return array.concat(obj);
-                });
         $scope.task.product_input = $scope.inputSelected.name;
         if (taskId) {
             WorkflowService.updateTaskTemplate(taskId, $scope.task).then(function() {
