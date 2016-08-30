@@ -9,6 +9,11 @@
                 </md-button>
             </div>
         </md-toolbar>
+        <md-toolbar class="md-warn" ng-if="errors">
+            <div class="md-toolbar-tools">
+                {{ errors }}
+            </div>
+        </md-toolbar>
         <md-dialog-content class="md-dialog-content" layout="column">
             <md-input-container>
                 <label>Workflow to run</label>

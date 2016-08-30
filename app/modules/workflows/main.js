@@ -269,7 +269,7 @@ app.controller('switchWorkflowCtrl', function($scope, $rootScope, $mdDialog,
 });
 
 app.controller('startWorkflowCtrl', function($scope, WorkflowService,
-        UserService, $mdDialog, $rootScope, $q, preSelected) {
+        UserService, ErrorService, $mdDialog, $rootScope, $q, preSelected) {
 
     $scope.cancel = function() {
         $mdDialog.cancel();
@@ -302,6 +302,8 @@ app.controller('startWorkflowCtrl', function($scope, WorkflowService,
                 $rootScope.$broadcast('workflow-added');
                 $mdDialog.hide();
             }
+        }).catch(function(err) {
+            $scope.errors = ErrorService.parseError(err);
         });
     };
 });

@@ -219,6 +219,29 @@ app.service('PageTitle', function($rootScope) {
     }
 });
 
+app.service('ErrorService', function() {
+
+    this.parseError = function(error) {
+        // There are multiple types of errors:
+        // 1. Errors with data.message
+        // 2. Thrown errors in an array
+        // 3. Thrown errors in n dimensional array (e.g. 400)
+        if (error.data.message) {
+            return error.data.message;
+        } else {
+            if (Array.isArray(error.data)) {
+                var result = '';
+                for (var i = 0; i < error.data.length; i++) {
+                    result += error.data[i] + '\n';
+                }
+                return result;
+            }
+        }
+        return error.status + ': ' + error.statusText;
+    };
+
+});
+
 app.service('AttachmentService', function(Restangular) {
 
     this.getFiles = function(params) {
