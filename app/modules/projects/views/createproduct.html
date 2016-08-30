@@ -19,10 +19,10 @@
                     <label>Product status</label>
                     <md-select ng-model="product.status"
                         aria-label="Product status" required>
-                        <md-option selected>Added</md-option>
-                        <md-option>Submitted</md-option>
-                        <md-option>Received</md-option>
-                        <md-option>In Progress</md-option>
+                        <md-option ng-repeat="status in productstatuses"
+                                   ng-value="status.name">
+                            {{ status.name }}
+                        </md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container>

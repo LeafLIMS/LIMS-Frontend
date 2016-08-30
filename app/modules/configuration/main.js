@@ -19,6 +19,10 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                     name: 'Workflow task templates',
                     ctrl: 'WorkflowTasks',
                 },
+                {
+                    name: 'Product statuses',
+                    ctrl: 'ProductStatuses',
+                },
             ],
         },
         {
@@ -1374,6 +1378,108 @@ app.controller('FileTemplatesDialogCtrl', function($scope, $mdDialog,
             });
         } else {
             FileTemplateService.saveTemplate($scope.filetemplate).then(function() {
+                $mdDialog.hide();
+            });
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('ProductStatusesConfigurationCtrl', function($scope, PageTitle,
+            ProjectService, $mdDialog) {
+    PageTitle.set('ProductStatuses configuration');
+
+    $scope.selectedItems = [];
+
+    $scope.query = {
+        ordering: '-created_on',
+        limit: 10,
+    };
+
+    var refreshData = function() {
+        ProjectService.productStatuses($scope.query).then(function(data) {
+            $scope.productstatuses = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createProductStatus = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createproductstatus.html',
+            controller: 'ProductStatusesDialogCtrl',
+            locals: {
+                productstatusesId: undefined,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(productstatusesId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createproductstatus.html',
+            controller: 'ProductStatusesDialogCtrl',
+            locals: {
+                productstatusesId: productstatusesId,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(productstatusesId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this product status?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            ProjectService.deleteProductStatuses(productstatusesId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('ProductStatusesDialogCtrl', function($scope, $mdDialog,
+    ProjectService, UserService, productstatusesId) {
+
+    var getProductStatuses = function(productstatusesId) {
+        if (productstatusesId) {
+            ProjectService.getProductStatus(productstatusesId).then(function(data) {
+                $scope.productstatuses = data;
+            });
+        } else {
+            $scope.productstatuses = {};
+        }
+    };
+    getProductStatuses(productstatusesId);
+
+    $scope.save = function() {
+        if (productstatusesId) {
+            ProjectService.updateProductStatuses(productstatusesId,
+                                                 $scope.productstatuses).then(function() {
+                $mdDialog.hide();
+            });
+        } else {
+            ProjectService.saveProductStatuses($scope.productstatuses).then(function() {
                 $mdDialog.hide();
             });
         }

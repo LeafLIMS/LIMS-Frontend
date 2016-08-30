@@ -156,6 +156,10 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         $scope.organisms = data;
     });
 
+    ProjectService.productStatuses().then(function(data) {
+        $scope.productstatuses = data;
+    });
+
     $scope.productFilter = '';
     $scope.currentProductId = undefined;
 
@@ -435,6 +439,10 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.product_types = data;
     });
 
+    ProjectService.productStatuses().then(function(data) {
+        $scope.productstatuses = data;
+    });
+
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
@@ -514,6 +522,22 @@ app.service('ProjectService', function(Restangular) {
             params = {};
         }
         return Restangular.all('productstatuses').getList(params);
+    };
+
+    this.getProductStatus = function(productstatusId) {
+        return Restangular.one('productstatuses', productstatusId).get();
+    };
+
+    this.saveProductStatuses = function(productstatusData) {
+        return Restangular.all('productstatuses').post(productstatusData);
+    };
+
+    this.updateProductStatuses = function(productstatusId, productstatusData) {
+        return Restangular.one('productstatuses', productstatusId).patch(productstatusData);
+    };
+
+    this.deleteProductStatuses = function(productstatusId) {
+        return Restangular.one('productstatuses', productstatusId).remove();
     };
 
 });
