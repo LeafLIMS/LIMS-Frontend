@@ -70,7 +70,9 @@
                                     </md-item-template>
                                 </md-autocomplete> 
                             </div>
-                            <md-autocomplete flex
+                        </div>
+                        <div layout="row" layout-align="start center">
+                            <md-autocomplete flex="50"
                                 md-selected-item-change="setLabware(lbItem)"
                                 md-selected-item="lbItem"
                                 md-search-text="lbText"
@@ -87,6 +89,9 @@
                                     </span>
                                 </md-item-template>
                             </md-autocomplete> 
+                            <md-checkbox ng-model="task.multiple_products_on_labware">
+                                Multiple products on labware
+                            </md-checkbox>
                         </div>
                         <md-chips flex="50"
                             ng-model="task.capable_equipment"

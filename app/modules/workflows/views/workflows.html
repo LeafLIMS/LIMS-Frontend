@@ -2,32 +2,52 @@
     <div flex="30" layout="column" layout-fill> 
         <md-toolbar class="md-primary md-hue-1 no-padding">
             <div class="md-toolbar-tools">
-                <md-button ng-click="startWorkflow()">
+                <md-button ng-click="startNewRun()">
                     <md-icon>play_arrow</md-icon>
-                    Start new workflow
+                    Start new run 
                 </md-button>
             </div>
         </md-toolbar>
         <md-list class="in-page-nav">
-            <md-subheader>Active workflows</md-subheader>
-            <md-list-item ng-show="activeWorkflows.length == 0">
-                <div class="no-workflows-message"> 
-                    There are no workflows currently in progress.
+            <md-subheader>Active runs</md-subheader>
+            <md-list-item ng-show="activeRuns.length == 0">
+                <div class="not-available"> 
+                    There are no runs active for you at this time. 
                 </div>
             </md-list-item>
-            <md-list-item ng-repeat="w in activeWorkflows" 
+            <md-list-item ng-repeat="run in activeRuns" 
                 ui-sref-active="selected"
-                ui-sref="app.workflows.workflow({id: w.id})"
+                ui-sref="app.workflows.run({id: run.id})"
                 class="md-3-line">
                 <div class="md-list-item-text">
                     <h3>
-                        {{ w.workflow_data.name }}
-                        <span class="product-count">{{ w.product_statuses.length }} products</span>
+                        {{ run.name }}
+                        <span class="product-count">{{ run.products.length }} products</span>
                     </h3>
-                    <h4>Started: {{ w.workflow_data.date_created|date:"medium" }}</h4>
-                    <p>Started by: {{ w.started_by }}</p>
+                    <h4>Started: {{ run.date_started|date:"medium" }}</h4>
+                    <p>Started by: {{ run.started_by }}</p>
                 </div>
                 <span flex></span>
+            </md-list-item>
+            <md-subheader>Last 5 runs</md-subheader>
+            <md-list-item ng-repeat="run in finishedRuns" 
+                ui-sref-active="selected"
+                ui-sref="app.workflows.run({id: run.id})"
+                class="md-3-line">
+                <div class="md-list-item-text">
+                    <h3>
+                        {{ run.name }}
+                        <span class="product-count">{{ run.products.length }} products</span>
+                    </h3>
+                    <h4>Started: {{ run.date_started|date:"medium" }}</h4>
+                    <p>Started by: {{ run.started_by }}</p>
+                </div>
+                <span flex></span>
+            </md-list-item>
+            <md-list-item ng-show="finishedRuns.length == 0">
+                <div class="not-available"> 
+                    There are no runs to show. 
+                </div>
             </md-list-item>
         </md-list>
     </div>

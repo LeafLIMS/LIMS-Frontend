@@ -25,6 +25,7 @@ var app = angular
     'sf.treeRepeat',
     'drop-ng',
     'datetime',
+    'vAccordion',
     'config',
   ]);
 
@@ -173,12 +174,12 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 },
             },
         })
-        .state('app.workflows.workflow', {
+        .state('app.workflows.run', {
             url: '/:id',
             views: {
                 workflow: {
-                    templateUrl: 'modules/workflows/views/workflow_partial.html',
-                    controller: 'WorkflowSelectedCtrl',
+                    templateUrl: 'modules/workflows/views/run.html',
+                    controller: 'ActiveRunCtrl',
                 },
             },
         })

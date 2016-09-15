@@ -90,6 +90,7 @@
                 {{ item.product_name }}
             </span>
             <md-icon ng-show="item.task_in_progress">play_circle_filled</md-icon>
+            <md-icon ng-show="!item.has_task_inputs">warning</md-icon>
         </div>
         <gtl-workflow-task-preview flex
             ng-click="showTask(item, item.task_in_progress)"

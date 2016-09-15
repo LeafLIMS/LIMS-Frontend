@@ -2,7 +2,7 @@
     <form name="form" ng-submit="form.$valid && start()" novalidate>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Start a workflow</h2>
+                <h2>Start a run</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <md-icon aria-label="Close dialog">close</md-icon>
@@ -16,17 +16,21 @@
         </md-toolbar>
         <md-dialog-content class="md-dialog-content" layout="column">
             <md-input-container>
+                <label>Run name</label>
+                <input required ng-model="run.name">
+            </md-input-container>
+            <md-input-container>
                 <label>Workflow to run</label>
-                <md-select ng-model="workflow.workflow"
+                <md-select ng-model="workflow"
                     aria-label="Workflow to run" required>
                     <md-option ng-repeat="w in availableWorkflows" 
-                        ng-value="w.id">
+                        ng-value="w">
                         {{ w.name }}
                     </md-option>
                 </md-select>
             </md-input-container>
             <gtl-select-product products-list="productsSelected"></gtl-select-product>
-            <gtl-permissions-widget input-data="workflow"></gtl-permissions-widget>
+            <gtl-permissions-widget input-data="run"></gtl-permissions-widget>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <md-button ng-click="cancel()">Cancel</md-button>

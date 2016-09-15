@@ -1,0 +1,131 @@
+<md-dialog aria-label="Task" flex="95">
+    <md-toolbar> 
+        <div class="md-toolbar-tools">
+            <h2>Monitoring: {{ task_name }}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="task" layout="column">
+        <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
+        <md-tabs md-dynamic-height md-border-bottom md-selected="taskPaneSelected">
+            <md-tab label="Task values">
+                <md-content class="md-dialog-content" layout="row"> 
+                    <div flex="30" class="right-padded">
+                        <v-accordion class="vAccordion--default" multiple>
+                            <v-pane>
+                                <v-pane-header>Inputs</v-pane-header>
+                                <v-pane-content>
+                                    <div layout="column">
+                                        <div class="bottom-padded">
+                                            <span class="field-label primary-label">Input items from products</span>
+                                            <div layout="row" ng-repeat="(pid, product) in task.product_inputs" >
+                                                {{ product.amount }}{{ product.measure }} {{ product.inventory_identifier }}
+                                            </div>
+                                        </div>
+
+                                        <div class="bottom-padded">
+                                            <span class="field-label primary-label">Labware to use</span>
+                                            {{ task.labware_amount }} {{ task.labware_identifier }}
+                                        </div>
+
+                                        <div ng-repeat="field in task.input_fields" flex="33" class="bottom-padded">
+                                            <span class="field-label primary-label">{{ field.label }}</span>
+                                            {{ field.amount }}{{ field.measure }} {{ field.inventory_identifier }}
+                                        </div>
+                                    </div>
+                                </v-pane-content>
+                            </v-pane>
+                            <v-pane ng-show="task.output_files.length > 0 || task.output_fields.length > 0">
+                                <v-pane-header>Outputs</v-pane-header>
+                                <v-pane-content>
+                                    <div ng-repeat="field in task.output_fields" flex="33" class="bottom-padded">
+                                        <span class="field-label primary-label">{{ field.label }}</span>
+                                        {{ field.amount }}{{ field.measure }} {{ field.lookup_type }}
+                                    </div>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                    </div>
+                    <div flex>
+                        <v-accordion class="vAccordion--default" multiple>
+                            <v-pane ng-show="task.step_fields.length > 0" expanded>
+                                <v-pane-header>Steps</v-pane-header>
+                                <v-pane-content>
+                                    <div ng-repeat="field in task.step_fields" class="bottom-padded">
+                                        <span class="field-label primary-label">{{ field.label }}</span>
+                                        <div ng-repeat="p in field.properties">
+                                            <span class="field-label">{{ p.label }}</span>
+                                            {{ p.amount }}{{ p.measure }}
+                                        </div>
+                                        <div>{{ field.description }}</div>
+                                    </div>
+                                </v-pane-content>
+                            </v-pane>
+                            <v-pane ng-show="task.variable_fields.length > 0">
+                                <v-pane-header>Constants</v-pane-header>
+                                <v-pane-content>
+                                    <div layout="row" layout-align="start center" layout-wrap>
+                                        <div ng-repeat="field in task.variable_fields" flex="33">
+                                            <span class="field-label primary-label">{{ field.label }}</span>
+                                            {{ field.amount }}{{ field.measure }}
+                                        </div>
+                                    </div>
+                                </v-pane-content>
+                            </v-pane>
+                            <v-pane ng-show="task.calculation_fields.length > 0">
+                                <v-pane-header>Calculations</v-pane-header>
+                                <v-pane-content>
+                                    <div layout="row">
+                                        <div ng-repeat="field in task.calculation_fields" flex="33">
+                                            <span class="field-label primary-label">{{ field.label }}</span>
+                                            <gtl-calculation-field is-disabled="isStarted" field="field">
+                                            </gtl-calculation-field>
+                                        </div>
+                                    </div>
+                                </v-pane-content>
+                            </v-pane>
+                        </v-accordion>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab 
+                ng-disabled="form.$invalid"
+                md-on-select="getRequirements()" 
+                label="Input items required">
+                <md-table-container>
+                    <table md-table> 
+                        <thead md-head> 
+                            <tr md-row>
+                                <th md-column>Item name</th> 
+                                <th md-column>Identifier</th> 
+                                <th md-column>Amount needed</th>
+                                <th md-column>Amount available</th>
+                                <th md-column>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="r in requirements">
+                                <td md-cell>{{ r.item.name }}</td>
+                                <td md-cell>{{ r.item.identifier }}</td>
+                                <td md-cell>{{ r.amount_taken }}{{ r.amount_measure.symbol }}</td>
+                                <td md-cell>{{ r.item.amount_available }}{{ r.item.amount_measure.symbol }}</td>
+                                <td md-cell>{{ r.item.location.name }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+            </md-tab>
+        </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="cancel()">Cancel</md-button>
+        <span flex></span>
+        <md-button class="md-primary"
+                   ng-click="finishTask()">
+            Finish Task
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,4 +1,4 @@
-<md-dialog aria-label="Workflow task" flex="95">
+<md-dialog aria-label="Task" flex="95">
     <form name="form" ng-submit="form.$valid && complete()" novalidate>
         <md-toolbar> 
             <div class="md-toolbar-tools">
@@ -27,7 +27,7 @@
                                             <p class="input-text">{{ input_files[file].name }}</p>
                                         </div>
                                     </div>
-                                    <div layout="row">
+                                    <div layout="row" layout-align="start center">
                                         <div layout="column" flex layout-padding>
                                             <span class="field-label primary-label">Input items from products</span>
                                             <div layout="row">
@@ -61,6 +61,10 @@
                                                 </md-not-found>
                                             </md-autocomplete> 
                                         </div>
+                                        <md-input-container flex="20">
+                                            <label>Labware amount</label>
+                                            <input type="number" required ng-model="task.labware_amount">
+                                        </md-input-container>
                                     </div>
                                     <div layout="row">
                                         <div ng-repeat="field in task.input_fields" flex="33">
@@ -172,7 +176,7 @@
                 Check task
             </md-button>
             <md-button 
-                ng-disabled="form.$invalid || errorMessage"
+                ng-disabled="form.$invalid || !canStart"
                 ng-show="taskPaneSelected == 1"
                 ng-click="startTask()"
                 class="md-primary">

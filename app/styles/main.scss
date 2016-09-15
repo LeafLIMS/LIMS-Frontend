@@ -1,5 +1,5 @@
 // bower:scss
-@import "nsPopover/sass/ns-popover.scss";
+//@import "nsPopover/sass/ns-popover.scss";
 // endbower
 
 //
@@ -137,6 +137,21 @@ md-checkbox.not-a-button {
     background: $accent;
 }
 
+// Re-style accordions
+v-pane-header {
+    text-transform: uppercase;
+    color: $primary !important;
+}
+
+.vAccordion--default v-pane-header::after, 
+.vAccordion--default v-pane-header::before {
+    background-color: $primary;
+}
+
+.vAccordion--default v-pane.is-expanded > v-pane-header {
+    border-bottom-color: $primary;
+}
+
 // App-wide elements
 .no-padding {
     padding: 0 !important;
@@ -160,6 +175,10 @@ md-checkbox.not-a-button {
 
 .right-padded {
     padding-right: $padding;
+}
+
+.bottom-padded {
+    padding-bottom: $padding;
 }
 
 .full-height {
@@ -596,6 +615,9 @@ md-list-item.selected {
         position: relative;
         z-index: 2;
         padding: 0.5em;
+        md-icon {
+            color: white;
+        }
     }
     .task-preview-end {
         font-size: 1.2em;
@@ -657,9 +679,30 @@ md-list-item.selected {
     }
 }
 
+.task-product-item {
+    display: inline-block;
+    padding: 0.25em 0.75em;
+    margin: 0 0.5em 0.5em 0;
+    background: $primary;
+    font-size: 0.8em;
+}
+
+.not-available {
+    display: block !important;
+    margin: $padding;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .field-label {
     color: $label;
     font-size: 0.9em;
+}
+
+.field-label.primary-label {
+    border-bottom: 1px solid lighten($label, 50%); 
+    margin: 0 1em 0.5em 0;
+    padding-bottom: 0.25em;
 }
 
 .task .field-label {

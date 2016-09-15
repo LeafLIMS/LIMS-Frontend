@@ -1,6 +1,7 @@
 <div class="gm-task-field" 
     layout="column" flex>
     <div ng-if="field.from_input_file" class="field-label">From input file</div>
+    <div ng-if="field.from_calculation" class="field-label">Using <i>{{ calc.label }}</i> to calculate amount</div>
     <div layout="row" layout-align="start center" ng-if="!field.from_input_file">
         <md-input-container class="task-field-amount">
             <label>Amount</label>
@@ -35,5 +36,4 @@
             </md-not-found>
         </md-autocomplete> 
     </div>
-    <div ng-if="field.from_calculation" class="field-label">Using <i>{{ calc.label }}</i> to calculate amount</div>
 </div>

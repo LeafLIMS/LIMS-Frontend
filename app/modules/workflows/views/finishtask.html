@@ -1,0 +1,35 @@
+<md-dialog aria-label="Task" flex="95">
+    <md-toolbar> 
+        <div class="md-toolbar-tools">
+            <h2>Finish {{ task_name }}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="task" layout="column">
+        <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
+        <div class="md-dialog-content">
+            <md-list>
+                <md-list-item ng-repeat="entry in task.data" layout="row" layout-align="start center">
+                    <span flex>{{ entry.product_name }}</span>
+                    <md-select ng-model="entry.state">
+                        <md-option value="succeeded">Succeeded</md-option>
+                        <md-option value="failed">Failed</md-option>
+                        <md-option value="repeat succeeded">Repeat succeeded</md-option>
+                        <md-option value="repeat failed">Repeat failed</md-option>
+                    </md-select>
+                </md-list-item>
+            </md-list>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="cancel()">Cancel</md-button>
+        <span flex></span>
+        <md-button class="md-primary"
+                   ng-click="finishTask()">
+            Move to next task 
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

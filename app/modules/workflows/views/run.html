@@ -1,0 +1,137 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button 
+            ng-disabled="!run || run.products.length == 0"
+            ng-hide="run.task_in_progress || !run.is_active"
+            ng-click="startTask()">
+            <md-icon>play_circle_outline</md-icon>
+            Start task
+        </md-button>
+        <md-button ng-click="monitorTask()" 
+            ng-hide="!run.task_in_progress">
+            <md-icon>visibility</md-icon>
+            Monitor task 
+        </md-button>
+        <span flex></span>
+        <md-menu>
+            <md-button ng-click="$mdOpenMenu()"
+                aria-label="More actions"
+                class="md-icon-button">
+                <md-icon md-menu-origin>more_horiz</md-icon> 
+            </md-button>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button 
+                        ng-disabled="selected.length == 0"
+                        ng-click="toNewRun()">
+                        <md-icon>call_split</md-icon>
+                        Move to new run
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button 
+                        ng-disabled="selected.length == 0"
+                        ng-click="removeFromRun()">
+                        <md-icon>remove_circle_outline</md-icon>
+                        Remove from run
+                    </md-button>
+                </md-menu-item>
+                <md-divider></md-divider>
+                <md-menu-item>
+                    <md-button 
+                        ng-disabled="!run"
+                        ng-click="addToRun()">
+                        <md-icon>add</md-icon>
+                        Add another product
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button 
+                        ng-disabled="!run"
+                        ng-click="workflowFromRun()">
+                        <md-icon>add_box</md-icon>
+                        New workflow from run
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button 
+                        ng-disabled="run.task_in_progress"
+                        ng-click="stopRun()">
+                        <md-icon>close</md-icon>
+                        Stop run
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+</md-toolbar>
+<div flex ng-show="run">
+    <div class="workflow-preview">
+        <h4>Run preview</h4>
+        <div class="workflow-preview-container">
+            <div class="gm-workflow-task-preview" flex 
+                 ng-repeat="t in run.tasks" 
+                 ng-class="{'current-task': $index == run.current_task}">
+                <div class="task-preview-header" layout="row">
+                    <span flex></span>
+                    <span>{{ $index + 1 }}</span>
+                </div>
+                <div class="task-preview-content" layout-fill layout="column" 
+                    layout-align="center center">
+                    <span layout="row">
+                        <span>{{ t.name|limitTo:"15" }}</span>
+                        <span ng-show="t.name.length > 15">&hellip;</span>
+                    </span>
+                    <md-icon class="white-icon" 
+                        ng-show="$index == run.current_task && run.task_in_progress">
+                        play_arrow</md-icon>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <md-divider class="section-divider"></md-divider>
+    <div ng-show="run.products.length == 0" class="not-available" 
+        layout="column"
+        layout-align="center center" flex>
+        No products on run
+    </div>
+    <div ng-repeat="product in run.products" layout="row" 
+        layout-align="center center"
+        class="active-workflow-product-container">
+        <div class="active-workflow-product" 
+            flex="30"
+            layout-align="start center"
+            layout="row">
+            <md-checkbox
+                class="no-margin"
+                ng-disabled="run.task_in_progress"
+                ng-click="toggle(product, selected)"
+                ng-checked="exists(product, selected)"
+                aria-label="Select {{ product.name }}">
+            </md-checkbox>
+            <span flex> 
+                <b>
+                    <a ui-sref="product_details({id: product.project, productId: product.id})">
+                        {{ product.product_identifier }}
+                    </a>
+                </b>
+                <br>
+                {{ product.name }}
+            </span>
+            <md-icon ng-show="!run.validate_inputs[product.id]">warning</md-icon>
+        </div>
+        <div flex>
+            <span class="task-product-item" 
+                  ng-repeat="item in product.linked_inventory | filter:input_filter">
+                <i>{{ item.identifier }}</i>
+                <b>{{ item.name }}</b>
+                &nbsp;({{ item.item_type }}) 
+            </span>
+        </div>
+    </div>
+</div>
+<div ng-show="!run" class="not-available" 
+    layout="column"
+    layout-align="center center" flex>
+    No runs currently available
+</div>
