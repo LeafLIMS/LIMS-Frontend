@@ -30,7 +30,7 @@
                 <span flex></span>
             </md-list-item>
             <md-subheader>Last 5 runs</md-subheader>
-            <md-list-item ng-repeat="run in finishedRuns" 
+            <md-list-item ng-repeat="run in finishedRuns | limitTo:'5'" 
                 ui-sref-active="selected"
                 ui-sref="app.workflows.run({id: run.id})"
                 class="md-3-line">
@@ -39,7 +39,7 @@
                         {{ run.name }}
                         <span class="product-count">{{ run.products.length }} products</span>
                     </h3>
-                    <h4>Started: {{ run.date_started|date:"medium" }}</h4>
+                    <h4>Finished: {{ run.date_finished|date:"medium" }}</h4>
                     <p>Started by: {{ run.started_by }}</p>
                 </div>
                 <span flex></span>
