@@ -533,6 +533,15 @@ input.noedit {
         padding: 0.5em 0.5em 0 0;
         height: 1em;
     }
+    .input-item {
+        margin: 0.25em 0;
+    }
+    .input-amount {
+        display: inline-block;
+        background: $highlight;
+        padding: 0.5em;
+        margin-right: 1em;
+    }
 }
 
 // Projects section

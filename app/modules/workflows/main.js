@@ -187,156 +187,6 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
 });
 
 
-app.controller('WorkflowSelectedCtrl', function($scope, PageTitle, WorkflowService,
-    $mdDialog, ProjectService, $rootScope, $q, $state, $stateParams) {
-
-    var getWorkflowData = function() {
-        WorkflowService.fullActiveWorkflow($stateParams.id)
-            .then(function(data) {
-            $scope.selectedWorkflow = data;
-            WorkflowService.workflowTasks(data.workflow).then(function(data) {
-                $scope.workflowTasks = data;
-            });
-            $scope.selected = [];
-            var validProducts = _.filter(data.product_statuses, function(obj) {
-                return obj.has_task_inputs;
-            });
-            var groupedProducts = _.map(_.groupBy(validProducts,
-                function(obj) {
-                    return obj.current_task + '|' + obj.run_identifier;
-                }), function(obj, key) {
-                    return [key, obj];
-                });
-            var max = _.maxBy(groupedProducts, function(obj) {
-                return obj[1].length;
-            });
-            _.each(max[1], function(obj) {
-                $scope.selected.push(obj);
-            });
-        }).catch(function() {
-            $rootScope.$broadcast('workflow-removed');
-        });
-    };
-    getWorkflowData();
-
-    $rootScope.$on('workflow-updated', getWorkflowData);
-
-    $scope.addToWorkflow = function(workflowId) {
-        $mdDialog.show({
-            templateUrl: 'modules/workflows/views/addtoworkflow.html',
-            controller: 'addToWorkflowCtrl',
-            locals: {
-                workflowId: workflowId,
-                products: $scope.products,
-            },
-        });
-    };
-
-    $scope.removeFromWorkflow = function(workflowId) {
-        var d = $mdDialog.confirm()
-            .title('Remove ' + $scope.selected.length + ' products from workflow?')
-            .ariaLabel('Confirm remove products from workflow')
-            .ok('Yes')
-            .cancel('No');
-        $mdDialog.show(d).then(function() {
-            var promises = [];
-            _.each($scope.selected, function(obj) {
-                var p = WorkflowService.removeProduct(workflowId, obj.id)
-                promises.push(p);
-            });
-            $q.all(promises).then(function(data) {
-                $rootScope.$broadcast('workflow-updated');
-            });
-        });
-    };
-
-    $scope.switchWorkflow = function(workflowId) {
-        $mdDialog.show({
-            templateUrl: 'modules/workflows/views/switchworkflow.html',
-            controller: 'switchWorkflowCtrl',
-            locals: {
-                items: $scope.selected,
-                workflowId: workflowId,
-            },
-        });
-    };
-
-    $scope.deleteWorkflow = function(workflowId) {
-        var confirmDelete = $mdDialog.confirm()
-            .title('Are you sure you want to stop this workflow?')
-            .ariaLabel('Confirm stop workflow')
-            .ok('Stop')
-            .cancel('No');
-        $mdDialog.show(confirmDelete).then(function() {
-            WorkflowService.deleteActiveWorkflow(workflowId)
-                .then(function() {
-                    $rootScope.$broadcast('workflow-removed');
-                });
-        });
-    };
-
-    $scope.selected = [];
-    $scope.toggle = function(item, list) {
-        _.each(_.clone(list), function(obj) {
-            var itemStatus = item.current_task + '|' + item.run_identifier;
-            var objStatus = obj.current_task + '|' + obj.run_identifier;
-            if (obj.hasOwnProperty('current_task') && itemStatus !== objStatus) {
-                var idx = list.indexOf(obj)
-                list.splice(idx, 1);
-            }
-        });
-        var idx = list.indexOf(item);
-        if (idx > -1) {
-            list.splice(idx, 1);
-        } else {
-            list.push(item);
-        }
-    };
-
-    $scope.exists = function(item, list) {
-        return list.indexOf(item) > -1;
-    };
-
-    $scope.showTask = function(item, isActive) {
-        if (isActive) {
-            $scope.showActiveTask(item.run_identifier, item.current_task);
-        } else {
-            $scope.doTask(item.taskPositionId);
-        }
-    }
-
-    $scope.showActiveTask = function(runIdentifier, taskPositionId) {
-        $mdDialog.show({
-            templateUrl: 'modules/workflows/views/active_task.html',
-            controller: 'showActiveTaskCtrl',
-            locals: {
-                runIdentifier: runIdentifier,
-                taskPositionId: taskPositionId,
-                selectedWorkflow: $scope.selectedWorkflow,
-            },
-        });
-    };
-
-    $scope.doTask = function(taskPositionId) {
-        if (!taskPositionId) {
-            taskPositionId = false;
-        }
-        $mdDialog.show({
-            templateUrl: 'modules/workflows/views/task.html',
-            controller: 'doTaskCtrl',
-            locals: {
-                taskPositionId: taskPositionId,
-                workflowId: $scope.selectedWorkflow.workflow,
-                selected: $scope.selected,
-                selectedWorkflow: $scope.selectedWorkflow,
-            },
-        }).then(function() {
-            $rootScope.$broadcast('workflow-updated');
-        });
-    };
-
-});
-
 app.controller('AddToRunCtrl', function($scope, $rootScope, $mdDialog,
             RunService, ProjectService, runId) {
 
@@ -425,8 +275,16 @@ app.controller('StartTaskCtrl', function($scope, $rootScope, $mdDialog,
         };
         RunService.startTask(run.id, params, doCheck).then(function(data) {
             $scope.errorMessage = '';
+            console.log(data);
             if (!doCheck) {
-                $mdDialog.hide();
+                $mdDialog.show({
+                    templateUrl: 'modules/workflows/views/monitortask.html',
+                    controller: 'MonitorTaskCtrl',
+                    locals: {
+                        run: run,
+                        task: task,
+                    },
+                });
                 $scope.run.task_in_progress = true;
             } else {
                 $scope.canStart = true;
@@ -480,7 +338,7 @@ app.controller('StartTaskCtrl', function($scope, $rootScope, $mdDialog,
 });
 
 app.controller('MonitorTaskCtrl', function($scope, $rootScope, $mdDialog,
-    RunService, InventoryService, WorkflowService, task, run) {
+    RunService, InventoryService, WorkflowService, API_URL, task, run) {
 
     $scope.task_name = task.name;
 
@@ -488,6 +346,17 @@ app.controller('MonitorTaskCtrl', function($scope, $rootScope, $mdDialog,
         $scope.taskData = data;
         $scope.task = data.data[0].data;
         $scope.requirements = data.transfers;
+        $scope.equipment_files = data.equipment_files;
+
+        // Create an object mapping identifier -> inventory data
+        // Used to link input/output objects
+        $scope.inmap = {};
+        _.each(data.transfers, function(obj) {
+            $scope.inmap[obj.item.identifier] = {
+                id: obj.item.id,
+                name: obj.item.name,
+            };
+        });
     });
 
     $scope.finishTask = function() {
@@ -500,6 +369,8 @@ app.controller('MonitorTaskCtrl', function($scope, $rootScope, $mdDialog,
             },
         });
     };
+
+    $scope.fileLocationUrl = API_URL + 'runs/' + run.id + '/get_file/?id=';
 
     $scope.cancel = $mdDialog.cancel;
 
@@ -529,9 +400,13 @@ app.controller('FinishTaskCtrl', function($scope, $rootScope, $mdDialog,
         }), function(obj) {
             return obj.product;
         });
-        RunService.finishTask(run.id, failed).then(function() {
+        RunService.finishTask(run.id, failed).then(function(data) {
             $mdDialog.hide();
-            $rootScope.$broadcast('run-updated');
+            if (data.is_active === false) {
+                $rootScope.$broadcast('run-ended');
+            } else {
+                $rootScope.$broadcast('run-updated');
+            }
         });
     };
 

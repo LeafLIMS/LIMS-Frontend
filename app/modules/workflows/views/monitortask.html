@@ -21,19 +21,42 @@
                                     <div layout="column">
                                         <div class="bottom-padded">
                                             <span class="field-label primary-label">Input items from products</span>
-                                            <div layout="row" ng-repeat="(pid, product) in task.product_inputs" >
-                                                {{ product.amount }}{{ product.measure }} {{ product.inventory_identifier }}
+                                            <div layout="row" class="input-item"
+                                                ng-repeat="(pid, product) in task.product_inputs" >
+                                                <span class="input-amount">
+                                                    {{ product.amount }}{{ product.measure }}
+                                                </span>
+                                                <span flex>
+                                                    <b>{{ inmap[product.inventory_identifier].name }}</b>
+                                                    <i>{{ product.inventory_identifier }}</i>
+                                                </span>
                                             </div>
                                         </div>
 
                                         <div class="bottom-padded">
                                             <span class="field-label primary-label">Labware to use</span>
-                                            {{ task.labware_amount }} {{ task.labware_identifier }}
+                                            <div class="input-item">
+                                                <span class="input-amount">
+                                                    {{ task.labware_amount }}
+                                                </span>
+                                                <span flex>
+                                                    <b>{{ inmap[task.labware_identifier].name }}</b>
+                                                    <i>{{ task.labware_identifier }}</i>
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <div ng-repeat="field in task.input_fields" flex="33" class="bottom-padded">
                                             <span class="field-label primary-label">{{ field.label }}</span>
-                                            {{ field.amount }}{{ field.measure }} {{ field.inventory_identifier }}
+                                            <div class="input-item">
+                                                <span class="input-amount">
+                                                    {{ field.amount }}{{ field.measure }}
+                                                </span>
+                                                <span flex>
+                                                    <b>{{ inmap[field.inventory_identifier].name }}</b>
+                                                    <i>{{ field.inventory_identifier }}</i>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </v-pane-content>
@@ -48,6 +71,16 @@
                                 </v-pane-content>
                             </v-pane>
                         </v-accordion>
+                        <div ng-show="equipment_files.length > 0" layout="column">
+                            <h4 class="section-header">Equipment/Lab files</h4>
+                            <md-button class="md-raised"
+                                       ng-href="{{ fileLocationUrl }}{{ f.id }}"
+                                       target="_blank"
+                                       ng-repeat="f in equipment_files">
+                                <md-icon>attachment</md-icon>
+                                {{ f.name }}
+                            </md-button>
+                        </div>
                     </div>
                     <div flex>
                         <v-accordion class="vAccordion--default" multiple>
