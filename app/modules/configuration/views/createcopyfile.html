@@ -1,0 +1,91 @@
+<md-dialog aria-label="Create copyfile" flex="60">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Create/update file copy</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-checkbox ng-model="copyfile.is_enabled" checked>Enable</md-checkbox>
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input md-maxlength="200"
+                        required ng-model="copyfile.name">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Equipment</label>
+                    <md-select required ng-model="copyfile.equipment">
+                        <md-option ng-repeat="e in equipment"
+                                   ng-value="e.name">
+                            {{ e.name }} 
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>From prefix</label>
+                    <input md-maxlength="200" ng-model="copyfile.copy_from_prefix">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>To prefix</label>
+                    <input md-maxlength="200" ng-model="copyfile.copy_to_prefix">
+                </md-input-container>
+                <h3 class="section-subheader">Locations</h3>
+                <md-table-container>
+                    <table md-table>
+                        <thead md-head> 
+                            <tr md-row>
+                                <th md-column>
+                                    Copy from</th>
+                                <th md-column>
+                                    Copy to</th>
+                                <th md-column></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="field in copyfile.locations">
+                                <td md-cell>
+                                    <md-input-container flex>
+                                        <input md-maxlength="200"
+                                               aria-label="Copy from"
+                                               required
+                                               ng-model="field.copy_from">
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container flex>
+                                        <input md-maxlength="200"
+                                               aria-label="Copy to"
+                                               required
+                                               ng-model="field.copy_to">
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-button class="md-icon-button"
+                                        aria-label="Delete field"
+                                        ng-click="removeLocation($index)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                <md-button ng-click="addLocation()">
+                    Add location
+                </md-button>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

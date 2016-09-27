@@ -1,5 +1,5 @@
 // bower:scss
-//@import "nsPopover/sass/ns-popover.scss";
+@import "nsPopover/sass/ns-popover.scss";
 // endbower
 
 //
@@ -387,6 +387,13 @@ input.noedit {
     text-align: center;
 }
 
+.run-finished {
+    margin: 0 0 $padding 0;
+    padding: 1em;
+    background: $highlight;
+    text-transform: uppercase;
+}
+
 .active-workflows {
     .md-subheader {
         display: flex;
@@ -466,6 +473,16 @@ input.noedit {
     .gm-workflow-task-preview:last-child:after {
         border: 0;
     }
+}
+
+.gm-workflow-task-preview.finished {
+    background: #eee !important;
+}
+.gm-workflow-task-preview.finished:before {
+    border-left-color: white;
+}
+.gm-workflow-task-preview.finished:after {
+    border-left-color: #eee;
 }
 
 .active-workflow-product-container {

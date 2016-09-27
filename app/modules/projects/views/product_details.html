@@ -130,7 +130,7 @@
                     class="md-avatar-icon"
                     ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">close</md-icon>
                 <div class="md-list-item-text">
-                    <h3>{{ entry.workflow }}: {{ entry.task }}</h3>
+                    <h3>{{ entry.run }}: {{ entry.task }}</h3>
                     <h4>{{ entry.date_created|date:"medium" }}</h4>
                     <p>{{ entry.item }} ({{ entry.state }})</p>
                 </div>

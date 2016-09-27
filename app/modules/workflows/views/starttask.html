@@ -14,6 +14,16 @@
             <md-tabs md-dynamic-height md-border-bottom md-selected="taskPaneSelected">
                 <md-tab label="Task setup">
                     <md-content class="md-dialog-content" layout="column" ng-if="!isStarted">
+                        <md-input-container>
+                            <label>Equipment to use</label>
+                            <md-select ng-model="task.equipment_choice">
+                                <md-option ng-repeat="e in task.capable_equipment"
+                                           ng-selected="$index == 0"
+                                           ng-value="e">
+                                    {{ e }}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
                         <v-accordion class="vAccordion--default" multiple>
                             <v-pane expanded>
                                 <v-pane-header>Inputs</v-pane-header>
@@ -28,7 +38,7 @@
                                         </div>
                                     </div>
                                     <div layout="row" layout-align="start center">
-                                        <div layout="column" flex layout-padding>
+                                        <div layout="column" flex class="right-padded">
                                             <span class="field-label primary-label">Input items from products</span>
                                             <div layout="row">
                                                 <md-input-container flex>
@@ -38,33 +48,36 @@
                                                 <span class="input-text">{{ task.product_input_measure }}</span>
                                             </div>
                                         </div>
-                                        <div layout="column" flex layout-padding>
+                                        <div layout="column" flex>
                                             <span class="field-label primary-label">Labware to use</span>
-                                            <md-autocomplete
-                                                md-selected-item-change="setLabwareItem(lwItem)"
-                                                md-selected-item="lwItem"
-                                                md-search-text="lwText"
-                                                md-items="item in filterLabwareItems(lwText, task.labware)"
-                                                md-item-text="item.name"
-                                                md-min-length="0"
-                                                md-select-on-match
-                                                required
-                                                md-floating-label="Choose {{ task.labware }} from inventory">
-                                                <md-item-template>
-                                                    <span md-highlight-text="lwText"
-                                                        md-highlight-flags="^i">
-                                                        {{ item.identifier }}: {{ item.name }}
-                                                    </span>
-                                                </md-item-template>
-                                                <md-not-found>
-                                                    There where no items found matching your query in the inventory.
-                                                </md-not-found>
-                                            </md-autocomplete> 
+                                            <div layout="row">
+                                                <md-input-container flex="20">
+                                                    <label>Labware amount</label>
+                                                    <input type="number" required ng-model="task.labware_amount">
+                                                </md-input-container>
+                                                <md-autocomplete
+                                                    flex
+                                                    md-selected-item-change="setLabwareItem(lwItem)"
+                                                    md-selected-item="lwItem"
+                                                    md-search-text="lwText"
+                                                    md-items="item in filterLabwareItems(lwText, task.labware)"
+                                                    md-item-text="item.name"
+                                                    md-min-length="0"
+                                                    md-select-on-match
+                                                    required
+                                                    md-floating-label="Choose {{ task.labware }} from inventory">
+                                                    <md-item-template>
+                                                        <span md-highlight-text="lwText"
+                                                            md-highlight-flags="^i">
+                                                            {{ item.identifier }}: {{ item.name }}
+                                                        </span>
+                                                    </md-item-template>
+                                                    <md-not-found>
+                                                        There where no items found matching your query in the inventory.
+                                                    </md-not-found>
+                                                </md-autocomplete> 
+                                            </div>
                                         </div>
-                                        <md-input-container flex="20">
-                                            <label>Labware amount</label>
-                                            <input type="number" required ng-model="task.labware_amount">
-                                        </md-input-container>
                                     </div>
                                     <div layout="row">
                                         <div ng-repeat="field in task.input_fields" flex="33">

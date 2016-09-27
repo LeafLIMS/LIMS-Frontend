@@ -15,6 +15,7 @@
         <span flex></span>
         <md-menu>
             <md-button ng-click="$mdOpenMenu()"
+                ng-disabled="!run.is_active"
                 aria-label="More actions"
                 class="md-icon-button">
                 <md-icon md-menu-origin>more_horiz</md-icon> 
@@ -39,7 +40,7 @@
                 <md-divider></md-divider>
                 <md-menu-item>
                     <md-button 
-                        ng-disabled="!run"
+                        ng-disabled="!run || run.task_in_progress"
                         ng-click="addToRun()">
                         <md-icon>add</md-icon>
                         Add another product
@@ -66,12 +67,18 @@
     </div>
 </md-toolbar>
 <div flex ng-show="run">
+    <div ng-show="!run.is_active"
+         class="run-finished"
+         layout="column"
+         layout-align="center center" flex>
+        Run finished
+    </div>
     <div class="workflow-preview">
         <h4>Run preview</h4>
         <div class="workflow-preview-container">
             <div class="gm-workflow-task-preview" flex 
                  ng-repeat="t in run.tasks" 
-                 ng-class="{'current-task': $index == run.current_task}">
+                 ng-class="{'current-task': $index == run.current_task, 'finished': !run.is_active}">
                 <div class="task-preview-header" layout="row">
                     <span flex></span>
                     <span>{{ $index + 1 }}</span>

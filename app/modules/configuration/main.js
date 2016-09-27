@@ -62,6 +62,10 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                     name: 'File templates',
                     ctrl: 'FileTemplates',
                 },
+                {
+                    name: 'File copy actions',
+                    ctrl: 'FileCopy',
+                },
             ],
         },
         {
@@ -1382,6 +1386,139 @@ app.controller('FileTemplatesDialogCtrl', function($scope, $mdDialog,
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
+});
+
+app.controller('FileCopyConfigurationCtrl', function($scope, PageTitle,
+            FileCopyService, $mdDialog) {
+    PageTitle.set('File copy configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10,
+    };
+
+    var refreshData = function() {
+        FileCopyService.copyfiles($scope.query).then(function(data) {
+            $scope.copyfiles = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.createFileCopy = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createcopyfile.html',
+            controller: 'FileCopyDialogCtrl',
+            locals: {
+                copyfileId: undefined,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(copyfileId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createcopyfile.html',
+            controller: 'FileCopyDialogCtrl',
+            locals: {
+                copyfileId: copyfileId,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.duplicateItem = function(item) {
+        var newItem = _.cloneDeep(item);
+        newItem.name = newItem.name + ' (copy)';
+        delete newItem.id;
+        FileCopyService.saveTemplate(newItem)
+            .then(function() {
+                refreshData();
+            });
+    };
+
+    $scope.deleteItem = function(filetemplateId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this filetemplate?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            FileCopyService.deleteTemplate(filetemplateId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('FileCopyDialogCtrl', function($scope, $mdDialog,
+    FileCopyService, EquipmentService, copyfileId) {
+
+    EquipmentService.equipment().then(function(data) {
+        $scope.equipment = data;
+    });
+
+    $scope.getItems = function(searchText) {
+        var st = searchText.toLowerCase();
+        return _.filter($scope.copyfiles, function(obj) {
+            return obj.name.toLowerCase().indexOf(st) > -1;
+        });
+    };
+
+    var getCopyFile = function(copyfileId) {
+        if (copyfileId) {
+            FileCopyService.getCopyFile(copyfileId).then(function(data) {
+                $scope.copyfile = data;
+            });
+        } else {
+            $scope.copyfile = {};
+            $scope.copyfile.locations = [];
+        }
+    };
+    getCopyFile(copyfileId);
+
+    $scope.addLocation = function() {
+        $scope.copyfile.locations.push({name: ''});
+    };
+
+    $scope.removeLocation = function(index) {
+        if ($scope.copyfile.locations.length == 1) {
+            $scope.copyfile.locations = [];
+        } else {
+            $scope.copyfile.locations.splice(index, 1);
+        }
+    };
+
+    $scope.save = function() {
+        if (copyfileId) {
+            FileCopyService.updateCopyFile(copyfileId, $scope.copyfile)
+                .then(function() {
+                $mdDialog.hide();
+            });
+        } else {
+            FileCopyService.saveCopyFile($scope.copyfile).then(function() {
+                $mdDialog.hide();
+            });
+        }
+    };
+
+    $scope.cancel = $mdDialog.cancel;
+
 });
 
 app.controller('ProductStatusesConfigurationCtrl', function($scope, PageTitle,

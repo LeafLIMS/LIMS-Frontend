@@ -1,0 +1,67 @@
+<md-toolbar class="md-primary md-hue-1 no-padding">
+    <div class="md-toolbar-tools">
+        <md-button ng-click="createFileCopy()">
+            <md-icon>add</md-icon>
+            Create/edit file copy
+        </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+<md-card>
+    <md-table-toolbar>
+        <div class="md-toolbar-tools">
+            <span>File Copy Actions</span>
+            <span flex></span>
+            <md-input-container class="md-body-1 toolbar-input">
+                <md-icon>search</md-icon>
+                <input aria-label="search file templates" 
+                    type="search" ng-model="search">
+            </md-input-container>
+        </div>
+    </md-table-toolbar>
+    <md-table-container>
+        <table md-table>
+            <thead md-head md-order="query.ordering" md-on-redorder="onSortItems">
+                <tr md-row>
+                    <th md-column md-order-by="name">Name</th>
+                    <th md-column>Equipment</th>
+                    <th md-column>From prefix</th>
+                    <th md-column>To prefix</th>
+                    <th md-column>Enabled</th>
+                    <th md-column></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr md-row md-select="item" ng-repeat="item in copyfiles">
+                    <td md-cell>{{ item.name }}</td>
+                    <td md-cell>{{ item.equipment }}</td>
+                    <td md-cell>{{ item.copy_from_prefix }}</td>
+                    <td md-cell>{{ item.copy_to_prefix }}</td>
+                    <td md-cell>{{ item.is_enabled }}</td>
+                    <td md-cell>
+                        <md-button class="md-icon-button"
+                            aria-label="Edit item"
+                            ng-click="editItem(item.id)">
+                            <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                            aria-label="Duplicate item"
+                            ng-click="duplicateItem(item)">
+                            <md-icon>content_copy</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                            aria-label="Delete item"
+                            ng-click="deleteItem(item.id)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-page="copyfiles.meta.current"
+        md-options="[10,20,50,100]"
+        md-on-paginate="onPaginateItems"
+        md-total="{{ copyfiles.meta.count }}" md-page-select>
+    </md-table-pagination>
+</md-card>
