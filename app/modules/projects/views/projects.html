@@ -42,10 +42,10 @@
                     <th md-column md-order-by="identifier">Identifier</th>
                     <th md-column md-order-by="name">Name</th>
                     <th md-column>Description</th>
+                    <th md-column md-order-by="status">Status</th>
+                    <th md-column>Project account</th>
                     <th md-column md-order-by="primary_lab_contact__username">
                         Lab contact</th>
-                    <th md-column md-order-by="status">Status</th>
-                    <th md-column>Order</th>
                 </tr>
             </thead>
             <tbody md-body>
@@ -54,11 +54,14 @@
                     <td md-cell>{{ item.project_identifier }}</td>
                     <td md-cell><b>{{ item.name }}</b></td>
                     <td md-cell>{{ item.description }}</td>
-                    <td md-cell>{{ item.primary_lab_contact }}</td>
                     <td md-cell>{{ item.status }}</td>
                     <td md-cell>
+                        <b>{{ item.crm_project.account.user.first_name }}&nbsp;
+                           {{ item.crm_project.account.user.last_name }}</b><br>
+                        {{ item.crm_project.account.account_name }}<br>
                         <a sref="app.orders.order_detail({id: item.order})">{{ item.order }}</a>
                     </td>
+                    <td md-cell>{{ item.primary_lab_contact }}</td>
                 </tr>
             </tbody>
         </table>
