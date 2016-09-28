@@ -160,6 +160,8 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         $scope.productstatuses = data;
     });
 
+    $scope.selected = [];
+
     $scope.productFilter = '';
     $scope.currentProductId = undefined;
 
@@ -247,6 +249,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     });
 
     $scope.changeProduct = function(selectedProduct) {
+        $scope.selectedProduct = selectedProduct;
         if (selectedProduct) {
             $state.go('product_details', {productId: selectedProduct.id});
         }
@@ -295,50 +298,54 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     };
 
-    $scope.deleteProduct = function(productId) {
+    $scope.deleteProduct = function() {
+        var sl = $scope.selected.length;
         var confirmDelete = $mdDialog.confirm()
-            .title('Are you sure you want to delete this product?')
+            .title('Are you sure you want to delete these ' + sl + ' products?')
             .ariaLabel('Confirm delete product')
             .ok('Yes')
             .cancel('No');
         $mdDialog.show(confirmDelete).then(function() {
-            ProjectService.deleteProduct(productId)
+            _.each($scope.selected, function(obj) {
+                ProjectService.deleteProduct(obj.id)
+                    .then(function() {
+                        $rootScope.$broadcast('project-product-deleted');
+                    });
+            });
+        });
+    };
+
+    $scope.deleteProject = function() {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this project?')
+            .ariaLabel('Confirm delete project')
+            .ok('Yes')
+            .cancel('No');
+        $mdDialog.show(confirmDelete).then(function() {
+            ProjectService.deleteProject($scope.project.id)
                 .then(function() {
-                    $rootScope.$broadcast('project-product-deleted');
+                    $rootScope.$broadcast('project-deleted');
+                    $state.go('app.projects');
                 });
-        });
-    };
-
-    $scope.switchWorkflow = function(item, workflowId) {
-        $mdDialog.show({
-            templateUrl: 'modules/projects/views/switchworkflow.html',
-            controller: 'switchWorkflowCtrl',
-            locals: {
-                items: [item],
-                workflowId: workflowId,
-            },
-        });
-    };
-
-    $scope.startWorkflow = function() {
-        var canAddToWorkflow = _.filter($scope.selected,
-            function(obj) {
-            return obj.on_workflow_as.length === 0;
-        });
-        // Use switch workflow instead!
-        $mdDialog.show({
-            templateUrl: 'modules/workflows/views/startworkflow.html',
-            controller: 'startWorkflowCtrl',
-            locals: {
-                preSelected: canAddToWorkflow,
-            },
-        }).then(function() {
-            $scope.getProductData();
         });
     };
 
     $rootScope.$on('project-product-added', $scope.getProductData);
     $rootScope.$on('project-product-deleted', $scope.getProductDataAfterDelete);
+
+    $scope.toggle = function(item, list) {
+        var idx = list.indexOf(item);
+        if (idx > -1) {
+            list.splice(idx, 1);
+        } else {
+            list.push(item);
+        }
+    };
+
+    $scope.exists = function(item, list) {
+        return list.indexOf(item) > -1;
+    };
+
 
 });
 

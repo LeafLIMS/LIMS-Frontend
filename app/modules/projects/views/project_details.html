@@ -56,12 +56,12 @@
             <md-input-container>
                 <label>Primary lab contact</label>
                 <md-select ng-model="project.primary_lab_contact">
-                    <md-option ng-repeat="member in staff" 
+                    <md-option ng-repeat="member in staff"
                         ng-value="member.username">{{ member.username }}</md-option>
                 </md-select>
             </md-input-container>
             <div ng-if="project.crm_project">
-                <h3 layout="row" layout-align="start center" 
+                <h3 layout="row" layout-align="start center"
                     class="section-subheader">
                     CRM details
                     <span flex></span>
@@ -82,27 +82,30 @@
                 </div>
             </div>
             <gtl-permissions-widget input-data="project">
-            </gtl-permissions-widget> 
+            </gtl-permissions-widget>
 
         </div>
-        <div layout="column" flex>
-            <div layout="row" layout-align="start center" class="product-select">
-                <span class="products-available">{{ initialProductCount }} products</span>
-                <md-input-container flex>
-                    <md-select ng-model="selectedProduct"
-                               md-on-close="changeProduct(selectedProduct)">
-                        <md-option ng-repeat="product in products"
-                                   ng-selected="selectedProduct.id == product.id"
-                                   ng-value="product">
-                            <md-icon ng-if="product.on_workflow">linear_scale</md-icon>
-                            {{ product.product_identifier }}: {{ product.name }}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
+        <div layout="row" flex>
+            <md-list class="md-dense product-list" flex>
+                <md-subheader>{{ initialProductCount }} products</md-subheader>
+                <md-list-item
+                    class="md-3-line"
+                    ng-click="changeProduct(product)"
+                    ng-class="{'active': selectedProduct.id == product.id}"
+                    ng-repeat="product in products">
+                    <div class="md-list-item-text">
+                        <h3><b>{{ product.product_identifier }}</b>: {{ product.name }}</h3>
+                        <h4><b>{{ product.status }}</b> Created by: {{ product.created_by }}</h4>
+                        <p><span ng-if="product.on_run">On run</span></p>
+                    </div>
+                    <md-checkbox class="md-secondary"
+                                 ng-click="toggle(product, selected)"
+                                 ng-checked="exists(product, selected)"></md-checkbox>
+                </md-list-item>
+            </md-list>
             <div ui-view="product"
                 layout="column"
-                class="side-padded">
+                class="side-padded" flex="60">
             </div>
         </div>
     </div>
