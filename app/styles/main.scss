@@ -587,6 +587,13 @@ input.noedit {
     overflow: scroll;
 }
 
+.product-status-label {
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    background: $highlight;
+    font-weight: bold;
+}
+
 // Experiments section
 md-list-item.selected {
     background: $primary1;

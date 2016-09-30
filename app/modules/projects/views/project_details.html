@@ -13,16 +13,6 @@
                     <md-icon md-menu-origin>more_horiz</md-icon>
                 </md-button>
                 <md-menu-content>
-                    <!--
-                    <md-menu-item>
-                        <md-button ng-click="startWorkflow()"
-                            ng-disabled="selected.length == 0">
-                            <md-icon md-menu-align-target>
-                                play_arrow</md-icon>
-                            Start workflow
-                        </md-button>
-                    </md-menu-item>
-                    -->
                     <md-menu-item>
                         <md-button ng-click="deleteProduct(currentProductId)">
                             <md-icon md-menu-align-target>
@@ -83,7 +73,6 @@
             </div>
             <gtl-permissions-widget input-data="project">
             </gtl-permissions-widget>
-
         </div>
         <div layout="row" flex>
             <md-list class="md-dense product-list" flex>
@@ -95,8 +84,11 @@
                     ng-repeat="product in products">
                     <div class="md-list-item-text">
                         <h3><b>{{ product.product_identifier }}</b>: {{ product.name }}</h3>
-                        <h4><b>{{ product.status }}</b> Created by: {{ product.created_by }}</h4>
-                        <p><span ng-if="product.on_run">On run</span></p>
+                        <h4>
+                            <span class="product-status-label">{{ product.status }}</span>
+                            <span class="product-status-label" ng-if="product.on_run">On run</span>
+                        </h4>
+                        <p>Created by: {{ product.created_by }}</p>
                     </div>
                     <md-checkbox class="md-secondary"
                                  ng-click="toggle(product, selected)"
