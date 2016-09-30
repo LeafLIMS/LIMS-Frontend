@@ -438,6 +438,20 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
     };
 });
 
+
+app.controller('ProductHistoryCtrl', function($scope, $stateParams,
+    ProjectService, InventoryService, $mdDialog) {
+
+    var getProduct = function() {
+        ProjectService.getProduct($stateParams.productId).then(function(data) {
+            $scope.product = data;
+        });
+    };
+    getProduct();
+
+});
+
+
 app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
     OrganismService, UserService, InventoryService, $rootScope,
     projectId, designTypes) {

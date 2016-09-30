@@ -1,0 +1,25 @@
+<md-button ui-sref="product_details({productId: product.id})">
+    <md-icon>arrow_back</md-icon>
+    Back to details
+</md-button>
+<h3 class="section-subheader">History</h3>
+<md-list class="md-dense">
+    <md-list-item
+        class="md-3-line"
+        ng-repeat="entry in product.data">
+        <md-icon
+            class="md-avatar-icon"
+            ng-if="entry.state == 'active'">hourglass_empty</md-icon>
+        <md-icon
+            class="md-avatar-icon"
+            ng-if="entry.state == 'succeeded' || entry.state == 'repeat succeeded'">done</md-icon>
+        <md-icon
+            class="md-avatar-icon"
+            ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">close</md-icon>
+        <div class="md-list-item-text">
+            <h3>{{ entry.run }}: {{ entry.task }}</h3>
+            <h4>{{ entry.date_created|date:"medium" }}</h4>
+            <p>{{ entry.item }} ({{ entry.state }})</p>
+        </div>
+    </md-list-item>
+</md-list>

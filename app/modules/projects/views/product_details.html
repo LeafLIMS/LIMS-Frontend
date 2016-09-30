@@ -17,7 +17,7 @@
             <md-item-template>
                 <span md-highlight-text="pText"
                     md-highlight-flags="^i">
-                {{ item.name }}
+                {{ item.display_name }}
                 </span>
             </md-item-template>
         </md-autocomplete>
@@ -92,7 +92,6 @@
         </md-list-item>
     </md-list>
     <md-button
-        class="md-primary"
         ng-click="addInventoryItem()">
         <md-icon>add</md-icon>
         Add item from inventory
@@ -103,7 +102,7 @@
     <md-list class="md-dense">
         <md-list-item
             class="md-3-line"
-            ng-repeat="entry in product.data">
+            ng-repeat="entry in product.data | limitTo:3">
             <md-icon
                 class="md-avatar-icon"
                 ng-if="entry.state == 'active'">hourglass_empty</md-icon>
@@ -120,4 +119,8 @@
             </div>
         </md-list-item>
     </md-list>
+    <md-button ui-sref="product_history({productId: product.id})">
+        <md-icon>history</md-icon>
+        Full history
+    </md-button>
 </div>
