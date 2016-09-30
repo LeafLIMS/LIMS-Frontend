@@ -691,7 +691,7 @@ app.directive('gtlSelectProduct', function(ProjectService) {
             var productParams = {
                 ordering: 'project,identifier',
                 limit: 10,
-                on_workflow_as: 'False',
+                on_run: 'False',
                 search: $scope.filterText,
             };
 
