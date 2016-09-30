@@ -454,6 +454,14 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.productstatuses = data;
     });
 
+    $scope.filterProductType = function(filterText) {
+        return InventoryService.itemTypes({search: filterText});
+    };
+
+    $scope.setProductType = function(item) {
+        $scope.product.product_type = item.name;
+    };
+
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
