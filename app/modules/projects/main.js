@@ -268,7 +268,6 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
                 $scope.setCRMProject = function(item) {
                     $scope.crm_project = item.Id;
-                    console.log($scope.crm_project, item);
                 };
 
                 $scope.add = function() {
@@ -331,6 +330,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     };
 
     $rootScope.$on('project-product-added', $scope.getProductData);
+    $rootScope.$on('project-product-updated', $scope.getProductData);
     $rootScope.$on('project-product-deleted', $scope.getProductDataAfterDelete);
 
     $scope.toggle = function(item, list) {
@@ -350,7 +350,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 });
 
 app.controller('ProductDetailsCtrl', function($scope, $stateParams,
-    ProjectService, InventoryService, $mdDialog) {
+    ProjectService, InventoryService, $mdDialog, $timeout, $rootScope) {
 
     var getProduct = function() {
         ProjectService.getProduct($stateParams.productId).then(function(data) {
@@ -369,8 +369,27 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         $scope.product.product_type = item.name;
     };
 
-    $scope.updateProduct = function() {
+    var timeout = null;
+    var doUpdate = function() {
+        if ($scope.productForm.$valid) {
+            ProjectService.updateProduct($scope.product.id, $scope.product).then(function(data) {
+                $rootScope.$broadcast('project-product-updated');
+            });
+        } else {
+            console.log('INVALID');
+        }
     };
+
+    var debounceUpdate = function(n, o) {
+        if (n !== o && o !== undefined && 'id' in o) {
+            if (timeout) {
+                $timeout.cancel(timeout);
+            }
+            timeout = $timeout(doUpdate, 1000);
+        }
+    };
+
+    $scope.$watch('product', debounceUpdate, true);
 
     $scope.addInventoryItem = function() {
         $mdDialog.show({
@@ -543,6 +562,12 @@ app.service('ProjectService', function(Restangular) {
     };
 
     this.updateProduct = function(productId, productData) {
+        // Remove linked_inventory if its a dict
+        productData = _.clone(productData);
+        if (typeof productData.linked_inventory[0] == 'object') {
+            delete productData.linked_inventory;
+        }
+        delete productData.data;
         return Restangular.one('products', productId).patch(productData);
     };
 
