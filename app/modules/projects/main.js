@@ -231,17 +231,6 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }
     });
 
-    $scope.getSelectedProductText = function(selectedProduct) {
-        if (selectedProduct) {
-            var name = selectedProduct.product_identifier + ': ' + selectedProduct.name;
-            var count = ' (' +
-                        $scope.initialProductCount +
-                        ' products)';
-            return name + count;
-        }
-        return '';
-    };
-
     $scope.$watch('productFilter', function(n, o) {
         $scope.returnProductData().then(function(data) {
             $scope.products = data;

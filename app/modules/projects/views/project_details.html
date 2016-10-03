@@ -75,26 +75,35 @@
             </gtl-permissions-widget>
         </div>
         <div layout="row" flex>
-            <md-list class="md-dense product-list" flex>
-                <md-subheader>{{ initialProductCount }} products</md-subheader>
-                <md-list-item
-                    class="md-3-line"
-                    ng-click="changeProduct(product)"
-                    ng-class="{'active': selectedProduct.id == product.id}"
-                    ng-repeat="product in products">
-                    <div class="md-list-item-text">
-                        <h3><b>{{ product.product_identifier }}</b>: {{ product.name }}</h3>
-                        <h4>
-                            <span class="product-status-label">{{ product.status }}</span>
-                            <span class="product-status-label" ng-if="product.on_run">On run</span>
-                        </h4>
-                        <p>Created by: {{ product.created_by }}</p>
-                    </div>
-                    <md-checkbox class="md-secondary"
-                                 ng-click="toggle(product, selected)"
-                                 ng-checked="exists(product, selected)"></md-checkbox>
-                </md-list-item>
-            </md-list>
+            <div flex layout="column">
+                <div layout="row">
+                    <md-input-container flex class="side-padded compact">
+                        <md-icon>search</md-icon>
+                        <input ng-model="productFilter">
+                    </md-input-container>
+                </div>
+                <md-list class="md-dense product-list">
+                    <md-subheader>{{ initialProductCount }} products</md-subheader>
+                    <md-list-item
+                        class="md-3-line"
+                        ng-click="changeProduct(product)"
+                        ng-class="{'active': selectedProduct.id == product.id}"
+                        ng-repeat="product in products">
+                        <div class="md-list-item-text">
+                            <h3><b>{{ product.product_identifier }}</b>: {{ product.name }}</h3>
+                            <h4>
+                                <span class="product-status-label">{{ product.product_type }}</span>
+                                <span class="product-status-label">{{ product.status }}</span>
+                                <span class="product-status-label" ng-if="product.on_run">On run</span>
+                            </h4>
+                            <p>Created by: {{ product.created_by }}</p>
+                        </div>
+                        <md-checkbox class="md-secondary"
+                                     ng-click="toggle(product, selected)"
+                                     ng-checked="exists(product, selected)"></md-checkbox>
+                    </md-list-item>
+                </md-list>
+            </div>
             <div ui-view="product"
                 layout="column"
                 class="side-padded" flex="60">
