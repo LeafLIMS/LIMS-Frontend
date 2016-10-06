@@ -137,19 +137,66 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
+                    <md-input-container flex>
+                        <label>Location</label>
+                        <md-select required ng-model="item.location">
+                            <md-option ng-repeat="location in locations"
+                                ng-value="location.code">
+                                {{ location.display_name }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                 </div>
-                <md-input-container>
-                    <label>Location</label>
-                    <md-select required ng-model="item.location">
-                        <md-option ng-repeat="location in locations"
-                            ng-value="location.code">
-                            {{ location.display_name }}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
             </div>
             <div layout="row">
                 <div flex>
+                    <h3 class="section-subheader">Properties</h3>
+                    <md-table-container>
+                        <table md-table class="properties-table">
+                            <thead md-head>
+                                <tr md-row>
+                                    <th md-column>
+                                        Name</th>
+                                    <th md-column>
+                                        Value</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="prop in item.properties">
+                                    <td md-cell>
+                                        <md-input-container ng-show="!prop.id">
+                                            <label>Name</label>
+                                            <input
+                                                required
+                                                ng-model="prop.name">
+                                        </md-input-container>
+                                        <b ng-show="prop.id">{{ prop.name }}</b>
+                                    </td>
+                                    <td md-cell>
+                                        <md-input-container>
+                                            <textarea
+                                                rows="5"
+                                                required
+                                                ng-model="prop.value"></textarea>
+                                        </md-input-container>
+                                    </td>
+                                    <td md-cell>
+                                        <md-button class="md-icon-button"
+                                            ng-click="removeProperty($index)">
+                                            <md-icon>delete</md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <md-button ng-click="addProperty()" flex>
+                        <md-icon>add</md-icon>
+                        Add property
+                    </md-button>
+                </div>
+                <div flex="40">
                     <h3 class="section-subheader">History</h3>
                     <md-list class="md-dense">
                         <md-list-item class="md-2-line" ng-repeat="tfr in item.transfers">
@@ -168,52 +215,6 @@
                             </md-button>
                         </md-list-item>
                     </md-list>
-                </div>
-                <div flex>
-                    <h3 class="section-subheader">Properties</h3>
-                    <md-table-container>
-                        <table md-table>
-                            <thead md-head> 
-                                <tr md-row>
-                                    <th md-column>
-                                        Name</th>
-                                    <th md-column>
-                                        Value</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody md-body>
-                                <tr md-row ng-repeat="prop in item.properties">
-                                    <td md-cell>
-                                        <md-input-container ng-show="!prop.id">
-                                            <label>Name</label>
-                                            <input
-                                                required 
-                                                ng-model="prop.name">
-                                        </md-input-container>
-                                        <span ng-show="prop.id">{{ prop.name }}</span>
-                                    </td>
-                                    <td md-cell>
-                                        <md-input-container>
-                                            <input
-                                                required
-                                                ng-model="prop.value">
-                                        </md-input-container>
-                                    </td>
-                                    <td md-cell>
-                                        <md-button class="md-icon-button"
-                                            ng-click="removeProperty($index)">
-                                            <md-icon>delete</md-icon>
-                                        </md-button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </md-table-container>
-                    <md-button ng-click="addProperty()" flex>
-                        <md-icon>add</md-icon>
-                        Add property
-                    </md-button>
                 </div>
             </div>
         </div>

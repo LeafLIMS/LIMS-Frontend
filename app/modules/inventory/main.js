@@ -149,6 +149,7 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
             });
             $q.all(promises).then(function(data) {
                 $scope.refreshItemData();
+                $scope.selected = [];
             });
         });
     };

@@ -65,6 +65,10 @@ md-list.sub-nav md-list-item .md-list-item-inner {
     font-weight: normal;
 }
 
+md-cell md-input-container {
+    width: 100%;
+}
+
 md-input-container.toolbar-input input {
     font-size: 1em !important;
 }
@@ -372,6 +376,22 @@ input.noedit {
                 }
             }
         }
+    }
+}
+
+.properties-table {
+    md-input-container {
+        width: 100%;
+    }
+    .md-cell {
+        padding: 0 !important;
+    }
+    .md-cell:first-child {
+        padding-right: $padding !important;
+    }
+    textarea {
+        max-height: 20em;
+        overflow: scroll;
     }
 }
 
