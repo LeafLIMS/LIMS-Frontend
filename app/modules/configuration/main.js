@@ -174,7 +174,7 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
 
     var getWorkflow = function(workflowId) {
         if (workflowId) {
-            WorkflowService.getWorkflowWithTasks(workflowId).then(function(data) {
+            WorkflowService.workflowTasks(workflowId).then(function(data) {
                 $scope.order = [];
                 var order = data.order.split(',');
                 if (order[0] !== '') {
