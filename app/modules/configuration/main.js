@@ -329,6 +329,7 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
             capable_equipment: [],
             input_files: [],
             output_files: [],
+            equipment_files: [],
         };
     }
 
@@ -379,7 +380,6 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
     };
 
     $scope.updateField = function(fieldType, field, frm) {
-        console.log(fieldType, field, frm);
         WorkflowService.updateTaskField(field.id, field, fieldType).then(function() {
             frm.$setPristine();
         });

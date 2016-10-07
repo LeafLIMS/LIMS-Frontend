@@ -73,6 +73,7 @@
                         </div>
                         <div layout="row" layout-align="start center">
                             <md-autocomplete flex="50"
+                                class="right-padded"
                                 md-selected-item-change="setLabware(lbItem)"
                                 md-selected-item="lbItem"
                                 md-search-text="lbText"
@@ -89,7 +90,8 @@
                                     </span>
                                 </md-item-template>
                             </md-autocomplete> 
-                            <md-checkbox ng-model="task.multiple_products_on_labware">
+                            <md-checkbox
+                                ng-model="task.multiple_products_on_labware">
                                 Multiple products on labware
                             </md-checkbox>
                         </div>
@@ -112,6 +114,7 @@
                         </md-chips>
                         <div layout="row">
                             <md-chips flex
+                                class="right-padded"
                                 ng-model="task.input_files"
                                 md-autocomplete-snap
                                 md-require-match
@@ -129,6 +132,7 @@
                                 </md-autocomplete>
                             </md-chips>
                             <md-chips flex
+                                class="right-padded"
                                 ng-model="task.output_files"
                                 md-autocomplete-snap
                                 md-require-match
@@ -141,6 +145,23 @@
                                     md-select-on-match
                                     placeholder="Choose output files">
                                     <span md-highlight-text="ofText">
+                                        {{ item.name }}
+                                    </span>
+                                </md-autocomplete>
+                            </md-chips>
+                            <md-chips flex
+                                ng-model="task.equipment_files"
+                                md-autocomplete-snap
+                                md-require-match
+                                md-transform-chip="transformChip($chip)">
+                                <md-autocomplete
+                                    md-selected-item="efSelected"
+                                    md-search-text="ofText"
+                                    md-items="item in filterFileTemplates(efText)"
+                                    md-item-text="item.name"
+                                    md-select-on-match
+                                    placeholder="Choose equipment files">
+                                    <span md-highlight-text="efText">
                                         {{ item.name }}
                                     </span>
                                 </md-autocomplete>
