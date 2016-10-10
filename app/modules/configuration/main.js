@@ -315,7 +315,7 @@ app.controller('WorkflowTasksConfigurationCtrl', function($scope, PageTitle, Wor
 
 app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
     WorkflowService, InventoryService, UserService,
-    EquipmentService, FileTemplateService, taskId) {
+    EquipmentService, FileTemplateService, ErrorService, taskId) {
 
     if (taskId) {
         WorkflowService.task(taskId).then(function(data) {
@@ -399,6 +399,8 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
         WorkflowService.saveTaskTemplate($scope.task).then(function(data) {
             $scope.task = data;
             taskId = data.id;
+        }).catch(function(err) {
+            $scope.message = ErrorService.parseError(err);
         });
     };
 

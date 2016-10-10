@@ -7,6 +7,12 @@
         <span flex></span>
     </div>
 </md-toolbar>
+<md-toolbar class="md-warn no-padding"
+            ng-if="message">
+    <div class="md-toolbar-tools">
+        {{ message }}
+    </div>
+</md-toolbar>
 <md-card>
     <md-table-toolbar>
         <div class="md-toolbar-tools">

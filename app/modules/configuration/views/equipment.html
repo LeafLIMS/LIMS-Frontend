@@ -24,6 +24,7 @@
             <thead md-head md-order="query.ordering" md-on-redorder="onSortItems">
                 <tr md-row>
                     <th md-column md-order-by="name">Name</th>
+                    <th md-column md-order-by="can_reserve">Reservable?</th>
                     <th md-column></th>
                 </tr>
             </thead>
@@ -31,12 +32,18 @@
                 <tr md-row md-select="item" ng-repeat="item in equipments">
                     <td md-cell>{{ item.name }}</td>
                     <td md-cell>
+                        <md-icon 
+                            ng-show="item.can_reserve">check_circle</md-icon>
+                        <md-icon 
+                            ng-show="!item.can_reserve">cancel</md-icon>
+                    </td>
+                    <td md-cell>
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
                             ng-click="editItem(item.id)">
                             <md-icon>edit</md-icon>
                         </md-button>
-                        <md-button class="md-icon-button md-warn"
+                        <md-button class="md-icon-button"
                             aria-label="Delete item"
                             ng-click="deleteItem(item.id)">
                             <md-icon>delete</md-icon>
