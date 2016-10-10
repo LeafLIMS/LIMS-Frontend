@@ -13,7 +13,7 @@ before_install:
   - docker run -d --name db --volumes-from db_data postgres:latest
   - docker build --no-cache -t getlims/backend .
   - docker run -t -i --link db:db getlims/backend python manage.py migrate
-  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" | docker run -t -i --link db:db getlims/backend python manage.py shell
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" | docker run -t --link db:db getlims/backend python manage.py shell
   - docker run -p 8000:8000 --link db:db --name app -d getlims/backend
   - cd ..
 before_script:
