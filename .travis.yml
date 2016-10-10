@@ -12,8 +12,10 @@ before_install:
   - docker create -v /var/lib/postgresql/data --name db_data postgres:latest /bin/echo "Data only container for DB"
   - docker run -d --name db --volumes-from db_data postgres:latest
   - docker build --no-cache -t getlims/backend .
-  - docker run -t -i --link db:db getlims/backend python manage.py migrate
-  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" | docker run -t --link db:db getlims/backend python manage.py shell
+  - docker run -t --link db:db getlims/backend python manage.py migrate
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" > create_superuser.py
+  - docker run -t --link db:db getlims/backend python manage.py shell < create_superuser.py
+  - rm create_superuser.py
   - docker run -p 8000:8000 --link db:db --name app -d getlims/backend
   - cd ..
 before_script:
