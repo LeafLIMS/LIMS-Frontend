@@ -1,14 +1,25 @@
-sudo: false
 language: node_js
 node_js:
   - 'iojs'
   - '0.12'
   - '0.10'
+sudo: required
+services: docker
+before_install:
+  - git clone https://github.com/GETLIMS/LIMS-Backend.git
+  - cd LIMS-Backend
+  - git checkout $TRAVIS_BRANCH
+  - docker create -v /var/lib/postgresql/data --name db_data postgres:latest /bin/echo "Data only container for DB"
+  - docker run -d --name db --volumes-from db_data postgres:latest
+  - docker build --no-cache -t getlims/backend .
+  - docker run -t -i --link db:db getlims/backend python manage.py migrate
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" | docker run -t -i --link db:db getlims/backend python manage.py shell
+  - docker run -p 8000:8000 --link db:db --name app -d getlims/backend
+  - cd ..
 before_script:
-# TODO Set up a test backend server for the frontend to communicate with during tests
-  - 'npm install'
-  - 'npm install -g grunt-cli bower'
-  - 'bower install'
-  - 'gem install compass'
+  - npm install
+  - npm install -g grunt-cli bower
+  - bower install
+  - gem install compass
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
