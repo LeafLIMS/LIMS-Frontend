@@ -9,8 +9,9 @@ before_install:
   - git clone https://github.com/GETLIMS/LIMS-Backend.git
   - cd LIMS-Backend
   - git checkout ${TRAVIS_BRANCH:-dev}
+  - docker create -v /var/lib/postgresql/data --name db_data postgres:latest /bin/echo "Data only container for DB"
+  - docker run -d --name db --volumes-from db_data postgres:latest
   - docker build --no-cache -t getlims/backend .
-  - docker run -d --name db postgres:latest
   - docker run -t --link db:db getlims/backend python manage.py migrate
   - docker run -t --link db:db getlims/backend python manage.py runscript create_superuser
   - docker run -p 8000:8000 --link db:db --name app -d getlims/backend
