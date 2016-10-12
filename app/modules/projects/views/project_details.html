@@ -77,6 +77,28 @@
                 ng-click="linkCRM()">
                 Link to CRM project
             </md-button>
+            <h3 class="section-subheader">External Links</h3>
+            <md-list class="md-dense">
+                <md-list-item
+                     ng-repeat="link in project.links"
+                     ng-show="link.url"
+                     ng-href="{{ link.url }}">
+                    <div class="md-list-item-text" ng-if="link.url">
+                        <md-icon>link</md-icon>
+                        <span ng-if="link.display_name">{{ link.display_name }}</span>
+                        <span ng-if="!link.display_name">{{ link.url }}</span>
+                    </div>
+                    <md-button
+                        ng-click="removeExternalLink($index)"
+                        class="md-icon-button md-secondary">
+                        <md-icon>remove_circle</md-icon>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+            <md-button
+                ng-click="addExternalLink()">
+                Add an external link
+            </md-button>
             <gtl-permissions-widget input-data="project">
             </gtl-permissions-widget>
         </div>

@@ -30,13 +30,13 @@
             <tbody md-body>
                 <tr md-row md-select="item" ng-repeat="item in groups">
                     <td md-cell>{{ item.name }}</td>
-                    <td md-cell>
+                    <td md-cell layout="row" layout-align="end">
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
                             ng-click="editItem(item.id)">
                             <md-icon>edit</md-icon>
                         </md-button>
-                        <md-button class="md-icon-button md-warn"
+                        <md-button class="md-icon-button"
                             aria-label="Delete item"
                             ng-click="deleteItem(item.id)">
                             <md-icon>delete</md-icon>

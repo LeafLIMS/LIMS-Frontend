@@ -244,6 +244,15 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }
     };
 
+    $scope.$watch('project', function(n,o) {
+        if (n && n !== o && o.id) {
+            ProjectService.updateProject($scope.project.id, $scope.project)
+                .then(function(data) {
+                    getProjectData();
+                });
+        }
+    }, true);
+
     $scope.linkCRM = function() {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/linkcrm.html',
@@ -272,6 +281,28 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }).then(function() {
             getProjectData();
         });
+    };
+
+    $scope.addExternalLink = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/addlink.html',
+            controller: function($scope, $mdDialog, project) {
+
+                $scope.cancel = $mdDialog.cancel;
+
+                $scope.add = function() {
+                    project.links.push($scope.link);
+                    $mdDialog.hide();
+                };
+            },
+            locals: {
+                project: $scope.project,
+            },
+        });
+    };
+
+    $scope.removeExternalLink = function(index) {
+        $scope.project.links.splice(index, 1);
     };
 
     $scope.createProduct = function(projectId) {
@@ -526,6 +557,10 @@ app.service('ProjectService', function(Restangular) {
 
     this.createProject = function(data) {
         return Restangular.all('projects').post(data);
+    };
+
+    this.updateProject = function(projectId, data) {
+        return Restangular.one('projects', projectId).patch(data);
     };
 
     this.deleteProject = function(identifier) {

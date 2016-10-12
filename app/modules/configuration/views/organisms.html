@@ -32,7 +32,7 @@
                 <tr md-row md-select="item" ng-repeat="item in organisms">
                     <td md-cell>{{ item.name }}</td>
                     <td md-cell>{{ item.common_name }}</td>
-                    <td md-cell>
+                    <td md-cell layout="row" layout-align="end">
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
                             ng-click="editItem(item.id)">
