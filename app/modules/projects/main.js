@@ -3,7 +3,7 @@
 var app = angular.module('limsFrontend');
 
 app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
-    $mdDialog) {
+    $mdDialog, CRMService) {
 
     PageTitle.set('Projects');
     $scope.removePadding = true;
@@ -128,6 +128,17 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
             $q.all(promises).then(function(data) {
                 $scope.refreshItemData();
             });
+        });
+    };
+
+    $scope.updateCRM = function(selected) {
+        var selectedIDs = _.pull(_.map(selected, function(obj) {
+            if (obj.crm_project) {
+                return obj.crm_project.id;
+            }
+        }), undefined);
+        CRMService.updateProjects(selectedIDs).then(function(data) {
+            refreshData();
         });
     };
 
@@ -256,7 +267,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     $scope.linkCRM = function() {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/linkcrm.html',
-            controller: function($scope, $mdDialog, CRMService, projectId) {
+            controller: function($scope, $mdDialog, CRMService, ErrorService, projectId) {
 
                 $scope.cancel = $mdDialog.cancel;
 
@@ -272,6 +283,8 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
                     CRMService.linkProject(projectId, $scope.crm_project)
                         .then(function() {
                             $mdDialog.hide();
+                        }).catch(function(err) {
+                            $scope.message = ErrorService.parseError(err);
                         });
                 };
             },
@@ -631,6 +644,11 @@ app.service('CRMService', function(Restangular) {
             params = {};
         }
         return Restangular.all('crm').customGETLIST('project', params);
+    };
+
+    this.updateProjects = function(selectedIDs) {
+        var data = {crm_ids: selectedIDs};
+        return Restangular.all('crm').customPOST(data, 'project/update');
     };
 
     this.linkProject = function(projectId, crmProjectId) {

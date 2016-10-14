@@ -9,6 +9,11 @@
                 </md-button>
             </div>
         </md-toolbar>
+        <md-toolbar ng-if="message" class="md-warn">
+            <div class="md-toolbar-tools">
+            {{ message }}
+            </div>
+        </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content" layout="column">
                 <md-autocomplete flex
@@ -27,7 +32,7 @@
                         {{ item.Name }}
                         </span>
                     </md-item-template>
-                </md-autocomplete> 
+                </md-autocomplete>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
