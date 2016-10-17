@@ -1,0 +1,57 @@
+<md-dialog aria-label="Transfer items" flex="60">
+    <form name="form" ng-submit="form.$valid && transfer()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Transfer items</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout="column" layout-padding>
+            <div layout="row" layout-alig="start center" ng-repeat="item in items">
+                <md-autocomplete
+                    flex="70"
+                    required
+                    md-selected-item="item.item"
+                    md-search-text="searchItemText"
+                    md-items="itm in searchItems(searchItemText)"
+                    md-item-text="itm.identifier + ': ' + itm.name + ' (' + itm.item_type + ')'"
+                    md-select-on-match
+                    md-min-length="0"
+                    md-floating-label="Item from inventory">
+                    <md-item-template>
+                        <span md-highlight-text="searchText">{{ itm.identifier }}: {{ itm.name }} ({{ itm.item_type }})</span>
+                    </md-item-template>
+                    <md-not-found>
+                        There where no matches found for "{{ searchItemText }}"
+                    </md-not-found>
+                </md-autocomplete>
+                <div layout="row" flex>
+                    <md-input-container flex>
+                        <label>Amount</label>
+                        <input required ng-disabled="!item.item"
+                            name="amount" type="number" ng-model="item.amount">
+                        <div ng-messages="form.name.$invalid">
+                            <div ng-message="required">An amount is required</div>
+                        </div>
+                    </md-input-container>
+                    <span class="postfix-text">{{ item.item.amount_measure }}</span>
+                </div>
+                <md-button ng-click="removeItem($index)" class="md-icon-button">
+                    <md-icon>remove_circle</md-icon>
+                </md-button>
+            </div>
+            <md-button ng-click="addItem()">
+                <md-icon>add</md-icon>
+                Add item
+            </md-button>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Transfer</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

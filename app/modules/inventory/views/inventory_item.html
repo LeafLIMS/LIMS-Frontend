@@ -46,25 +46,21 @@
     </md-toolbar>
     <div layout="row" flex> 
         <div flex="33" class="coloured-section" layout="column">
-            <div layout="row">
-                <md-input-container flex>
-                    <label>Name</label>
-                    <input required name="name" ng-model="item.name">
-                    <div ng-messages="form.name.$invalid">
-                        <div ng-message="required">A name is required</div>
-                    </div>
-                </md-input-container>
-                <md-input-container flex>
-                    <label>Type</label>
-                    <input disabled ng-model="item.item_type" class="noedit">
-                </md-input-container>
-            </div>
-            <div layout="row">
-                <md-input-container flex>
-                    <label>Description</label>
-                    <textarea ng-model="item.description"></textarea>
-                </md-input-container>
-            </div>
+            <md-input-container>
+                <label>Name</label>
+                <input required name="name" ng-model="item.name">
+                <div ng-messages="form.name.$invalid">
+                    <div ng-message="required">A name is required</div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Type</label>
+                <input disabled ng-model="item.item_type" class="noedit">
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model="item.description" rows="3"></textarea>
+            </md-input-container>
             <!--
             <div>
                 <md-chips ng-model="item.tags" md-autocomplete-snap
@@ -84,7 +80,7 @@
                 </md-chips>
             </div>
             -->
-            <div class="top-padded">
+            <div class="top-padded" layout="column">
                 <div layout="row">
                     <md-input-container flex class="read-only">
                         <label>Added on</label>

@@ -127,6 +127,13 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
         });
     };
 
+    $scope.transferItems = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/inventory/views/transferitems.html',
+            controller: 'TransferItemsCtrl',
+        });
+    };
+
     $scope.createSet = function() {
         $mdDialog.show({
             templateUrl: 'modules/inventory/views/createset.html',
@@ -182,6 +189,55 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
             },
         }).then(function() {
             $scope.refreshSetData();
+        });
+    };
+
+});
+
+app.controller('TransferItemsCtrl', function($scope, $mdDialog, $q, InventoryService) {
+
+    $scope.cancel = $mdDialog.cancel;
+
+    $scope.items = [
+        {item: undefined, amount: 0},
+    ];
+
+    $scope.addItem = function() {
+        $scope.items.push({item: undefined, amount: 0});
+    };
+
+    $scope.removeItem = function(index) {
+        $scope.items.splice(index, 1);
+    };
+
+    $scope.searchItems = function(searchText) {
+        return InventoryService.items({search: searchText});
+    };
+
+    $scope.searchItemTypes = function(searchText) {
+        if (!searchText) {
+            return $scope.item_types;
+        }
+        var lSearchText = searchText.toLowerCase();
+        var results = _.filter($scope.item_types, function(itm) {
+            return itm.name.toLowerCase().indexOf(lSearchText) > -1;
+        });
+        return results;
+    };
+
+    $scope.transfer = function() {
+        var promises = [];
+        _.each($scope.items, function(obj) {
+            var transfer = {
+                amount: obj.amount,
+                measure: obj.item.amount_measure,
+                transfer_complete: true,
+            };
+            var p = InventoryService.createTransfer(obj.item.id, transfer)
+            promises.push(p);
+        });
+        $q.all(promises).then(function(data) {
+            $mdDialog.hide();
         });
     };
 

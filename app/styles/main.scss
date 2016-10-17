@@ -316,6 +316,11 @@ input.noedit {
     color: $label;
 }
 
+.prefix-text, .postfix-text {
+    display: inline-block;
+    padding: 1.5em 0.5em 0 0.5em;
+}
+
 // View animations
 
 [ui-view].ng-enter {
