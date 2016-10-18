@@ -21,7 +21,11 @@
                                     <div layout="row" flex-wrap ng-show="task.input_files.length > 0">
                                         <div ng-repeat="file in task.input_files">
                                             <span class="field-label">{{ file }}</span>
-                                            <md-button ng-disabled="isStarted" ngf-select ng-model="input_files[file]" class="md-raised">
+                                            <md-button ng-disabled="isStarted" 
+                                                       ngf-select
+                                                       ngf-pattern="'.txt,.csv'"
+                                                       ng-model="input_files[file]"
+                                                       class="md-raised">
                                                Select file
                                             </md-button> 
                                             <p class="input-text">{{ input_files[file].name }}</p>
