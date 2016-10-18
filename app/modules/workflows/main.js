@@ -370,6 +370,13 @@ app.controller('MonitorTaskCtrl', function($scope, $rootScope, $mdDialog,
         });
     };
 
+    $scope.cancelTask = function() {
+        RunService.cancelTask(run.id).then(function() {
+            $mdDialog.hide();
+            $rootScope.$broadcast('run-updated');
+        });
+    };
+
     $scope.fileLocationUrl = API_URL + 'runs/' + run.id + '/get_file/?id=';
 
     $scope.cancel = $mdDialog.cancel;
@@ -937,6 +944,11 @@ app.service('RunService', function(Restangular) {
             .customPOST(frmData, 'start_task', params, {
                 'Content-Type': undefined,
             });
+    };
+
+    this.cancelTask = function(runId) {
+        return Restangular.one('runs', runId)
+            .customPOST({}, 'cancel_task'); 
     };
 
     this.monitorTask = function(runId) {
