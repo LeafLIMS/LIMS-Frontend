@@ -122,13 +122,18 @@
                                 <md-autocomplete
                                     md-selected-item="ifSelected"
                                     md-search-text="ifText"
-                                    md-items="item in filterFileTemplates(ifText)"
+                                    md-items="item in filterFileTemplates(ifText, 'input')"
                                     md-item-text="item.name"
                                     md-select-on-match
                                     placeholder="Choose input files">
-                                    <span md-highlight-text="ifText">
-                                        {{ item.name }}
-                                    </span>
+                                    <md-item-template>
+                                        <span md-highlight-text="ifText">
+                                            {{ item.name }}
+                                        </span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        No input files matching "{{ ifText }}"
+                                    </md-not-found>
                                 </md-autocomplete>
                             </md-chips>
                             <md-chips flex
@@ -140,13 +145,18 @@
                                 <md-autocomplete
                                     md-selected-item="ofSelected"
                                     md-search-text="ofText"
-                                    md-items="item in filterFileTemplates(ofText)"
+                                    md-items="item in filterFileTemplates(ofText, 'output')"
                                     md-item-text="item.name"
                                     md-select-on-match
                                     placeholder="Choose output files">
-                                    <span md-highlight-text="ofText">
-                                        {{ item.name }}
-                                    </span>
+                                    <md-item-template>
+                                        <span md-highlight-text="ofText">
+                                            {{ item.name }}
+                                        </span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        No ouput files matching "{{ ofText }}"
+                                    </md-not-found>
                                 </md-autocomplete>
                             </md-chips>
                             <md-chips flex
@@ -157,13 +167,18 @@
                                 <md-autocomplete
                                     md-selected-item="efSelected"
                                     md-search-text="ofText"
-                                    md-items="item in filterFileTemplates(efText)"
+                                    md-items="item in filterFileTemplates(efText, 'equipment')"
                                     md-item-text="item.name"
                                     md-select-on-match
                                     placeholder="Choose equipment files">
-                                    <span md-highlight-text="efText">
-                                        {{ item.name }}
-                                    </span>
+                                    <md-item-template>
+                                        <span md-highlight-text="efText">
+                                            {{ item.name }}
+                                        </span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        No equipment files matching "{{ efText }}"
+                                    </md-not-found>
                                 </md-autocomplete>
                             </md-chips>
                         </div>

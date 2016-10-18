@@ -352,8 +352,8 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
         return EquipmentService.equipment({search: filterText});
     };
 
-    $scope.filterFileTemplates = function(filterText) {
-        return FileTemplateService.templates({search: filterText});
+    $scope.filterFileTemplates = function(filterText, fileType) {
+        return FileTemplateService.templates({search: filterText, file_for: fileType});
     };
 
     $scope.filterMeasures = function(filterText) {
