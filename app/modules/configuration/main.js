@@ -1082,6 +1082,16 @@ app.controller('GroupsConfigurationCtrl', function($scope, PageTitle,
         });
     };
 
+    $scope.duplicateItem = function(item) {
+        var newItem = _.cloneDeep(item);
+        newItem.name = newItem.name + ' (copy)';
+        delete newItem.id;
+        GroupService.saveGroup(newItem)
+            .then(function() {
+                refreshData();
+            });
+    };
+
     $scope.deleteItem = function(groupId) {
         var confirmDelete = $mdDialog.confirm()
             .title('Are you sure you want to delete this group?')
