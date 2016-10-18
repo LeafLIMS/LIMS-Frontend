@@ -206,8 +206,14 @@
                             <md-button 
                                 ng-if="!tfr.transfer_complete" 
                                 ng-click="completeTransfer(tfr)"
-                                class="md-secondary md-icon-button md-warn">
+                                class="md-secondary md-icon-button md-primary">
                                 <md-icon>done</md-icon>
+                            </md-button>
+                            <md-button 
+                                ng-if="!tfr.transfer_complete" 
+                                ng-click="cancelTransfer(tfr)"
+                                class="md-secondary md-icon-button md-warn">
+                                <md-icon>close</md-icon>
                             </md-button>
                         </md-list-item>
                     </md-list>

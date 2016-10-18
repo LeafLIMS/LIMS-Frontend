@@ -446,6 +446,13 @@ app.controller('InventoryItemCtrl', function($scope, PageTitle,
             });
     };
 
+    $scope.cancelTransfer = function(transfer) {
+        InventoryService.cancelTransfer(transfer.item, transfer.id)
+            .then(function() {
+                getDetails();
+            });
+    };
+
     $scope.dispense = function() {
         $mdDialog.show({
             templateUrl: 'modules/inventory/views/dispense.html',
@@ -614,6 +621,13 @@ app.service('InventoryService', function(Restangular) {
             .customPOST(null, 'transfer', {
                 id: transferId,
                 complete: 'True',
+            });
+    };
+
+    this.cancelTransfer = function(itemId, transferId) {
+        return Restangular.one('inventory', itemId)
+            .customPOST(null, 'cancel_transfer', {
+                id: transferId,
             });
     };
 
