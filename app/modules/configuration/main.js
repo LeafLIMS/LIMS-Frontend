@@ -1306,6 +1306,18 @@ app.controller('FileTemplatesConfigurationCtrl', function($scope, PageTitle,
         });
     };
 
+    $scope.fileTemplateWizard = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/filetemplatewizard.html',
+            controller: 'FileTemplateWizardCtrl',
+            locals: {
+                filetemplateId: undefined,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
     $scope.editItem = function(filetemplateId) {
         $mdDialog.show({
             templateUrl: 'modules/configuration/views/createfiletemplate.html',
@@ -1399,6 +1411,101 @@ app.controller('FileTemplatesDialogCtrl', function($scope, $mdDialog,
         $mdDialog.cancel();
     };
 });
+
+
+app.controller('FileTemplateWizardCtrl', function($scope, $mdDialog,
+    FileTemplateService, InventoryService, WorkflowService) {
+
+    $scope.taskFields = [
+        'product_identifier',
+        'inventory_identifier',
+        'product_input_amount',
+        'product_input_measure',
+    ];
+
+    $scope.inventoryFields = [
+        'name',
+        'identifier',
+        'barcode',
+        'description',
+        'item_type',
+        'amount_available',
+        'amount_measure',
+        'location',
+    ];
+
+    $scope.filetemplate = {
+        fields: []
+    };
+
+    WorkflowService.availableTasks().then(function(data) {
+        $scope.tasks = data;
+    });
+
+    $scope.getTaskFields = function(task) {
+        WorkflowService.getTask(task.id).then(function(data) {
+            _.each(data.input_fields, function(obj) {
+                $scope.taskFields.push(obj.label);
+            });
+        });
+    };
+
+    $scope.addField = function() {
+        $scope.filetemplate.fields.push({name: ''});
+    };
+
+    $scope.removeField = function(index) {
+        if ($scope.filetemplate.fields.length == 1) {
+            $scope.filetemplate.fields = [];
+        } else {
+            $scope.filetemplate.fields.splice(index, 1);
+        }
+    };
+
+    $scope.setFileFor = function(file_for) {
+        if (file_for == 'inventory') {
+            $scope.fields = $scope.inventoryFields;
+        } else if (file_for == 'tasks') {
+            $scope.fields = $scope.taskFields;
+        }
+    };
+
+    $scope.setDefaultFields = function(file_for, file_type) {
+        if (file_type == 'input' && file_for == 'tasks') {
+            $scope.filetemplate.fields.push({
+                name: 'product identifier',
+                map_to: 'product_identifier',
+                required: true,
+                is_identifier: true,
+            },{
+                name: 'inventory identifier',
+                map_to: 'inventory_identifier',
+                required: true,
+                is_identifier: true,
+            });
+        } else if (file_type == 'input' && file_for == 'inventory') {
+            $scope.filetemplate.fields.push({
+                name: 'barcode',
+                map_to: 'barcode',
+                required: true,
+                is_identifier: true,
+            },{
+                name: 'name',
+                map_to: 'name',
+                required: true,
+            });
+        }
+    };
+
+    $scope.save = function() {
+        FileTemplateService.saveTemplate($scope.filetemplate).then(function() {
+            $mdDialog.hide();
+        });
+    };
+
+    $scope.cancel = $mdDialog.cancel;
+});
+
 
 app.controller('FileCopyConfigurationCtrl', function($scope, PageTitle,
             FileCopyService, $mdDialog) {

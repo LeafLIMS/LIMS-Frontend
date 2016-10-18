@@ -1,0 +1,156 @@
+<md-dialog aria-label="Filetemplate wizard" flex="60">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Create/update file template wizard</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input md-maxlength="255"
+                        required ng-model="filetemplate.name">
+                </md-input-container>
+
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>File to be used in</label>
+                        <md-select ng-model="file_used_for"
+                                   md-on-close="setFileFor(file_used_for)">
+                            <md-option value="tasks">
+                                Tasks
+                            </md-option>
+                            <md-option value="inventory">
+                                Inventory
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>File for</label>
+                        <md-select md-on-close="setDefaultFields(file_used_for, filetemplate.file_for)"
+                                   ng-model="filetemplate.file_for">
+                            <md-option value="input">
+                                Input
+                            </md-option>
+                            <md-option value="output"
+                                       ng-disabled="file_used_for == 'inventory'">
+                                Output
+                            </md-option>
+                            <md-option value="equipment"
+                                       ng-disabled="file_used_for == 'inventory'">
+                                Equipment
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <md-input-container ng-show="file_used_for == 'tasks'">
+                    <label>Task for</label>
+                    <md-select ng-model="task_for" md-on-close="getTaskFields(task_for)">
+                        <md-option ng-repeat="t in tasks" ng-value="t">
+                            {{ t.name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <h3 class="section-subheader">Fields</h3>
+                <md-table-container>
+                    <table md-table>
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    Name</th>
+                                <th md-column>
+                                    Map to</th>
+                                <th md-column>
+                                    Required</th>
+                                <th md-column>
+                                    Is an identifier
+                                    </th>
+                                <th md-column>
+                                    Is a property
+                                    </th>
+                                <th md-column></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr md-row ng-repeat="field in filetemplate.fields">
+                                <td md-cell>
+                                    <md-input-container>
+                                        <label>Name</label>
+                                        <input md-maxlength="50"
+                                            required ng-model="field.name">
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container ng-if="!field.is_property">
+                                        <label>Map to</label>
+                                        <md-select ng-model="field.map_to"
+                                                   ng-required="!field.is_property">
+                                            <md-option ng-repeat="field in fields"
+                                                       ng-value="field">
+                                                {{ field }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container ng-show="field.is_property">
+                                        <label>Map to</label>
+                                        <input ng-model="field.map_to"
+                                               ng-required="field.is_property">
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container>
+                                        <md-checkbox ng-model="field.required">
+                                            Required
+                                        </md-checkbox>
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container>
+                                        <md-checkbox 
+                                            ng-disabled="field.is_property"
+                                            ng-model="field.is_identifier">
+                                            Is an identifier 
+                                        </md-checkbox>
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container>
+                                        <md-checkbox 
+                                            ng-disabled="field.is_identifier"
+                                            ng-model="field.is_property">
+                                            Is a property 
+                                        </md-checkbox>
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-button class="md-icon-button"
+                                        aria-label="Delete field"
+                                        ng-click="removeField($index)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                <md-button ng-click="addField()">
+                    Add field
+                </md-button>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
