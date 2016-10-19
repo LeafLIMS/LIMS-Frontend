@@ -127,7 +127,9 @@
             </span>
             <md-icon ng-show="!run.validate_inputs[product.id]">warning</md-icon>
         </div>
-        <div flex>
+        <div
+            ng-if="run.is_active"
+            flex>
             <span class="task-product-item" 
                   ng-repeat="item in product.linked_inventory | filter:input_filter">
                 <i>{{ item.identifier }}</i>
