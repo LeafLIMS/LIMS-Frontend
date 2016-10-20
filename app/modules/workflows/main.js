@@ -908,6 +908,17 @@ app.service('RunService', function(Restangular) {
         return Restangular.all('runs').getList(params);
     };
 
+    this.runStats = function(field, params) {
+        if (!params) {
+            params = {
+                field: field,
+            }
+        } else {
+            params.field = field;
+        }
+        return Restangular.all('runs').customGET('stats', params);
+    };
+
     this.getRun = function(runId) {
         return Restangular.one('runs', runId).get();
     };

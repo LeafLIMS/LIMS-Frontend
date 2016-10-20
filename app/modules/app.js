@@ -26,6 +26,7 @@ var app = angular
     'drop-ng',
     'datetime',
     'vAccordion',
+    'chart.js',
     'config',
   ]);
 

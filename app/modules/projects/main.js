@@ -564,6 +564,17 @@ app.service('ProjectService', function(Restangular) {
         return Restangular.all('projects').getList(params);
     };
 
+    this.projectStats = function(field, params) {
+        if (!params) {
+            params = {
+                field: field,
+            }
+        } else {
+            params.field = field;
+        }
+        return Restangular.all('projects').customGET('stats', params);
+    };
+
     this.project_details = function(identifier) {
         return Restangular.one('projects', identifier).get();
     };
@@ -585,6 +596,17 @@ app.service('ProjectService', function(Restangular) {
             params = {};
         }
         return Restangular.all('products').getList(params);
+    };
+
+    this.productStats = function(field, params) {
+        if (!params) {
+            params = {
+                field: field,
+            }
+        } else {
+            params.field = field;
+        }
+        return Restangular.all('products').customGET('stats', params);
     };
 
     this.getProduct = function(productId, params) {

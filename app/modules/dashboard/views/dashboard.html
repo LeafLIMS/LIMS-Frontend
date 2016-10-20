@@ -2,8 +2,13 @@
 
 <div layout="row">
     <div layout="column" flex>
+        <h3 class="section-subheader">Project statuses</h3>
+        <canvas id="doughnut" class="chart chart-doughnut"
+              chart-data="project_status_stats.results"
+              chart-labels="project_status_stats.labels">
+        </canvas>
         <h3 class="section-subheader">Latest Projects</h3>
-        <md-list>
+        <md-list class="md-dense">
             <md-list-item ng-repeat="p in projects"
                 ui-sref="project_details({id: p.id})"
                 class="md-3-line">
@@ -22,8 +27,13 @@
         </md-button>
     </div>
     <div layout="column" flex>
+        <h3 class="section-subheader">Product statuses</h3>
+        <canvas id="doughnut" class="chart chart-doughnut"
+              chart-data="product_status_stats.results"
+              chart-labels="product_status_stats.labels">
+        </canvas>
         <h3 class="section-subheader">Active runs</h3>
-        <md-list>
+        <md-list class="md-dense">
             <md-list-item ng-repeat="run in activeRuns"
                 ui-sref="app.workflows.run({id: run.id})"
                 class="md-3-line">
@@ -42,8 +52,13 @@
         </md-button>
     </div>
     <div layout="column" flex>
-        <h3 class="section-subheader">Active Equipment</h3>
-        <md-list>
+        <h3 class="section-subheader">Equipment statuses</h3>
+        <canvas id="doughnut" class="chart chart-doughnut"
+              chart-data="equipment_stats.results"
+              chart-labels="equipment_stats.labels">
+        </canvas>
+        <h3 class="section-subheader">Equipment</h3>
+        <md-list class="md-dense">
             <md-subheader>Equipment currently active</md-subheader>
             <md-list-item ng-if="activeEquipment.length == 0">
                 All equipment idle

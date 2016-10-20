@@ -44,6 +44,17 @@ app.service('EquipmentService', function(Restangular) {
         return Restangular.all('equipment').getList(params);
     };
 
+    this.equipmentStats = function(field, params) {
+        if (!params) {
+            params = {
+                field: field,
+            }
+        } else {
+            params.field = field;
+        }
+        return Restangular.all('equipment').customGET('stats', params);
+    };
+
     this.getEquipment = function(equipmentId) {
         return Restangular.one('equipment', equipmentId).get();
     };
