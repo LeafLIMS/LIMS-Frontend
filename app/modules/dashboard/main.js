@@ -79,7 +79,7 @@ app.controller('DashboardCtrl', function($scope, PageTitle,
             } else {
                 toLabel = 'None';
             }
-            toValue = obj[filter+'__count'];
+            toValue = obj[filter + '__count'];
             results.labels.push(toLabel);
             results.results.push(toValue);
         });

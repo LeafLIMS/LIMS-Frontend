@@ -959,7 +959,7 @@ app.service('RunService', function(Restangular) {
 
     this.cancelTask = function(runId) {
         return Restangular.one('runs', runId)
-            .customPOST({}, 'cancel_task'); 
+            .customPOST({}, 'cancel_task');
     };
 
     this.monitorTask = function(runId) {

@@ -1435,7 +1435,7 @@ app.controller('FileTemplateWizardCtrl', function($scope, $mdDialog,
     ];
 
     $scope.filetemplate = {
-        fields: []
+        fields: [],
     };
 
     WorkflowService.availableTasks().then(function(data) {
@@ -1462,34 +1462,34 @@ app.controller('FileTemplateWizardCtrl', function($scope, $mdDialog,
         }
     };
 
-    $scope.setFileFor = function(file_for) {
-        if (file_for == 'inventory') {
+    $scope.setFileFor = function(fileFor) {
+        if (fileFor == 'inventory') {
             $scope.fields = $scope.inventoryFields;
-        } else if (file_for == 'tasks') {
+        } else if (fileFor == 'tasks') {
             $scope.fields = $scope.taskFields;
         }
     };
 
-    $scope.setDefaultFields = function(file_for, file_type) {
-        if (file_type == 'input' && file_for == 'tasks') {
+    $scope.setDefaultFields = function(fileFor, fileType) {
+        if (fileType == 'input' && fileFor == 'tasks') {
             $scope.filetemplate.fields.push({
                 name: 'product identifier',
                 map_to: 'product_identifier',
                 required: true,
                 is_identifier: true,
-            },{
+            }, {
                 name: 'inventory identifier',
                 map_to: 'inventory_identifier',
                 required: true,
                 is_identifier: true,
             });
-        } else if (file_type == 'input' && file_for == 'inventory') {
+        } else if (fileType == 'input' && fileFor == 'inventory') {
             $scope.filetemplate.fields.push({
                 name: 'barcode',
                 map_to: 'barcode',
                 required: true,
                 is_identifier: true,
-            },{
+            }, {
                 name: 'name',
                 map_to: 'name',
                 required: true,
