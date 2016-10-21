@@ -14,13 +14,23 @@
                 </md-button>
                 <md-menu-content>
                     <md-menu-item>
-                        <md-button ng-click="deleteProduct(currentProductId)">
+                        <md-button ng-disabled="selected.length == 0"
+                            ng-click="deleteProduct(currentProductId)">
                             <md-icon md-menu-align-target>
                                 delete_sweep</md-icon>
                             Delete selected
                         </md-button>
                     </md-menu-item>
                     <md-divider></md-divider>
+                    <md-menu-item>
+                        <md-button ng-click="setArchiveStatus()">
+                            <md-icon ng-if="project.archive"
+                                md-menu-align-target>check_box</md-icon>
+                            <md-icon ng-if="!project.archive"
+                                md-menu-align-target>check_box_outline_blank</md-icon>
+                            Archive project
+                        </md-button>
+                    </md-menu-item>
                     <md-menu-item>
                         <md-button ng-click="deleteProject()"
                             class="md-warn">

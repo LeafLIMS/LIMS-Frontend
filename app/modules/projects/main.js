@@ -11,6 +11,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
     $scope.query = {
         ordering: 'identifier',
         limit: 10,
+        archive: 'False',
     };
 
     $scope.selected = [];
@@ -27,6 +28,16 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
             refreshData();
         }
     });
+
+    $scope.hasFilter = function(fieldName, scopeQueryName) {
+        if (!scopeQueryName) {
+            scopeQueryName = 'query';
+        }
+        if (fieldName in $scope[scopeQueryName]) {
+            return true;
+        }
+        return false;
+    };
 
     $scope.toggleFilter = function(fieldName, value) {
         // If value == undefined then boolean toggle
@@ -360,6 +371,14 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
                     $state.go('app.projects');
                 });
         });
+    };
+
+    $scope.setArchiveStatus = function() {
+        if ($scope.project.archive) {
+            $scope.project.archive = false;
+        } else {
+            $scope.project.archive = true;
+        }
     };
 
     $rootScope.$on('project-product-added', $scope.getProductData);
