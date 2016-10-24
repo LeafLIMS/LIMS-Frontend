@@ -3,7 +3,7 @@
 var app = angular.module('limsFrontend');
 
 app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
-    $mdDialog, CRMService) {
+    $mdDialog, CRMService, $q) {
 
     PageTitle.set('Projects');
     $scope.removePadding = true;
@@ -65,8 +65,8 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
     $scope.createProject = function() {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/createproject.html',
-            controller: function($scope, $mdDialog, OrderService,
-                UserService, CRMService, $state) {
+            controller: function($scope, $mdDialog, $mdToast, OrderService,
+                UserService, CRMService, ErrorService, $state) {
 
                 $scope.project = {};
 
@@ -111,7 +111,13 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                             $state.go('project_details', {id: data.id});
                             $mdDialog.hide();
                         }).catch(function(err) {
-                            $scope.message = ErrorService.parseError(err);
+                            //$scope.message = ErrorService.parseError(err);
+                            $mdDialog.hide();
+                            $mdToast.show(
+                                $mdToast.simple()
+                                .textContent(ErrorService.parseError(err))
+                                .position('top right')
+                                .hideDelay(6000));
                         });
                     });
                 };
@@ -132,7 +138,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
         $mdDialog.show(d).then(function() {
             var promises = [];
             _.each(selected, function(obj) {
-                var p = ProjectService.deleteItem(obj.id);
+                var p = ProjectService.deleteProject(obj.id);
                 promises.push(p);
             });
             $q.all(promises).then(function(data) {
