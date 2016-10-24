@@ -99,8 +99,6 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                         $scope.project.order = $scope.orderSelected.id;
                     }
                     ProjectService.createProject($scope.project).then(function(data) {
-
-
                         CRMService.linkProject(data.id,
                             $scope.project_identifier).then(function(crmData) {
                             if ($scope.orderSelected) {
@@ -112,8 +110,9 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                             }
                             $state.go('project_details', {id: data.id});
                             $mdDialog.hide();
+                        }).catch(function(err) {
+                            $scope.message = ErrorService.parseError(err);
                         });
-
                     });
                 };
 
