@@ -34,14 +34,20 @@
             </div>
             <div layout="row" class="no-padding">
                 <div flex="50" layout="column">
-                    <md-input-container>
-                        <label>Identifier</label>
-                        <input ng-model="item.identifier" required>
-                    </md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label>Identifier</label>
+                            <input ng-model="item.identifier" required>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Barcode</label>
+                            <input ng-model="item.barcode" type="number" required>
+                        </md-input-container>
+                    </div>
                     <div layout="row">
                         <md-input-container>
                             <label>Amount</label>
-                            <input required type="number" 
+                            <input required type="number"
                                 ng-model="item.amount_available">
                         </md-input-container>
                         <md-input-container flex>
@@ -67,7 +73,7 @@
                 <div layout="column" flex>
                     <md-input-container>
                         <label>Description</label>
-                        <textarea ng-model="item.description"></textarea>
+                        <textarea ng-model="item.description" rows="4"></textarea>
                     </md-input-container>
                     <!--
                     <md-chips ng-model="item.tags" md-autocomplete-snap
