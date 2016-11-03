@@ -111,8 +111,8 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                             $state.go('project_details', {id: data.id});
                             $mdDialog.hide();
                         }).catch(function(err) {
-                            //$scope.message = ErrorService.parseError(err);
                             $mdDialog.hide();
+                            $state.go('project_details', {id: data.id});
                             $mdToast.show(
                                 $mdToast.simple()
                                 .textContent(ErrorService.parseError(err))
@@ -142,7 +142,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                 promises.push(p);
             });
             $q.all(promises).then(function(data) {
-                $scope.refreshItemData();
+                refreshData();
             });
         });
     };
