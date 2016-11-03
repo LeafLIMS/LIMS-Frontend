@@ -14,14 +14,14 @@
                 <div layout="column" flex>
                     <md-input-container flex>
                         <label>Username</label>
-                        <input md-maxlength="255"
+                        <input md-maxlength="30"
                             required ng-model="user.username">
                     </md-input-container>
                     <md-input-container flex>
                         <label>Email</label>
                         <input type="email" required ng-model="user.email">
                     </md-input-container>
-                    <md-input-container flex>
+                    <md-input-container flex ng-show="!user.id">
                         <label>Password</label>
                         <input type="password" 
                             ng-required="!user.id"
@@ -29,15 +29,12 @@
                     </md-input-container>
                     <md-input-container flex>
                         <label>First name</label>
-                        <input ng-model="user.first_name">
+                        <input ng-model="user.first_name" md-maxlength="30">
                     </md-input-container>
                     <md-input-container flex>
                         <label>Last name</label>
-                        <input ng-model="user.last_name">
+                        <input ng-model="user.last_name" md-maxlength="30">
                     </md-input-container>
-                    <md-checkbox ng-model="user.is_staff">
-                        User has staff access
-                    </md-checkbox>
                 </div>
                 <div layout="column" flex>
                     <md-autocomplete
