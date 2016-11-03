@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create filetemplate" flex="60">
+<md-dialog aria-label="Create filetemplate" flex="80">
     <form name="form" ng-submit="form.$valid && save()" novalidate>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -68,26 +68,26 @@
                                 </td>
                                 <td md-cell>
                                     <md-input-container>
-                                        <md-checkbox ng-model="field.required">
-                                            Required 
+                                        <md-checkbox ng-model="field.required"
+                                            aria-label="Required">
                                         </md-checkbox>
                                     </md-input-container>
                                 </td>
                                 <td md-cell>
                                     <md-input-container>
-                                        <md-checkbox 
+                                        <md-checkbox
                                             ng-disabled="field.is_property"
-                                            ng-model="field.is_identifier">
-                                            Is an identifier 
+                                            ng-model="field.is_identifier"
+                                            aria-label="Is an identifier ">
                                         </md-checkbox>
                                     </md-input-container>
                                 </td>
                                 <td md-cell>
                                     <md-input-container>
-                                        <md-checkbox 
+                                        <md-checkbox
                                             ng-disabled="field.is_identifier"
-                                            ng-model="field.is_property">
-                                            Is a property 
+                                            ng-model="field.is_property"
+                                            aria-label="Is a property">
                                         </md-checkbox>
                                     </md-input-container>
                                 </td>
