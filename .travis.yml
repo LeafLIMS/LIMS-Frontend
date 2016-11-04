@@ -16,6 +16,7 @@ before_install:
   - docker build --no-cache -t getlims/backend .
   - docker run -t --link db:db getlims/backend python manage.py migrate
   - docker run -t --link db:db getlims/backend python manage.py runscript create_superuser
+  - docker run -t --link db:db getlims/backend python manage.py createinitialrevisions
   - docker run -p 8000:8000 --link db:db --name app -d getlims/backend
   - cd ..
 before_script:
