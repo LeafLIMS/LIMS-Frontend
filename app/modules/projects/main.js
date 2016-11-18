@@ -320,6 +320,9 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
                 $scope.cancel = $mdDialog.cancel;
 
                 $scope.add = function() {
+                    if (!project.links) {
+                        project.links = [];
+                    }
                     project.links.push($scope.link);
                     $mdDialog.hide();
                 };
@@ -701,5 +704,10 @@ app.service('CRMService', function(Restangular) {
         var data = {identifier: crmProjectId, id: projectId};
         return Restangular.all('crm').customPOST(data, 'link');
     };
+
+    this.updateAccounts = function(selectedIDs) {
+        var data = {crm_ids: selectedIDs};
+        return Restangular.all('crm').customPOST(data, 'account/update');
+    }
 
 });

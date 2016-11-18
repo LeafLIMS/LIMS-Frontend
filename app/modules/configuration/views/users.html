@@ -35,6 +35,11 @@
                     <td md-cell layout="row" layout-align="end">
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
+                            ng-click="refreshUserCRM(item)">
+                            <md-icon>refresh</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                            aria-label="Edit item"
                             ng-click="editItem(item.id)">
                             <md-icon>edit</md-icon>
                         </md-button>

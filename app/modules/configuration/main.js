@@ -869,7 +869,7 @@ app.controller('OrganismsConfigurationCtrl', function($scope, PageTitle,
 });
 
 app.controller('OrganismDialogCtrl', function($scope, $mdDialog,
-    OrganismService, UserService, organismId) {
+    OrganismService, UserService, CRMService, organismId) {
 
     var getOrganism = function(organismId) {
         if (organismId) {
@@ -900,7 +900,7 @@ app.controller('OrganismDialogCtrl', function($scope, $mdDialog,
 });
 
 app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
-            UserService, $mdDialog) {
+            UserService, CRMService, $mdDialog) {
     PageTitle.set('Users configuration');
 
     $scope.query = {
@@ -937,6 +937,15 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
         }).then(function() {
             refreshData();
         });
+    };
+
+    $scope.refreshUserCRM = function(item) {
+        if (item.crmaccount) {
+            var accountId = [item.crmaccount.id];
+            CRMService.updateAccounts(accountId).then(function() {
+                refreshData();
+            });
+        }
     };
 
     $scope.editItem = function(userId) {
