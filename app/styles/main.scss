@@ -95,7 +95,7 @@ tr[ui-sref] {
 }
 
 tr[ui-sref]:hover {
-    background: $primary2;
+    background: $highlight;
 }
 
 .md-subheader.with-buttons .md-subheader-content {
@@ -369,6 +369,21 @@ input.noedit {
     }
 }
 
+// Orders
+
+.order-item-detail {
+    font-size: 0.9em;
+    padding-bottom: 0.5em;
+}
+
+.order-item-value {
+    word-wrap: break-word;
+}
+
+.subvalue-group {
+    padding-bottom: 1em;
+}
+
 // Inventory
 
 .created-from {
@@ -625,7 +640,7 @@ input.noedit {
 
 // Experiments section
 md-list-item.selected {
-    background: $primary1;
+    background: $highlight; //$primary1;
 }
 
 // Shared directives

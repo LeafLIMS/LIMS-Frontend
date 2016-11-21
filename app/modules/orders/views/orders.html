@@ -15,15 +15,9 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button>
+                        <md-button ng-disabled="selected.length == 0">
                             <md-icon md-menu-align-target>delete</md-icon>
-                            Delete Item(s) 
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button>
-                            <md-icon md-menu-align-target>add_to_photos</md-icon>
-                            Create project(s) from
+                            Delete Item(s)
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
@@ -37,25 +31,27 @@
                     <th md-column>Name</th>
                     <th md-column>Account</th>
                     <th md-column>Status</th>
-                    <th md-column>Services</th>
                     <th md-column>Submitted</th>
                     <th md-column>Last updated</th>
                     <th md-column>Project</th>
                 </tr>
             </thead>
             <tbody md-body>
-                <tr md-row md-select="selected" ng-repeat="item in orders"
+                <tr md-row md-select="item" ng-repeat="item in orders"
                     ui-sref="order_details({id: item.id})">
                     <td md-cell>{{ item.name }}</td>
-                    <td md-cell>{{ item.crm.account }}</td>
-                    <td md-cell>{{ item.status }}</td>
-                    <td md-cell class="capitalise">{{ item.services.join(", ") }}</td>
+                    <td md-cell>
+                        <b>{{ item.crm.account.user.first_name }}&nbsp;
+                           {{ item.crm.account.user.last_name }}</b><br>
+                        {{ item.crm.account.account_name }}<br>
+                    </td>
+                    <td md-cell>{{ item.crm.status }}</td>
                     <td md-cell>{{ item.date_placed|date:"medium" }}</td>
                     <td md-cell>{{ item.date_updated|date:"medium" }}</td>
                     <td md-cell>
-                        <gm-link type="project" 
-                            identifier="item.project.identifier">
-                        </gm-link>
+                        <a ui-sref="app.projects({id: item.project.identifier})">
+                            {{ item.project_identifier }}
+                        </a>
                     </td>
                 </tr>
             </tbody>
