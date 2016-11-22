@@ -960,6 +960,26 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
         });
     };
 
+    $scope.changePassword = function(userId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/changepassword.html',
+            controller: function($scope, $mdDialog, UserService, userId) {
+                $scope.cancel = $mdDialog.cancel;
+
+                $scope.changePassword = function() {
+                    UserService.changePassword(userId, $scope.new_password).then(function(data) {
+                        $mdDialog.hide();
+                    });
+                };
+            },
+            locals: {
+                userId: userId,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
     $scope.deleteItem = function(userId) {
         var confirmDelete = $mdDialog.confirm()
             .title('Are you sure you want to delete this user?')

@@ -72,6 +72,11 @@ app.service('UserService', function(Restangular, $localStorage) {
         return Restangular.one('users', userId).remove();
     };
 
+    this.changePassword = function(userId, password) {
+        var data = {new_password: password};
+        return Restangular.one('users', userId).customPOST(data, 'change_password');
+    };
+
     this.setUser = function(user) {
         $localStorage.user = user;
         return $localStorage.user;
