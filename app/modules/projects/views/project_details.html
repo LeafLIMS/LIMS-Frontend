@@ -50,6 +50,10 @@
                 <input disabled value="{{ project.date_started|date:'medium' }}">
             </md-input-container>
             <md-input-container>
+                <label>Name</label>
+                <input required ng-model="project.name">
+            </md-input-container>
+            <md-input-container>
                 <label>Description</label>
                 <textarea ng-model="project.description"></textarea>
             </md-input-container>

@@ -271,12 +271,22 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         }
     };
 
+    var updateProjectData = function() {
+        ProjectService.updateProject($scope.project.id, $scope.project)
+            .then(function(data) {
+                getProjectData();
+            });
+    };
+
+	var updateDelayed = function() {
+        $scope.$apply(function() { updateProjectData() });
+    };
+
+    var updateThrottled = _.debounce(updateDelayed, 1000);
+
     $scope.$watch('project', function(n, o) {
-        if (n && n !== o && o.id) {
-            ProjectService.updateProject($scope.project.id, $scope.project)
-                .then(function(data) {
-                    getProjectData();
-                });
+        if (n && o && n !== o && o.id) {
+            updateThrottled();
         }
     }, true);
 
