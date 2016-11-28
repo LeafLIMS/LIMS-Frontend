@@ -71,7 +71,7 @@
                     <th md-column md-order-by="identifier">Identifier</th>
                     <th md-column md-order-by="name">Name</th>
                     <th md-column>Description</th>
-                    <th md-column md-order-by="status">Status</th>
+                    <th md-column md-order-by="crm_project__status">Status</th>
                     <th md-column md-order-by="crm_project__account__user__last_name">
                         Project account</th>
                     <th md-column md-order-by="primary_lab_contact__username">
@@ -85,7 +85,10 @@
                     ui-sref="project_details({id: item.id})">
                     <td md-cell>{{ item.project_identifier }}</td>
                     <td md-cell><b>{{ item.name }}</b></td>
-                    <td md-cell>{{ item.description }}</td>
+                    <td md-cell>
+                        {{ item.description|limitTo:"200" }}
+                        <span ng-if="item.description.length > 200">&hellip;</span>
+                    </td>
                     <td md-cell>{{ item.crm_project.status }}</td>
                     <td md-cell>
                         <b>{{ item.crm_project.account.user.first_name }}&nbsp;
