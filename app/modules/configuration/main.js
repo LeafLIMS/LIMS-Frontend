@@ -47,6 +47,15 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
             ],
         },
         {
+            name: 'Alerts',
+            sections: [
+                {
+                    name: 'Triggers',
+                    ctrl: 'Triggers',
+                },
+            ],
+        },
+        {
             name: 'Equipment',
             sections: [
                 {

@@ -1,0 +1,102 @@
+<md-dialog aria-label="Create trigger" flex="60">
+    <form name="form" ng-submit="form.$valid && save()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Create/update trigger</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input md-maxlength="255"
+                        required ng-model="trigger.name">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Severity</label>
+                    <md-select ng-model="trigger.severity">
+                        <md-option value="L">Low</md-option>
+                        <md-option value="M">Medium</md-option>
+                        <md-option value="H">High</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Model</label>
+                    <md-select ng-model="trigger.model"
+                               md-on-close="setConditionFields(trigger.model)">
+                        <md-option ng-repeat="m in models"
+                                   ng-value="m.model">
+                            {{ m.model }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Email title</label>
+                    <input md-maxlength="255" ng-model="trigger.email_title">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Email template</label>
+                    <textarea ng-model="trigger.email_template" rows="6"></textarea>
+                </md-input-container>
+                <h3 class="section-subheader">Conditions</h3>
+                <div ng-repeat="c in conditions" layout="row">
+                    <md-input-container flex>
+                        <label>Field</label>
+                        <md-select ng-model="c.field" required>
+                            <md-option
+                                ng-value="f"
+                                ng-repeat="f in conditionFields">{{ f }}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Operator</label>
+                        <md-select ng-model="c.operator" required>
+                            <md-option ng-repeat="o in operators"
+                                       ng-value="o.value">{{ o.name }}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Value</label>
+                        <input ng-model="c.value" required>
+                    </md-input-container>
+                    <div layout="column" layout-align="center center">
+                        <md-button class="md-icon-button" ng-click="deleteCondition($index)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <md-button ng-click="addCondition()">
+                    Add Condition
+                </md-button>
+                <h3 class="section-subheader">Subscriptions</h3>
+                <div ng-repeat="s in subscriptions" layout="row">
+                    <md-input-container flex>
+                        <label>User</label>
+                        <md-select ng-model="s.user" required>
+                            <md-option ng-repeat="u in users"
+                                       ng-value="u.username">{{ u.username }}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-checkbox flex ng-model="s.email">Send email?</md-checkbox>
+                    <md-button class="md-icon-button" ng-click="deleteSubscription($index)">
+                        <md-icon>delete</md-icon>
+                    </md-button>
+                </div>
+                <md-button ng-click="addSubscription()">
+                    Add Subscription
+                </md-button>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
