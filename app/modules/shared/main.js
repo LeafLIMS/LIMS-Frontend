@@ -64,6 +64,51 @@ app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
 
 });
 
+
+app.controller('AccountCtrl', function($scope, PageTitle, UserService, CountryService,
+            AddressService) {
+
+    PageTitle.set('GeneMill: Account settings');
+
+    UserService.getUserDetails(UserService.getUser().id).then(function(data) {
+        $scope.user = data;
+    });
+
+    $scope.countries = CountryService;
+
+    $scope.save = function() {
+        var data = {
+            first_name: $scope.user.first_name,
+            last_name: $scope.user.last_name
+        };
+        UserService.updateUserDetails($scope.user.id, data);
+    };
+
+    $scope.changePassword = function() {
+        if ($scope.new_password == $scope.confirm_new_password) {
+            UserService.changePassword($scope.user.id, $scope.new_password);
+        } else {
+            $scope.noMatch = true;
+        }
+    };
+
+    $scope.addAddress = function() {
+        $scope.user.addresses.push({});
+    };
+
+    $scope.updateAddress = function() {
+        _.each($scope.user.addresses, function(obj) {
+            obj.user = UserService.getUser().username;
+            if (obj.id) {
+                AddressService.updateAddress(obj.id, obj);
+            } else {
+                AddressService.createAddress(obj);
+            }
+        });
+    };
+
+});
+
 app.controller('FilePickerCtrl', function($scope, $mdDialog, AttachmentService,
             Upload, UserService) {
 
@@ -388,4 +433,16 @@ app.service('PermissionsService', function(Restangular) {
         return Restangular.one(sourceUrl, objectId).customDELETE('remove_permissions',
                                                                  {groups: groups});
     }
+});
+
+app.service('AddressService', function(Restangular) {
+
+    this.updateAddress = function(addressId, addressData) {
+        Restangular.one('addresses', addressId).patch(addressData);
+    };
+
+    this.createAddress = function(addressData) {
+        Restangular.all('addresses').post(addressData);
+    };
+
 });

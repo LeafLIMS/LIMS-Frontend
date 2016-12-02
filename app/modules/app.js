@@ -115,6 +115,15 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 },
             },
         })
+        .state('app.account', {
+            url: '/account',
+            views: {
+                content: {
+                    templateUrl: 'modules/shared/views/account.html',
+                    controller: 'AccountCtrl',
+                },
+            },
+        })
         // Orders states
         .state('app.orders', {
             url: '/orders',

@@ -1,7 +1,7 @@
 <div layout="column" class="relative" layout-fill role="main">
     <md-toolbar class="md-whiteframe-z1">
         <div class="md-toolbar-tools">
-            <md-button ng-click="toggleSidenav('left')" hide-gt-lg 
+            <md-button ng-click="toggleSidenav('left')" hide-gt-lg
                 aria-label="Menu" class="md-icon-button">
                 <md-icon>menu</md-icon>
             </md-button>
@@ -15,7 +15,7 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button ui-sref="account(user.id)">
+                        <md-button ui-sref="app.account">
                             <md-icon md-menu-align-target>settings</md-icon>
                             Account settings
                         </md-button>
@@ -35,7 +35,7 @@
             md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')">
             <md-toolbar class="md-tall md-primary sidebar-logo">
                 <div class="md-toolbar-tools">
-                    GET LIMS
+                    Leaf LIMS
                 </div>
             </md-toolbar>
             <md-list>
