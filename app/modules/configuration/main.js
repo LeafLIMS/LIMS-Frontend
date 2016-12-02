@@ -900,8 +900,10 @@ app.controller('OrganismDialogCtrl', function($scope, $mdDialog,
 });
 
 app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
-            UserService, CRMService, $mdDialog) {
+            UserService, CRMService, $mdDialog, $q) {
     PageTitle.set('Users configuration');
+
+    $scope.selected = [];
 
     $scope.query = {
         ordering: 'name',
@@ -939,13 +941,31 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
         });
     };
 
-    $scope.refreshUserCRM = function(item) {
-        if (item.crmaccount) {
-            var accountId = [item.crmaccount.id];
-            CRMService.updateAccounts(accountId).then(function() {
-                refreshData();
-            });
-        }
+    $scope.refreshUserCRM = function(selected) {
+        var promises = [];
+        _.each(selected, function(item) {
+            if (item.crmaccount) {
+                var accountId = [item.crmaccount.id];
+                var p = CRMService.updateAccounts(accountId);
+                promises.push(p);
+            }
+        });
+        $q.all(promises).then(function(data) {
+            refreshData();
+        });
+    };
+
+    $scope.linkUserCRM = function(selected) {
+        var promises = [];
+        _.each(selected, function(item) {
+            if (!item.crmaccount) {
+                var p = CRMService.addAccount(item.email);
+                promises.push(p);
+            }
+        });
+        $q.all(promises).then(function(data) {
+            refreshData();
+        });
     };
 
     $scope.editItem = function(userId) {

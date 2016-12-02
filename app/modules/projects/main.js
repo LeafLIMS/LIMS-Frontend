@@ -718,6 +718,11 @@ app.service('CRMService', function(Restangular) {
     this.updateAccounts = function(selectedIDs) {
         var data = {crm_ids: selectedIDs};
         return Restangular.all('crm').customPOST(data, 'account/update');
-    }
+    };
+
+    this.addAccount = function(emailAddress) {
+        var data = {email: emailAddress, add_only: 'True'};
+        return Restangular.all('crm').customPOST(data, 'user');
+    };
 
 });

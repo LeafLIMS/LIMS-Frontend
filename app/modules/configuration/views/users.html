@@ -5,6 +5,42 @@
             Create a user
         </md-button>
         <span flex></span>
+        <md-menu>
+            <md-button aria-label="Table actions"
+                class="md-icon-button"
+                ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin>more_vert</md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <md-menu-item>
+                    <md-button
+                        aria-label="Link a CRM account"
+                        ng-disabled="selected.length == 0"
+                        ng-click="linkUserCRM(selected)">
+                        <md-icon md-menu-align-target>add</md-icon>
+                        Add CRM account
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button
+                        aria-label="Update CRM account"
+                        ng-disabled="selected.length == 0"
+                        ng-click="refreshUserCRM(selected)">
+                        <md-icon md-menu-align-target>refresh</md-icon>
+                        Update CRM account
+                    </md-button>
+                </md-menu-item>
+                <md-divider></md-divider>
+                <md-menu-item>
+                    <md-button
+                        ng-disabled="selected.length == 0"
+                        ng-click="deleteItems(selected)">
+                        <md-icon md-menu-align-target>delete</md-icon>
+                        Delete Item(s)
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
     </div>
 </md-toolbar>
 <md-card>
@@ -14,17 +50,18 @@
             <span flex></span>
             <md-input-container class="md-body-1 toolbar-input">
                 <md-icon>search</md-icon>
-                <input aria-label="search users" 
+                <input aria-label="search users"
                     type="search" ng-model="search">
             </md-input-container>
         </div>
     </md-table-toolbar>
     <md-table-container>
-        <table md-table>
+        <table md-table md-row-select ng-model="selected">
             <thead md-head md-order="query.ordering" md-on-redorder="onSortItems">
                 <tr md-row>
                     <th md-column md-order-by="name">Name</th>
                     <th md-column md-order-by="email">Email</th>
+                    <th md-column>CRM account</th>
                     <th md-column></th>
                 </tr>
             </thead>
@@ -32,6 +69,11 @@
                 <tr md-row md-select="item" ng-repeat="item in users">
                     <td md-cell>{{ item.username }}</td>
                     <td md-cell>{{ item.email }}</td>
+                    <td md-cell>
+                        <b>{{ item.crmaccount.user.first_name }}&nbsp;
+                           {{ item.crmaccount.user.last_name }}</b><br>
+                        {{ item.crmaccount.account_name }}<br>
+                    </td>
                     <td md-cell layout="row" layout-align="end">
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
@@ -40,18 +82,8 @@
                         </md-button>
                         <md-button class="md-icon-button"
                             aria-label="Edit item"
-                            ng-click="refreshUserCRM(item)">
-                            <md-icon>refresh</md-icon>
-                        </md-button>
-                        <md-button class="md-icon-button"
-                            aria-label="Edit item"
                             ng-click="editItem(item.id)">
                             <md-icon>edit</md-icon>
-                        </md-button>
-                        <md-button class="md-icon-button"
-                            aria-label="Delete item"
-                            ng-click="deleteItem(item.id)">
-                            <md-icon>delete</md-icon>
                         </md-button>
                     </td>
                 </tr>
