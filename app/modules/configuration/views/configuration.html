@@ -2,7 +2,7 @@
     <md-list flex="25" class="sub-nav">
         <div ng-repeat="group in availableConfigs">
             <md-subheader>{{ group.name }}</md-subheader>
-            <md-list-item 
+            <md-list-item
                 class="no-margin"
                 ui-sref-active="selected"
                 ng-repeat="item in group.sections"
@@ -13,5 +13,9 @@
             </md-list-item>
         </div>
     </md-list>
-    <div flex ui-view="configuration-section"></div>
+    <div flex ui-view="configuration-section">
+        <div class="padded" layout-align="center center" layout="column" layout-fill>
+            <md-icon class="holding-page-icon">settings</md-icon>
+        </div>
+    </div>
 </div>
