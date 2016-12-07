@@ -10,62 +10,70 @@
             </div>
         </md-toolbar>
         <md-dialog-content class="task" layout="column">
-            <div class="md-dialog-content" layout="row">
-                <div layout="column" flex>
-                    <md-input-container flex>
-                        <label>Username</label>
-                        <input md-maxlength="30"
-                            required ng-model="user.username">
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Email</label>
-                        <input type="email" required ng-model="user.email">
-                    </md-input-container>
-                    <md-input-container flex ng-show="!user.id">
-                        <label>Password</label>
-                        <input type="password" 
-                            ng-required="!user.id"
-                            ng-model="user.password">
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>First name</label>
-                        <input ng-model="user.first_name" md-maxlength="30">
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Last name</label>
-                        <input ng-model="user.last_name" md-maxlength="30">
-                    </md-input-container>
+            <div class="md-dialog-content">
+                <div layout="row">
+                    <div layout="column" flex>
+                        <md-input-container flex>
+                            <label>Username</label>
+                            <input md-maxlength="30"
+                                required ng-model="user.username">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Email</label>
+                            <input type="email" required ng-model="user.email">
+                        </md-input-container>
+                        <md-input-container flex ng-show="!user.id">
+                            <label>Password</label>
+                            <input type="password" 
+                                ng-required="!user.id"
+                                ng-model="user.password">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>First name</label>
+                            <input ng-model="user.first_name" md-maxlength="30">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Last name</label>
+                            <input ng-model="user.last_name" md-maxlength="30">
+                        </md-input-container>
+                    </div>
+                    <div layout="column" flex class="left-padded">
+                        <md-input-container>
+                            <label>Group to add</label>
+                            <md-select ng-model="selectedItem" md-on-close="addGroup()">
+                                <md-option ng-value="item" ng-repeat="item in groups">
+                                    {{ item.name }}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-list>
+                            <md-subheader>Groups part of</md-subheader>
+                            <md-list-item ng-repeat="g in user.groups">
+                                <md-list-item-text>
+                                    {{ g }}
+                                </md-list-item-text>
+                                <md-button class="md-icon-button md-secondary"
+                                    ng-click="removeGroup(g)">
+                                    <md-icon>remove_circle</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </div>
                 </div>
-                <div layout="column" flex>
-                    <md-autocomplete
-                        md-selected-item="selectedItem"
-                        md-search-text="searchText"
-                        md-selected-item-change="addGroup()"
-                        md-items="item in getItems(searchText)"
-                        md-item-text="item.name"
-                        md-min-length="0"
-                        md-select-on-match
-                        placeholder="Select group to add">
-                        <md-item-template>
-                            <span md-highlight-text="searchText"
-                                md-highlight-flags="^i">
-                            {{ item.name }}
-                            </span>
-                        </md-item-template>
-                    </md-autocomplete> 
-                    <md-list>
-                        <md-subheader>Groups part of</md-subheader>
-                        <md-list-item ng-repeat="g in user.groups">
-                            <md-list-item-text>
-                                {{ g }}
-                            </md-list-item-text>
-                            <md-button class="md-icon-button md-secondary"
-                                ng-click="removeGroup(g)">
-                                <md-icon>remove_circle</md-icon>
-                            </md-button>
-                        </md-list-item>
-                    </md-list>
+                <h3 class="subsection-header">CRM details</h3>
+                <div layout="row" ng-show="user.crmaccount">
+                    <div flex>
+                        <span><b>Account:</b> {{ user.crmaccount.account_name }}</span>
+                        <div layout="row">
+                            <md-button flex href="{{ user.crmaccount.contact_url }}">Contact details</md-button>
+                            <md-button flex href="{{ user.crmaccount.account_url }}">Account details</md-button>
+                        </div>
+                    </div>
+                    <div layout-align="center center">
+                        <md-button ng-click="removeCRMAccount()">Remove account</md-button>
+                    </div>
                 </div>
+                <md-button ng-show="!user.crmaccount" ng-click="addCRMAccount()">Add CRM Account</md-button>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">

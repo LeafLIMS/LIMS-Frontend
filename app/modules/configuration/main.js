@@ -915,7 +915,7 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
     $scope.selected = [];
 
     $scope.query = {
-        ordering: 'name',
+        ordering: 'id',
         limit: 10,
     };
 
@@ -1026,9 +1026,9 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
 });
 
 app.controller('UserDialogCtrl', function($scope, $mdDialog,
-    UserService, GroupService, userId) {
+    UserService, GroupService, CRMService, userId) {
 
-    GroupService.groups().then(function(data) {
+    GroupService.groups({limit: 200}).then(function(data) {
         $scope.groups = data;
     });
 
@@ -1067,6 +1067,22 @@ app.controller('UserDialogCtrl', function($scope, $mdDialog,
         }
     };
     getUser(userId);
+
+    $scope.addCRMAccount = function() {
+        if (!$scope.user.crmaccount && $scope.user.email) {
+            CRMService.addAccount($scope.user.email).then(function(data) {
+                $scope.user.crmaccount = data.crmaccount;
+            }).catch(function(err) {
+                $scope.error = err;
+            });
+        }
+    };
+
+    $scope.removeCRMAccount = function() {
+        CRMService.removeAccount($scope.user.email).then(function(data) {
+            $scope.user.crmaccount = undefined;
+        });
+    };
 
     $scope.save = function() {
         if ($scope.user.password === '') {

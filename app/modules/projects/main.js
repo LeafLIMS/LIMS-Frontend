@@ -725,4 +725,8 @@ app.service('CRMService', function(Restangular) {
         return Restangular.all('crm').customPOST(data, 'user');
     };
 
+    this.removeAccount = function(emailAddress) {
+        return Restangular.all('crm').customDELETE('user', {email: emailAddress});
+    };
+
 });
