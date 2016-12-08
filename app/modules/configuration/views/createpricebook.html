@@ -1,0 +1,36 @@
+<md-dialog aria-label="Create a pricebook">
+    <form ng-submit="save()" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Create a new pricebook</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-toolbar class="md-warn" ng-if="error">
+            <div class="md-toolbar-tools">
+                {{ error }}
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="task" layout="column">
+            <div class="md-dialog-content" layout="column">
+                <md-input-container flex>
+                    <label>Pricebook to use</label>
+                    <md-select ng-model="pricebook" required>
+                        <md-option ng-repeat="p in crmPricebooks"
+                                   ng-value="p.Id">{{ p.Name }}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

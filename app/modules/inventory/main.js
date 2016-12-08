@@ -774,3 +774,38 @@ app.service('OrganismService', function(Restangular) {
     };
 
 });
+
+app.service('PricebookService', function(Restangular) {
+
+    this.pricebooks = function(params) {
+        if (!params) {
+            params = {};
+        }
+        return Restangular.all('pricebooks').getList(params);
+    };
+
+    this.getPricebook = function(pricebookId) {
+        return Restangular.one('pricebooks', pricebookId).get();
+    };
+
+    this.savePricebook = function(data) {
+        return Restangular.all('pricebooks').post(data);
+    };
+
+    this.updatePricebook = function(pricebookId, data) {
+        return Restangular.one('pricebooks', pricebookId).patch(data);
+    };
+
+    this.deletePricebook = function(pricebookId) {
+        return Restangular.one('pricebooks', pricebookId).remove();
+    };
+
+    this.updateAllPricebooks = function() {
+        return Restangular.all('pricebooks').customPOST(null, 'updateall');
+    };
+
+    this.listCRMPricebooks = function() {
+        return Restangular.all('pricebooks').customGET('on_crm');
+    };
+
+});

@@ -44,6 +44,10 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                     name: 'Organisms',
                     ctrl: 'Organisms',
                 },
+                {
+                    name: 'Price books',
+                    ctrl: 'Pricebooks',
+                },
             ],
         },
         {
@@ -899,6 +903,124 @@ app.controller('OrganismDialogCtrl', function($scope, $mdDialog,
         } else {
             OrganismService.saveOrganism($scope.organism).then(function() {
                 $mdDialog.hide();
+            });
+        }
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+});
+
+app.controller('PricebooksConfigurationCtrl', function($scope, PageTitle,
+            PricebookService, $mdDialog) {
+    PageTitle.set('Pricebooks configuration');
+
+    $scope.query = {
+        ordering: 'name',
+        limit: 10,
+    };
+
+    var refreshData = function() {
+        PricebookService.pricebooks($scope.query).then(function(data) {
+            $scope.pricebooks = data;
+        });
+    };
+    refreshData();
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        refreshData();
+    };
+
+    $scope.$watch('query.search', function(n, o) {
+        if (n !== o) {
+            refreshData();
+        }
+    }, true);
+
+    $scope.updatePricebooks = function() {
+        PricebookService.updateAllPricebooks().then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.createPricebook = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createpricebook.html',
+            controller: 'PricebookDialogCtrl',
+            locals: {
+                pricebookId: undefined,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.editItem = function(pricebookId) {
+        $mdDialog.show({
+            templateUrl: 'modules/configuration/views/createpricebook.html',
+            controller: 'PricebookDialogCtrl',
+            locals: {
+                pricebookId: pricebookId,
+            },
+        }).then(function() {
+            refreshData();
+        });
+    };
+
+    $scope.deleteItem = function(pricebookId) {
+        var confirmDelete = $mdDialog.confirm()
+            .title('Are you sure you want to delete this pricebook?')
+            .ariaLabel('Confirm delete this item')
+            .ok('Delete')
+            .cancel('Cancel');
+        $mdDialog.show(confirmDelete).then(function() {
+            PricebookService.deletePricebook(pricebookId)
+                .then(function() {
+                    refreshData();
+                });
+        });
+    };
+
+});
+
+app.controller('PricebookDialogCtrl', function($scope, $mdDialog,
+    PricebookService, UserService, CRMService, pricebookId) {
+
+    var getPricebook = function(pricebookId) {
+        if (pricebookId) {
+            PricebookService.getPricebook(pricebookId).then(function(data) {
+                $scope.pricebook = data.identifier;
+            });
+        } else {
+            $scope.pricebook = {};
+        }
+    };
+    getPricebook(pricebookId);
+
+    PricebookService.listCRMPricebooks().then(function(data) {
+        $scope.crmPricebooks = data;
+    });
+
+    $scope.save = function() {
+        var pricebook = _.find($scope.crmPricebooks, function(obj) {
+            return obj.Id == $scope.pricebook;
+        });
+        var data = {
+            name: pricebook.Name,
+            identifier: pricebook.Id,
+        };
+        if (pricebookId) {
+            PricebookService.updatePricebook(pricebookId, data).then(function() {
+                $mdDialog.hide();
+            });
+        } else {
+            PricebookService.savePricebook(data).then(function() {
+                $mdDialog.hide();
+            }).catch(function(err) {
+                $scope.error = 'Invalid price book';
             });
         }
     };
