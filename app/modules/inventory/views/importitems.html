@@ -16,8 +16,8 @@
         </md-toolbar>
         <md-dialog-content layout="column">
             <div class="md-dialog-content">
-                <div layout="row">
-                    <md-input-container flex="30">
+                <div layout="column">
+                    <md-input-container>
                         <label>File template</label>
                         <md-select required ng-model="import.filetemplate">
                             <md-option 
@@ -27,13 +27,17 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <p layout-padding flex>
-                        <strong>Available fields:</strong>
+                    <h4 class="section-subheader">Available fields</h4>
+                    <div class="bottom-padded">
+                        <span ng-show="!import.filetemplate">
+                            Please select a file template to see available fields
+                        </span>
                         <span ng-repeat="field in import.filetemplate.fields">
                             {{ field.name }}<span ng-if="!$last">,</span>
                         </span>
-                    </p>
+                    </div>
                 </div>
+                <md-divider class="padded"></md-divider>
                 <div layout="row">
                     <span flex>{{ items_file.name || 'No file selected' }}</span>
                     <md-button 
