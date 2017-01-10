@@ -340,23 +340,44 @@ input.noedit {
 // Section specific
 
 .welcome {
-    background: $primary1 url(/images/temp_sidebar_logo.svg) no-repeat;
+    background: $primary1 url(/images/5985922350_cdcdf403e6_o.jpg) no-repeat;
     background-size: cover;
     font-size: 2em;
     .welcome-title {
-        font-size: 3em;
-        font-weight: 200;
-        text-align: center;
+        //font-size: 3em;
+        //font-weight: 200;
+        //text-align: center;
+        //color: white;
+        position: relative;
+        height: 200px;
+        text-indent: -9000em;
+        background: url(/images/logo_ds_clean.svg) no-repeat top center;
+        background-size: contain;
+        z-index: 1000;
+    }
+    .image-attribution {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        padding: 1em;
         color: white;
+        font-size: 0.5em;
+        z-index: 1000;
     }
 }
 
 .sidebar-logo {
-    background: url(/images/temp_sidebar_logo.svg) no-repeat;
+    background: url(/images/5985922350_9deb361b9a_n.jpeg) no-repeat;
     background-size: cover;
     .md-toolbar-tools {
-        font-size: 2em;
-        font-weight: 200;
+        //font-size: 2em;
+        //font-weight: 200;
+        display: inline-block;
+        height: 5em;
+        max-height: 5em;
+        text-indent: -9000em;
+        background: url(/images/logo_ds_clean.svg) no-repeat center;
+        background-size: contain;
     }
 }
 
