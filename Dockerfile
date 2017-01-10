@@ -20,12 +20,16 @@ RUN sed -i.bak "s/:80/:$LISTEN_PORT/g" /etc/apache2/sites-available/000-default.
 RUN echo "Listen $LISTEN_PORT\nNameVirtualHost *:$LISTEN_PORT" > /etc/apache2/ports.conf
 
 WORKDIR /usr/src/app
-RUN mkdir getlims
-COPY . getlims
+RUN mkdir lims
+COPY . lims
 
-WORKDIR /usr/src/app/getlims
-RUN npm install -g grunt-cli bower 
-RUN npm install 
+WORKDIR /usr/src/app/lims
+RUN npm install -g grunt-cli bower
+# Fix bug https://github.com/npm/npm/issues/9863
+RUN cd $(npm root)/npm \
+  && npm install fs-extra \
+  && sed -i -e s/graceful-fs/fs-extra/ -e s/fs\.rename/fs.move/ ./lib/utils/rename.js
+RUN npm install
 RUN bower --allow-root install
 RUN gem install compass
 
