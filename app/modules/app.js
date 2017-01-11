@@ -174,16 +174,6 @@ app.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider,
                 },
             },
         })
-        .state('product_history', {
-            parent: 'project_details',
-            url: '/product/:productId/history',
-            views: {
-                product: {
-                    templateUrl: 'modules/projects/views/product_history.html',
-                    controller: 'ProductHistoryCtrl',
-                },
-            },
-        })
         // Workflow states
         .state('app.workflows', {
             url: '/workflows',

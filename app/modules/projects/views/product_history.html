@@ -1,25 +1,33 @@
-<md-button ui-sref="product_details({productId: product.id})">
-    <md-icon>arrow_back</md-icon>
-    Back to details
-</md-button>
-<h3 class="section-subheader">History</h3>
-<md-list class="md-dense">
-    <md-list-item
-        class="md-3-line"
-        ng-repeat="entry in product.data">
-        <md-icon
-            class="md-avatar-icon"
-            ng-if="entry.state == 'active'">hourglass_empty</md-icon>
-        <md-icon
-            class="md-avatar-icon"
-            ng-if="entry.state == 'succeeded' || entry.state == 'repeat succeeded'">done</md-icon>
-        <md-icon
-            class="md-avatar-icon"
-            ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">close</md-icon>
-        <div class="md-list-item-text">
-            <h3>{{ entry.run }}: {{ entry.task }}</h3>
-            <h4>{{ entry.date_created|date:"medium" }}</h4>
-            <p>{{ entry.item }} ({{ entry.state }})</p>
+<md-dialog aria-label="Create new project" flex="60">
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <h2>
+                {{ product.product_identifier }}: {{ product.name }} History
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon aria-label="Close dialog">close</md-icon>
+            </md-button>
         </div>
-    </md-list-item>
-</md-list>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content" layout="column">
+            <md-card ng-repeat="entry in product.data">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">
+                            {{ entry.run }}: {{ entry.task }}
+                        </span>
+                        <span class="md-subhead" layout="row">
+                            <span flex>{{ entry.date_created|date:"medium" }}</span>
+                            <span flex>{{ entry.state }}</span>
+                        </span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>{{ entry.run }}</p>
+                </md-card-content>
+            </md-card>
+        </div>
+    </md-dialog-content>
+</md-dialog>

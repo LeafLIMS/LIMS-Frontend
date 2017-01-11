@@ -194,16 +194,17 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     $scope.initialProductCount = 0;
 
+    $scope.query = {
+        ordering: 'product_identifier',
+        limit: 200,
+        project: $stateParams.id,
+    };
+
     $scope.returnProductData = function() {
-        var params = {
-            project: $stateParams.id,
-            limit: 200,
-            ordering: '-id',
-        }
         if ($scope.productFilter) {
-            params.search = $scope.productFilter;
+            $scope.query.search = $scope.productFilter;
         }
-        return ProjectService.products(params);
+        return ProjectService.products($scope.query);
     };
 
     $scope.getProductData = function(event) {
@@ -223,39 +224,14 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             }
             $scope.currentProductId = data[0].id;
             $scope.selectedProduct = data[0];
-            $state.go('product_details',
-                    {productId: data[0].id},
-                    {location: 'replace'}
-                    );
         });
     };
-
-    $scope.$on('$stateChangeSuccess', function(e, toState, toParams) {
-        if (toState.name == 'product_details') {
-            $scope.currentProductId = toParams.productId;
-        }
-    });
 
     // Get initial product data on page load.
     // Will only be called if the page is refreshed.
     $scope.returnProductData().then(function(data) {
         $scope.products = data;
         $scope.initialProductCount = data.length;
-        if (data.length > 0) {
-            if ($state.params.productId) {
-                $scope.currentProductId = $state.params.productId;
-                $scope.selectedProduct = _.find($scope.products, function(obj) {
-                    return obj.id == $scope.currentProductId;
-                });
-            } else {
-                $scope.currentProductId = data[0].id;
-                $scope.selectedProduct = data[0];
-                $state.go('product_details',
-                        {productId: data[0].id},
-                        {location: 'replace'}
-                        );
-            }
-        }
     });
 
     $scope.$watch('productFilter', function(n, o) {
@@ -276,6 +252,16 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
             .then(function(data) {
                 getProjectData();
             });
+    };
+
+    $scope.onSortItems = function(order) {
+        updateProjectData();
+    };
+
+    $scope.onPaginateItems = function(page, limit) {
+        $scope.query.page = page;
+        $scope.query.limit = limit;
+        updateProjectData();
     };
 
 	var updateDelayed = function() {
@@ -525,6 +511,21 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
     $scope.designs = [];
     $scope.getDesigns = function() {
     };
+
+    $scope.getHistory = function(productId) {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/product_history.html',
+            controller: function($scope, $mdDialog, ProjectService, product) {
+                $scope.cancel = $mdDialog.cancel;
+                $scope.product = product;
+            },
+            locals: {
+                product: $scope.product,
+            }
+        });
+
+    };
+
 });
 
 

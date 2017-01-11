@@ -1,128 +1,149 @@
-<form novalidate name="productForm">
-    <div layout="column">
-        <div layout="row">
-            <md-input-container flex>
-                <label>Name</label>
-                <input ng-model="product.name" required>
-            </md-input-container>
-            <md-autocomplete flex
-                md-selected-item-change="setProductType(pItem)"
-                md-selected-item="pItem"
-                md-search-text="pText"
-                md-items="item in filterProductType(pText)"
-                md-item-text="item.name"
-                md-min-length="0"
-                md-select-on-match
-                required
-                md-floating-label="Product type">
-                <md-item-template>
-                    <span md-highlight-text="pText"
-                        md-highlight-flags="^i">
-                    {{ item.display_name }}
-                    </span>
-                </md-item-template>
-            </md-autocomplete>
-        </div>
-        <div layout="row">
-            <md-input-container flex>
-                <label>Product status</label>
-                <md-select ng-model="product.status"
-                    aria-label="Product status" required>
-                    <md-option ng-repeat="status in productstatuses"
-                               ng-value="status.name">
-                        {{ status.name }}
-                    </md-option>
+<div layout="row">
+    <md-button class="md-primary"
+               ui-sref="project_details({id: product.project})">
+        <md-icon>navigate_before</md-icon>
+        Back to project
+    </md-button>
+</div>
+<md-card>
+    <md-card-title>
+        <md-card-title-text layout="row">
+            <span class="md-headline" flex>
+                {{ product.product_identifier }}: {{ product.name }}
+            </span>
+            <span ng-if="product.on_run">On run</span>
+        </md-card-title-text>
+    </md-card-title>
+    <form novalidate name="productForm" class="padded">
+        <div layout="column">
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Name</label>
+                    <input ng-model="product.name" required>
+                </md-input-container>
+                <md-autocomplete flex
+                    md-selected-item-change="setProductType(pItem)"
+                    md-selected-item="pItem"
+                    md-search-text="pText"
+                    md-items="item in filterProductType(pText)"
+                    md-item-text="item.name"
+                    md-min-length="0"
+                    md-select-on-match
+                    required
+                    md-floating-label="Product type">
+                    <md-item-template>
+                        <span md-highlight-text="pText"
+                            md-highlight-flags="^i">
+                        {{ item.display_name }}
+                        </span>
+                    </md-item-template>
+                </md-autocomplete>
+            </div>
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Product status</label>
+                    <md-select ng-model="product.status"
+                        aria-label="Product status" required>
+                        <md-option ng-repeat="status in productstatuses"
+                                   ng-value="status.name">
+                            {{ status.name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <div ng-if="product.on_workflow" flex
+                    layout="row" layout-align="start center">
+                    <md-icon>linear_scale</md-icon>&nbsp;
+                    <p flex>{{ product.on_workflow_name }}</p>
+                    <md-button
+                        ui-sref="app.workflows.workflow({id: product.on_workflow})">
+                        View workflow
+                    </md-button>
+                </div>
+            </div>
+            <md-input-container>
+                <label>Optimised for</label>
+                <md-select ng-model="product.optimised_for"
+                    aria-label="Optimised for">
+                    <md-option ng-repeat="org in organisms" ng-value="org.id">
+                        {{ org.name }}</md-option>
                 </md-select>
             </md-input-container>
-            <div ng-if="product.on_workflow" flex
-                layout="row" layout-align="start center">
-                <md-icon>linear_scale</md-icon>&nbsp;
-                <p flex>{{ product.on_workflow_name }}</p>
-                <md-button
-                    ui-sref="app.workflows.workflow({id: product.on_workflow})">
-                    View workflow
-                </md-button>
+            <div layout="row">
+                <md-input-container flex class="read-only">
+                    <label>Date created</label>
+                    <input
+                        disabled
+                        value="{{ product.created_on|date:'medium' }}">
+                </md-input-container>
+                <md-input-container flex class="read-only">
+                    <label>Date modified</label>
+                    <input
+                        disabled
+                        value="{{ product.last_modified_on|date:'medium' }}">
+                </md-input-container>
             </div>
         </div>
-        <md-input-container>
-            <label>Optimised for</label>
-            <md-select ng-model="product.optimised_for"
-                aria-label="Optimised for">
-                <md-option ng-repeat="org in organisms" ng-value="org.id">
-                    {{ org.name }}</md-option>
-            </md-select>
-        </md-input-container>
-        <div layout="row">
-            <md-input-container flex class="read-only">
-                <label>Date created</label>
-                <input
-                    disabled
-                    value="{{ product.created_on|date:'medium' }}">
-            </md-input-container>
-            <md-input-container flex class="read-only">
-                <label>Date modified</label>
-                <input
-                    disabled
-                    value="{{ product.last_modified_on|date:'medium' }}">
-            </md-input-container>
+        <div layout="column" ng-if="product.design_format">
+            <h3 class="section-subheader">Designs</h3>
+            <p>{{ product.design_format }}</p>
         </div>
-    </div>
-    <div layout="column" ng-if="product.design_format">
-        <h3 class="section-subheader">Designs</h3>
-        <p>{{ product.design_format }}</p>
-    </div>
-    <div>
-        <h3 class="section-subheader">
-            Inventory items
-        </h3>
-        <md-list class="md-dense">
-            <md-list-item
-                class="md-2-line"
-                ui-sref="inventory_item({id: item.id})"
-                ng-repeat="item in product.linked_inventory">
-                <md-icon md-svg-icon="alt:drawing"
-                    class="md-avatar-icon"></md-icon>
-                <div class="md-list-item-text">
-                    <h3>{{ item.identifier}}: {{ item.name }}</h3>
-                    <p>{{ item.item_type }}</p>
-                </div>
-                <md-button class="md-secondary md-warn md-icon-button"
-                    ng-click="removeInventoryItem($index)">
-                    <md-icon>remove_circle</md-icon>
-                </md-button>
-            </md-list-item>
-        </md-list>
-        <md-button
-            ng-click="addInventoryItem()">
-            <md-icon>add</md-icon>
-            Add item from inventory
-        </md-button>
-    </div>
-    <div ng-show="product.data.length > 0">
-        <h3 class="section-subheader">History</h3>
-        <md-list class="md-dense">
-            <md-list-item
-                class="md-3-line"
-                ng-repeat="entry in product.data | limitTo:3">
-                <md-icon
-                    class="md-avatar-icon"
-                    ng-if="entry.state == 'active'">hourglass_empty</md-icon>
-                <md-icon
-                    class="md-avatar-icon"
-                    ng-if="entry.state == 'succeeded' || entry.state == 'repeat succeeded'">done</md-icon>
-                <md-icon
-                    class="md-avatar-icon"
-                    ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">close</md-icon>
-                <div class="md-list-item-text">
-                    <h3>{{ entry.run }}: {{ entry.task }}</h3>
-                    <h4>{{ entry.date_created|date:"medium" }}</h4>
-                    <p>{{ entry.item }} ({{ entry.state }})</p>
-                </div>
-            </md-list-item>
-        </md-list>
-        <md-button ui-sref="product_history({productId: product.id})">
-            <md-icon>history</md-icon>
-            Full history
-        </md-button>
-    </div>
-</form>
+        <div>
+            <h3 class="section-subheader">
+                Inventory items
+            </h3>
+            <md-list class="md-dense">
+                <md-list-item
+                    class="md-2-line"
+                    ui-sref="inventory_item({id: item.id})"
+                    ng-repeat="item in product.linked_inventory">
+                    <md-icon md-svg-icon="alt:drawing"
+                        class="md-avatar-icon"></md-icon>
+                    <div class="md-list-item-text">
+                        <h3>{{ item.identifier}}: {{ item.name }}</h3>
+                        <p>{{ item.item_type }}</p>
+                    </div>
+                    <md-button class="md-secondary md-warn md-icon-button"
+                        ng-click="removeInventoryItem($index)">
+                        <md-icon>remove_circle</md-icon>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+            <md-button
+                ng-click="addInventoryItem()">
+                <md-icon>add</md-icon>
+                Add item from inventory
+            </md-button>
+        </div>
+        <div ng-show="product.data.length > 0">
+            <h3 class="section-subheader">History</h3>
+            <md-list class="md-dense">
+                <md-list-item
+                    class="md-3-line"
+                    ng-repeat="entry in product.data | limitTo:3">
+                    <md-icon
+                        class="md-avatar-icon"
+                        ng-if="entry.state == 'active'">hourglass_empty</md-icon>
+                    <md-icon
+                        class="md-avatar-icon"
+                        ng-if="entry.state == 'succeeded' || entry.state == 'repeat succeeded'">
+                        done
+                    </md-icon>
+                    <md-icon
+                        class="md-avatar-icon"
+                        ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">
+                        close
+                    </md-icon>
+                    <div class="md-list-item-text">
+                        <h3>{{ entry.run }}: {{ entry.task }}</h3>
+                        <h4>{{ entry.date_created|date:"medium" }}</h4>
+                        <p>{{ entry.item }} ({{ entry.state }})</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-button ng-click="getHistory(product.id)">
+                <md-icon>history</md-icon>
+                Full history
+            </md-button>
+        </div>
+    </form>
+</md-card>

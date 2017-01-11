@@ -44,7 +44,7 @@
         </div>
     </md-toolbar>
     <div layout="row" flex>
-        <div layout="column" flex="25" class="side-padded top-padded coloured-section">
+        <div layout="column" flex="30" class="side-padded top-padded coloured-section">
             <md-input-container class="read-only">
                 <label>Date started</label>
                 <input disabled value="{{ project.date_started|date:'medium' }}">
@@ -116,39 +116,45 @@
             <gtl-permissions-widget input-data="project">
             </gtl-permissions-widget>
         </div>
-        <div layout="row" flex>
-            <div flex layout="column">
-                <div layout="row">
-                    <md-input-container flex class="side-padded compact">
-                        <md-icon>search</md-icon>
-                        <input ng-model="productFilter">
-                    </md-input-container>
-                </div>
-                <md-list class="md-dense product-list">
-                    <md-subheader>{{ initialProductCount }} products</md-subheader>
-                    <md-list-item
-                        class="md-3-line"
-                        ng-click="changeProduct(product)"
-                        ng-class="{'active': selectedProduct.id == product.id}"
-                        ng-repeat="product in products">
-                        <div class="md-list-item-text">
-                            <h3><b>{{ product.product_identifier }}</b>: {{ product.name }}</h3>
-                            <h4>
-                                <span class="product-status-label">{{ product.product_type }}</span>
-                                <span class="product-status-label">{{ product.status }}</span>
-                                <span class="product-status-label" ng-if="product.on_run">On run</span>
-                            </h4>
-                            <p>Created by: {{ product.created_by }}</p>
-                        </div>
-                        <md-checkbox class="md-secondary"
-                                     ng-click="toggle(product, selected)"
-                                     ng-checked="exists(product, selected)"></md-checkbox>
-                    </md-list-item>
-                </md-list>
-            </div>
+        <div flex>
             <div ui-view="product"
                 layout="column"
-                class="side-padded" flex="60">
+                flex>
+                <h3 class="side-padded section-subheader">Products</h3>
+                <md-card layout="column">
+                    <md-table-container>
+                        <table md-table md-row-select ng-model="selected">
+                            <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
+                                <tr md-row>
+                                    <th md-column md-order-by="id">Identifier</th>
+                                    <th md-column md-order-by="name">Name</th>
+                                    <th md-column md-order-by="status">Status</th>
+                                    <th md-column md-order-by="product_type">Type</th>
+                                    <th md-column md-order-by="created_by">Created by</th>
+                                    <th md-column>On run?</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row md-select="item" ng-repeat="item in products"
+                                    ui-sref="product_details({id: project.id, productId: item.id})">
+                                    <td md-cell>{{ item.product_identifier }}</td>
+                                    <td md-cell><b>{{ item.name }}</b></td>
+                                    <td md-cell>{{ item.status }}</td>
+                                    <td md-cell>{{ item.product_type }}</td>
+                                    <td md-cell>{{ item.created_by }}</td>
+                                    <td md-cell>
+                                        <md-icon ng-show="item.on_run">check_circle</md-icon>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <md-table-pagination md-limit="query.limit" md-page="products.meta.current"
+                        md-options="[10,20,50,100]"
+                        md-on-paginate="onPaginateItems"
+                        md-total="{{ products.meta.count }}" md-page-select>
+                    </md-table-pagination>
+                </md-card>
             </div>
         </div>
     </div>
