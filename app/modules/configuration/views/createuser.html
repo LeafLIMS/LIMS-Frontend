@@ -60,20 +60,22 @@
                         </md-list>
                     </div>
                 </div>
-                <h3 class="subsection-header">CRM details</h3>
-                <div layout="row" ng-show="user.crmaccount">
-                    <div flex>
-                        <span><b>Account:</b> {{ user.crmaccount.account_name }}</span>
-                        <div layout="row">
-                            <md-button flex href="{{ user.crmaccount.contact_url }}">Contact details</md-button>
-                            <md-button flex href="{{ user.crmaccount.account_url }}">Account details</md-button>
+                <div ng-if="crmEnabled">
+                    <h3 class="subsection-header">CRM details</h3>
+                    <div layout="row" ng-show="user.crmaccount">
+                        <div flex>
+                            <span><b>Account:</b> {{ user.crmaccount.account_name }}</span>
+                            <div layout="row">
+                                <md-button flex href="{{ user.crmaccount.contact_url }}">Contact details</md-button>
+                                <md-button flex href="{{ user.crmaccount.account_url }}">Account details</md-button>
+                            </div>
+                        </div>
+                        <div layout-align="center center">
+                            <md-button ng-click="removeCRMAccount()">Remove account</md-button>
                         </div>
                     </div>
-                    <div layout-align="center center">
-                        <md-button ng-click="removeCRMAccount()">Remove account</md-button>
-                    </div>
+                    <md-button ng-show="!user.crmaccount" ng-click="addCRMAccount()">Add CRM Account</md-button>
                 </div>
-                <md-button ng-show="!user.crmaccount" ng-click="addCRMAccount()">Add CRM Account</md-button>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">

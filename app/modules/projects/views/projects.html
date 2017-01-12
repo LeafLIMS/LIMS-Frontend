@@ -43,7 +43,7 @@
                     <md-icon md-menu-origin>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4">
-                    <md-menu-item>
+                    <md-menu-item ng-if="crmEnabled">
                         <md-button
                             ng-disabled="selected.length == 0"
                             ng-click="updateCRM(selected)">
@@ -72,7 +72,8 @@
                     <th md-column md-order-by="name">Name</th>
                     <th md-column>Description</th>
                     <th md-column md-order-by="crm_project__status">Status</th>
-                    <th md-column md-order-by="crm_project__account__user__last_name">
+                    <th md-column md-order-by="crm_project__account__user__last_name"
+                        ng-if="crmEnabled">
                         Project account</th>
                     <th md-column md-order-by="primary_lab_contact__username">
                         Lab contact</th>
@@ -90,7 +91,7 @@
                         <span ng-if="item.description.length > 200">&hellip;</span>
                     </td>
                     <td md-cell>{{ item.crm_project.status }}</td>
-                    <td md-cell>
+                    <td md-cell ng-if="crmEnabled">
                         <b>{{ item.crm_project.account.user.first_name }}&nbsp;
                            {{ item.crm_project.account.user.last_name }}</b><br>
                         {{ item.crm_project.account.account_name }}<br>

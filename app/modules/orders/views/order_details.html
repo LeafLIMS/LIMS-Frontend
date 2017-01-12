@@ -1,6 +1,6 @@
 <md-toolbar class="md-primary md-hue-1">
     <div class="md-toolbar-tools">
-        <md-button ng-click="refreshQuotes()">
+        <md-button ng-click="refreshQuotes()" ng-if="crmEnabled">
             <md-icon>refresh</md-icon>
             Refresh quote information
         </md-button>
@@ -10,42 +10,44 @@
 </md-toolbar>
 <div layout-padding>
 
-    <h3 class="section-subheader">Quotes</h3>
+    <div ng-if="crmEnabled" class="no-padding">
+        <h3 class="section-subheader">Quotes</h3>
 
-    <md-card>
-        <md-table-container>
-            <table md-table>
-                <thead md-head>
-                    <tr md-row>
-                        <th md-column>Number</th>
-                        <th md-column>Name</th>
-                        <th md-column>Subtotal</th>
-                        <th md-column>Discount</th>
-                        <th md-column>Total</th>
-                        <th md-column></th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row ng-repeat="item in order.crm.quotes">
-                        <td md-cell>{{ item.quote_number }}</td>
-                        <td md-cell><b>{{ item.quote_name }}</b></td>
-                        <td md-cell>£{{ item.subtotal }}</td>
-                        <td md-cell>£{{ item.discount }}</td>
-                        <td md-cell>£{{ item.total }}</td>
-                        <td md-cell>
-                            <md-button href="{{ item.quote_url }}">
-                                View on CRM
-                            </md-button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-table-container>
-        <md-button
-            href="{{ order.crm.project_url }}">
-            View project on CRM system
-        </md-button>
-    </md-card>
+        <md-card>
+            <md-table-container>
+                <table md-table>
+                    <thead md-head>
+                        <tr md-row>
+                            <th md-column>Number</th>
+                            <th md-column>Name</th>
+                            <th md-column>Subtotal</th>
+                            <th md-column>Discount</th>
+                            <th md-column>Total</th>
+                            <th md-column></th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row ng-repeat="item in order.crm.quotes">
+                            <td md-cell>{{ item.quote_number }}</td>
+                            <td md-cell><b>{{ item.quote_name }}</b></td>
+                            <td md-cell>£{{ item.subtotal }}</td>
+                            <td md-cell>£{{ item.discount }}</td>
+                            <td md-cell>£{{ item.total }}</td>
+                            <td md-cell>
+                                <md-button href="{{ item.quote_url }}">
+                                    View on CRM
+                                </md-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+            <md-button
+                href="{{ order.crm.project_url }}">
+                View project on CRM system
+            </md-button>
+        </md-card>
+    </div>
 
     <h3 class="section-subheader">Summary</h3>
 

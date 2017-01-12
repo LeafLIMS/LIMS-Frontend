@@ -4,6 +4,7 @@
             <md-subheader>{{ group.name }}</md-subheader>
             <md-list-item
                 class="no-margin"
+                ng-if="item.show"
                 ui-sref-active="selected"
                 ng-repeat="item in group.sections"
                 ui-sref="app.configuration.section({sectionName: item.ctrl})">

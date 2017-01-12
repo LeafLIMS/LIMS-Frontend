@@ -3,10 +3,12 @@
 var app = angular.module('limsFrontend');
 
 app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
-    $mdDialog, CRMService, $q) {
+    $mdDialog, CRMService, $q, UserService) {
 
     PageTitle.set('Projects');
     $scope.removePadding = true;
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     $scope.query = {
         ordering: 'identifier',
@@ -66,7 +68,9 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
         $mdDialog.show({
             templateUrl: 'modules/projects/views/createproject.html',
             controller: function($scope, $mdDialog, $mdToast, OrderService,
-                UserService, CRMService, ErrorService, $state) {
+                UserService, CRMService, ErrorService, $state, crmEnabled) {
+
+                $scope.crmEnabled = crmEnabled;
 
                 $scope.project = {};
 
@@ -127,6 +131,9 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
                 };
 
             },
+            locals: {
+                crmEnabled: $scope.crmEnabled,
+            }
         });
     };
 
@@ -165,6 +172,8 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     $q, UserService, OrganismService, $state) {
 
     $scope.removePadding = true;
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     var getProjectData = function() {
         ProjectService.project_details($stateParams.id).then(function(data) {

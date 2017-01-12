@@ -2,10 +2,12 @@
 
 var app = angular.module('limsFrontend');
 
-app.controller('OrdersCtrl', function($scope, PageTitle, OrderService) {
+app.controller('OrdersCtrl', function($scope, PageTitle, OrderService, UserService) {
 
     PageTitle.set('Orders');
     $scope.removePadding = true;
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     $scope.selected = [];
 
@@ -52,7 +54,9 @@ app.controller('OrdersCtrl', function($scope, PageTitle, OrderService) {
 });
 
 app.controller('OrderDetailsCtrl', function($scope, PageTitle,
-    OrderService, $stateParams, $state) {
+    OrderService, $stateParams, $state, UserService) {
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     OrderService.order_details($stateParams.id).then(function(data) {
         $scope.order = data;

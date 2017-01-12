@@ -64,33 +64,35 @@
                         ng-value="member.username">{{ member.username }}</md-option>
                 </md-select>
             </md-input-container>
-            <h3 layout="row" layout-align="start center"
-                class="section-subheader">
-                CRM details
-                <span flex></span>
-                <md-button class="md-icon-button"
-                    ng-show="project.crm_project"
-                    ng-click="linkCRM()">
-                    <md-icon>edit</md-icon>
-                </md-button>
-            </h3>
-            <div ng-if="project.crm_project">
-                <p><b>{{ project.crm_project.name }}</b></p>
-                <p>{{ project.crm_project.account.user.first_name }} {{ project.crm_project.account.user.last_name }}</p>
-                <p>{{ project.crm_project.account.account_name }}</p>
-                <div layout="row">
-                    <md-button
-                        flex
-                        href="{{ project.crm_project.project_url }}">
-                        View on CRM system
+            <div ng-if="crmEnabled">
+                <h3 layout="row" layout-align="start center"
+                    class="section-subheader">
+                    CRM details
+                    <span flex></span>
+                    <md-button class="md-icon-button"
+                        ng-show="project.crm_project"
+                        ng-click="linkCRM()">
+                        <md-icon>edit</md-icon>
                     </md-button>
+                </h3>
+                <div ng-if="project.crm_project">
+                    <p><b>{{ project.crm_project.name }}</b></p>
+                    <p>{{ project.crm_project.account.user.first_name }} {{ project.crm_project.account.user.last_name }}</p>
+                    <p>{{ project.crm_project.account.account_name }}</p>
+                    <div layout="row">
+                        <md-button
+                            flex
+                            href="{{ project.crm_project.project_url }}">
+                            View on CRM system
+                        </md-button>
+                    </div>
                 </div>
+                <md-button
+                    ng-show="!project.crm_project"
+                    ng-click="linkCRM()">
+                    Link to CRM project
+                </md-button>
             </div>
-            <md-button
-                ng-show="!project.crm_project"
-                ng-click="linkCRM()">
-                Link to CRM project
-            </md-button>
             <h3 class="section-subheader">External Links</h3>
             <md-list class="md-dense">
                 <md-list-item

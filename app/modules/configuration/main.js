@@ -2,10 +2,12 @@
 
 var app = angular.module('limsFrontend');
 
-app.controller('ConfigurationCtrl', function($scope, PageTitle) {
+app.controller('ConfigurationCtrl', function($scope, PageTitle, UserService) {
 
     PageTitle.set('Configuration');
     $scope.removePadding = true;
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     $scope.availableConfigs = [
         {
@@ -14,14 +16,17 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'Workflow templates',
                     ctrl: 'Workflows',
+                    show: true,
                 },
                 {
                     name: 'Workflow task templates',
                     ctrl: 'WorkflowTasks',
+                    show: true,
                 },
                 {
                     name: 'Product statuses',
                     ctrl: 'ProductStatuses',
+                    show: true,
                 },
             ],
         },
@@ -31,22 +36,27 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'Item types',
                     ctrl: 'ItemType',
+                    show: true,
                 },
                 {
                     name: 'Measures',
                     ctrl: 'Measures',
+                    show: true,
                 },
                 {
                     name: 'Locations',
                     ctrl: 'Locations',
+                    show: true,
                 },
                 {
                     name: 'Organisms',
                     ctrl: 'Organisms',
+                    show: true,
                 },
                 {
                     name: 'Price books',
                     ctrl: 'Pricebooks',
+                    show: $scope.crmEnabled,
                 },
             ],
         },
@@ -56,6 +66,7 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'Triggers',
                     ctrl: 'Triggers',
+                    show: true,
                 },
             ],
         },
@@ -65,6 +76,7 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'Available equipment',
                     ctrl: 'Equipment',
+                    show: true,
                 },
             ],
         },
@@ -74,10 +86,12 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'File templates',
                     ctrl: 'FileTemplates',
+                    show: true,
                 },
                 {
                     name: 'File copy actions',
                     ctrl: 'FileCopy',
+                    show: true,
                 },
             ],
         },
@@ -87,10 +101,12 @@ app.controller('ConfigurationCtrl', function($scope, PageTitle) {
                 {
                     name: 'Users',
                     ctrl: 'Users',
+                    show: true,
                 },
                 {
                     name: 'Groups',
                     ctrl: 'Groups',
+                    show: true,
                 },
             ],
         },
@@ -1034,6 +1050,8 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
             UserService, CRMService, $mdDialog, $q) {
     PageTitle.set('Users configuration');
 
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
+
     $scope.selected = [];
 
     $scope.query = {
@@ -1149,6 +1167,8 @@ app.controller('UsersConfigurationCtrl', function($scope, PageTitle,
 
 app.controller('UserDialogCtrl', function($scope, $mdDialog,
     UserService, GroupService, CRMService, userId) {
+
+    $scope.crmEnabled = UserService.getUser().crmEnabled;
 
     GroupService.groups({limit: 200}).then(function(data) {
         $scope.groups = data;

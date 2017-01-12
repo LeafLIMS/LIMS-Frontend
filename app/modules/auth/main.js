@@ -13,6 +13,7 @@ app.controller('LoginModalCtrl', function($scope, UserService, $mdDialog) {
             user.username = username;
             user.status = data.status;
             user.groups = data.groups;
+            user.crmEnabled = data.crm;
             UserService.setUser(user)
             $mdDialog.hide(user);
         }).catch(function(error) {

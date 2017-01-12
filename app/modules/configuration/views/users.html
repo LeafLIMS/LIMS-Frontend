@@ -12,7 +12,7 @@
                 <md-icon md-menu-origin>more_vert</md-icon>
             </md-button>
             <md-menu-content width="4">
-                <md-menu-item>
+                <md-menu-item ng-if="crmEnabled">
                     <md-button
                         aria-label="Link a CRM account"
                         ng-disabled="selected.length == 0"
@@ -21,7 +21,7 @@
                         Add CRM account
                     </md-button>
                 </md-menu-item>
-                <md-menu-item>
+                <md-menu-item ng-if="crmEnabled">
                     <md-button
                         aria-label="Update CRM account"
                         ng-disabled="selected.length == 0"
@@ -61,7 +61,7 @@
                 <tr md-row>
                     <th md-column md-order-by="name">Name</th>
                     <th md-column md-order-by="email">Email</th>
-                    <th md-column>CRM account</th>
+                    <th md-column ng-if="crmEnabled">CRM account</th>
                     <th md-column></th>
                 </tr>
             </thead>
@@ -69,7 +69,7 @@
                 <tr md-row md-select="item" ng-repeat="item in users">
                     <td md-cell>{{ item.username }}</td>
                     <td md-cell>{{ item.email }}</td>
-                    <td md-cell>
+                    <td md-cell ng-if="crmEnabled">
                         <b>{{ item.crmaccount.user.first_name }}&nbsp;
                            {{ item.crmaccount.user.last_name }}</b><br>
                         {{ item.crmaccount.account_name }}<br>

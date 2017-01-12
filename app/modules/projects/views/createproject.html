@@ -16,24 +16,26 @@
         </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content" layout="column">
-                <md-autocomplete flex
-                    md-selected-item-change="fillDetails(pItem)"
-                    md-selected-item="pItem"
-                    md-search-text="pText"
-                    md-items="item in filterCRMProjects(pText)"
-                    md-item-text="item.Name"
-                    md-min-length="0"
-                    md-select-on-match
-                    md-floating-label="Create from existing project in CRM database">
-                    <md-item-template>
-                        <span md-highlight-text="pText"
-                            md-highlight-flags="^i">
-                        {{ item.Name }}
-                        </span>
-                    </md-item-template>
-                </md-autocomplete> 
-                <div layout="row" layout-align="center center">
-                    <span>OR</span>
+                <div ng-if="crmEnabled">
+                    <md-autocomplete flex
+                        md-selected-item-change="fillDetails(pItem)"
+                        md-selected-item="pItem"
+                        md-search-text="pText"
+                        md-items="item in filterCRMProjects(pText)"
+                        md-item-text="item.Name"
+                        md-min-length="0"
+                        md-select-on-match
+                        md-floating-label="Create from existing project in CRM database">
+                        <md-item-template>
+                            <span md-highlight-text="pText"
+                                md-highlight-flags="^i">
+                            {{ item.Name }}
+                            </span>
+                        </md-item-template>
+                    </md-autocomplete>
+                    <div layout="row" layout-align="center center">
+                        <span>OR</span>
+                    </div>
                 </div>
                 <md-input-container>
                     <label>Name of project</label>
