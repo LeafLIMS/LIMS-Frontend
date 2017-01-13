@@ -354,6 +354,17 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     };
 
+    $scope.importProducts = function(projectId) {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/importproducts.html',
+            controller: 'ImportProductsCtrl',
+            locals: {
+                projectId: projectId,
+                designTypes: $scope.designTypes,
+            },
+        });
+    };
+
     $scope.deleteProduct = function() {
         var sl = $scope.selected.length;
         var confirmDelete = $mdDialog.confirm()
@@ -602,6 +613,26 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
 
 });
 
+
+app.controller('ImportProductsCtrl', function($scope, $mdDialog, ProjectService, $rootScope,
+    projectId, designTypes) {
+
+    $scope.cancel = $mdDialog.cancel;
+
+    $scope.create = function() {
+        var params = new FormData();
+        params.append('products_file', $scope.products_file);
+        if ($scope.designs_file) {
+            params.append('designs_file', $scope.designs_file);
+        }
+        ProjectService.importProducts(projectId, params).then(function() {
+            $rootScope.$broadcast('project-product-added');
+            $mdDialog.hide();
+        });
+    };
+
+});
+
 app.service('ProjectService', function(Restangular) {
 
     this.projects = function(params) {
@@ -665,6 +696,14 @@ app.service('ProjectService', function(Restangular) {
 
     this.addProduct = function(productData) {
         return Restangular.all('products').post(productData);
+    };
+
+    this.importProducts = function(projectId, productFiles) {
+        return Restangular.one('projects', projectId)
+               .withHttpConfig({transformRequest: angular.identity})
+               .customPOST(productFiles, 'import_products', undefined, {
+                    'Content-Type': undefined,
+                });
     };
 
     this.updateProduct = function(productId, productData) {

@@ -1,0 +1,57 @@
+<md-dialog aria-label="Import products from file" flex="60">
+    <form name="form" ng-submit="form.$valid && create()" novalidate>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Import products from file</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-dialog-content" layout="row">
+            <div flex layout="column">
+                <p>To import a list of products two files are needed: a TSV (tab seperated) text
+                   file that contains information on the products to be imported and (optionaly) a
+                   zip file containing the design files.
+                </p>
+                <p>The following headers are valid for use in the product information file. Those
+                   marked with an asterix (*) are required: name*, status*, product_type*,
+				   optimised_for.</p>
+		        <p>All information supplied must match a valid input for the corrosponding field or
+                   it will be rejected. Some values are case sensitive, using the incorrect case
+                   will cause the entry to be rejected.</p>
+                <div layout="row" layout-align="center center">
+                    <div flex>
+                        {{ designfile.name }}
+                        <md-button
+                            aria-label="Select a design file"
+                            class="md-raised"
+                            ngf-select
+                            required
+                            ng-model="products_file">
+                            Choose CSV file of products
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="row" layout-align="center center">
+                    <div flex>
+                        {{ designfile.name }}
+                        <md-button
+                            aria-label="Select a design file"
+                            class="md-raised"
+                            ngf-select
+                            ng-model="designs_file">
+                            Choose ZIP file containing designs
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Create</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
