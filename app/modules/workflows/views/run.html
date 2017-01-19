@@ -66,81 +66,82 @@
         </md-menu>
     </div>
 </md-toolbar>
-<div flex ng-show="run">
-    <div ng-show="!run.is_active"
-         class="run-finished"
-         layout="column"
-         layout-align="center center" flex>
-        Run finished
-    </div>
-    <div class="workflow-preview">
-        <h4>Run preview</h4>
-        <div class="workflow-preview-container">
-            <div class="gm-workflow-task-preview" flex 
-                 ng-repeat="t in run.tasks" 
-                 ng-class="{'current-task': $index == run.current_task, 'finished': !run.is_active}">
-                <div class="task-preview-header" layout="row">
-                    <span flex></span>
-                    <span>{{ $index + 1 }}</span>
-                </div>
-                <div class="task-preview-content" layout-fill layout="column" 
-                    layout-align="center center">
-                    <span layout="row">
-                        <span>{{ t.name|limitTo:"15" }}</span>
-                        <span ng-show="t.name.length > 15">&hellip;</span>
-                    </span>
-                    <md-icon class="white-icon" 
-                        ng-show="$index == run.current_task && run.task_in_progress">
-                        play_arrow</md-icon>
-                </div>
-            </div> 
+<md-card>
+    <div flex ng-show="run">
+        <div ng-show="!run.is_active"
+             class="run-finished"
+             layout="column"
+             layout-align="center center" flex>
+            Run finished
+        </div>
+        <div class="workflow-preview">
+            <span class="bg-container"></span>
+            <div class="workflow-preview-container">
+                <div class="gm-workflow-task-preview" flex 
+                     ng-repeat="t in run.tasks" 
+                     ng-class="{'current-task': $index == run.current_task, 'finished': !run.is_active}">
+                    <div class="task-preview-header" layout="row">
+                        <span flex></span>
+                        <span>{{ $index + 1 }}</span>
+                    </div>
+                    <div class="task-preview-content" layout-fill layout="column" 
+                        layout-align="center center">
+                        <span layout="row">
+                            <span>{{ t.name|limitTo:"15" }}</span>
+                            <span ng-show="t.name.length > 15">&hellip;</span>
+                        </span>
+                        <md-icon class="white-icon" 
+                            ng-show="$index == run.current_task && run.task_in_progress">
+                            play_arrow</md-icon>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div ng-show="run.products.length == 0" class="not-available" 
+            layout="column"
+            layout-align="center center" flex>
+            No products on run
+        </div>
+        <div ng-repeat="product in run.products" layout="row" 
+            layout-align="center center"
+            class="active-workflow-product-container">
+            <div class="active-workflow-product" 
+                flex="30"
+                layout-align="start center"
+                layout="row">
+                <md-checkbox
+                    class="no-margin"
+                    ng-disabled="run.task_in_progress"
+                    ng-click="toggle(product, selected)"
+                    ng-checked="exists(product, selected)"
+                    aria-label="Select {{ product.name }}">
+                </md-checkbox>
+                <span flex> 
+                    <b>
+                        <a ui-sref="product_details({id: product.project, productId: product.id})">
+                            {{ product.product_identifier }}
+                        </a>
+                    </b>
+                    <br>
+                    {{ product.name }}
+                </span>
+                <md-icon ng-show="!run.validate_inputs[product.id]">warning</md-icon>
+            </div>
+            <div
+                ng-if="run.is_active"
+                flex>
+                <span class="task-product-item" 
+                      ng-repeat="item in product.linked_inventory | filter:input_filter">
+                    <i>{{ item.identifier }}</i>
+                    <b>{{ item.name }}</b>
+                    &nbsp;({{ item.item_type }}) 
+                </span>
+            </div>
         </div>
     </div>
-    <md-divider class="section-divider"></md-divider>
-    <div ng-show="run.products.length == 0" class="not-available" 
+    <div ng-show="!run" class="not-available" 
         layout="column"
         layout-align="center center" flex>
-        No products on run
+        No runs currently available
     </div>
-    <div ng-repeat="product in run.products" layout="row" 
-        layout-align="center center"
-        class="active-workflow-product-container">
-        <div class="active-workflow-product" 
-            flex="30"
-            layout-align="start center"
-            layout="row">
-            <md-checkbox
-                class="no-margin"
-                ng-disabled="run.task_in_progress"
-                ng-click="toggle(product, selected)"
-                ng-checked="exists(product, selected)"
-                aria-label="Select {{ product.name }}">
-            </md-checkbox>
-            <span flex> 
-                <b>
-                    <a ui-sref="product_details({id: product.project, productId: product.id})">
-                        {{ product.product_identifier }}
-                    </a>
-                </b>
-                <br>
-                {{ product.name }}
-            </span>
-            <md-icon ng-show="!run.validate_inputs[product.id]">warning</md-icon>
-        </div>
-        <div
-            ng-if="run.is_active"
-            flex>
-            <span class="task-product-item" 
-                  ng-repeat="item in product.linked_inventory | filter:input_filter">
-                <i>{{ item.identifier }}</i>
-                <b>{{ item.name }}</b>
-                &nbsp;({{ item.item_type }}) 
-            </span>
-        </div>
-    </div>
-</div>
-<div ng-show="!run" class="not-available" 
-    layout="column"
-    layout-align="center center" flex>
-    No runs currently available
-</div>
+</md-card>
