@@ -19,6 +19,7 @@ $warn: #f44336;
 
 // Highlight
 $highlight: #eee;
+$lowlight: darken($highlight, 5%);
 
 // Extra
 $positive: #8bc34a;
@@ -183,6 +184,10 @@ v-pane-header {
 
 .bottom-padded {
     padding-bottom: $padding;
+}
+
+.bottom-margin {
+    margin-bottom: $padding;
 }
 
 .full-height {
@@ -633,11 +638,15 @@ input.noedit {
         height: 1em;
     }
     .input-item {
-        margin: 0.25em 0;
+        margin: 0;//0.25em 0;
+        border-bottom: 1px solid $lowlight;
+    }
+    .task-field-container .input-item:last-child {
+        border: 0;
     }
     .input-amount {
         display: inline-block;
-        background: $highlight;
+        border-right: 1px solid $lowlight; 
         padding: 0.5em;
         margin-right: 1em;
     }
@@ -678,7 +687,7 @@ input.noedit {
 
 // Experiments section
 md-list-item.selected {
-    background: $highlight; //$primary1;
+    background: $lowlight;
 }
 
 // Shared directives
@@ -821,17 +830,25 @@ md-list-item.selected {
 }
 
 .field-label.primary-label {
-    border-bottom: 1px solid lighten($label, 50%); 
-    margin: 0 1em 0.5em 0;
-    padding-bottom: 0.25em;
+    //border-bottom: 1px solid lighten($label, 50%);
+    border-bottom: 1px solid $lowlight;
+    //margin: 0 1em 0em 0;
+    padding: 0.25em;
+    background: $lowlight;
 }
 
 .task .field-label {
     display: block;
 }
 
+.task-field-container {
+    margin-right: $padding;
+    border: 1px solid $lowlight;
+}
+
 .gm-task-field {
     margin: 0.25em;
+    margin-top: 0;
     margin-left: 0;
     padding: 0.25em;
     //md-input-container {

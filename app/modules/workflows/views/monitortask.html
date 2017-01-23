@@ -12,16 +12,16 @@
         <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
         <md-tabs md-dynamic-height md-border-bottom md-selected="taskPaneSelected">
             <md-tab label="Task values">
-                <md-content class="md-dialog-content" layout="row"> 
+                <md-content class="md-dialog-content" layout="row">
                     <div flex="30" class="right-padded">
                         <v-accordion class="vAccordion--default" multiple>
-                            <v-pane>
+                            <v-pane expanded>
                                 <v-pane-header>Inputs</v-pane-header>
                                 <v-pane-content>
                                     <div layout="column">
-                                        <div class="bottom-padded">
+                                        <div class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Input items from products</span>
-                                            <div layout="row" class="input-item"
+                                            <div layout="row" class="input-item" layout-align="start center"
                                                 ng-repeat="(pid, product) in task.product_inputs" >
                                                 <span class="input-amount">
                                                     {{ product.amount }}{{ product.measure }}
@@ -33,7 +33,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="bottom-padded">
+                                        <div class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Labware to use</span>
                                             <div class="input-item">
                                                 <span class="input-amount">
@@ -46,7 +46,8 @@
                                             </div>
                                         </div>
 
-                                        <div ng-repeat="field in task.input_fields" flex="33" class="bottom-padded">
+                                        <div ng-repeat="field in task.input_fields"
+                                             class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <div class="input-item">
                                                 <span class="input-amount">
@@ -61,17 +62,24 @@
                                     </div>
                                 </v-pane-content>
                             </v-pane>
-                            <v-pane ng-show="task.output_files.length > 0 || task.output_fields.length > 0">
+                            <v-pane ng-if="task.output_files.length > 0 || task.output_fields.length > 0">
                                 <v-pane-header>Outputs</v-pane-header>
                                 <v-pane-content>
-                                    <div ng-repeat="field in task.output_fields" flex="33" class="bottom-padded">
+                                    <div ng-repeat="field in task.output_fields" flex="33" class="task-field-container bottom-margin">
                                         <span class="field-label primary-label">{{ field.label }}</span>
-                                        {{ field.amount }}{{ field.measure }} {{ field.lookup_type }}
+                                        <div class="input-item">
+                                            <span class="input-amount">
+                                                {{ field.amount }}{{ field.measure }}
+                                            </span>
+                                            <span flex>
+                                                <b>{{ field.lookup_type }}</b>
+                                            </span>
+                                        </div>
                                     </div>
                                 </v-pane-content>
                             </v-pane>
                         </v-accordion>
-                        <div ng-show="equipment_files.length > 0" layout="column">
+                        <div ng-if="equipment_files.length > 0" layout="column">
                             <h4 class="section-header">Equipment/Lab files</h4>
                             <md-button class="md-raised"
                                        ng-href="{{ fileLocationUrl }}{{ f.id }}"
@@ -84,10 +92,10 @@
                     </div>
                     <div flex>
                         <v-accordion class="vAccordion--default" multiple>
-                            <v-pane ng-show="task.step_fields.length > 0" expanded>
+                            <v-pane ng-if="task.step_fields.length > 0" expanded>
                                 <v-pane-header>Steps</v-pane-header>
                                 <v-pane-content>
-                                    <div ng-repeat="field in task.step_fields" class="bottom-padded">
+                                    <div ng-repeat="field in task.step_fields" class="task-field-container bottom-margin">
                                         <span class="field-label primary-label">{{ field.label }}</span>
                                         <div ng-repeat="p in field.properties">
                                             <span class="field-label">{{ p.label }}</span>
@@ -97,22 +105,27 @@
                                     </div>
                                 </v-pane-content>
                             </v-pane>
-                            <v-pane ng-show="task.variable_fields.length > 0">
+                            <v-pane ng-if="task.variable_fields.length > 0">
                                 <v-pane-header>Constants</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row" layout-align="start center" layout-wrap>
-                                        <div ng-repeat="field in task.variable_fields" flex="33">
+                                        <div ng-repeat="field in task.variable_fields" flex="50"
+                                            class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
-                                            {{ field.amount }}{{ field.measure }}
+                                            <div class="input-item">
+                                                {{ field.amount }}{{ field.measure }}
+                                            </div>
                                         </div>
                                     </div>
                                 </v-pane-content>
                             </v-pane>
-                            <v-pane ng-show="task.calculation_fields.length > 0">
+                            <v-pane ng-if="task.calculation_fields.length > 0">
                                 <v-pane-header>Calculations</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row">
-                                        <div ng-repeat="field in task.calculation_fields" flex="33">
+                                        <div ng-repeat="field in task.calculation_fields"
+                                             class="task-field-container bottom-margin"
+                                             flex="50">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-calculation-field is-disabled="isStarted" field="field">
                                             </gtl-calculation-field>

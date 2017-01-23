@@ -29,28 +29,28 @@
                                 <v-pane-header>Inputs</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row" flex-wrap ng-show="task.input_files.length > 0">
-                                        <div ng-repeat="file in task.input_files">
-                                            <span class="field-label">{{ file }}</span>
+                                        <div ng-repeat="file in task.input_files" class="task-field-container bottom-margin">
+                                            <span class="field-label primary-label">{{ file }}</span>
                                             <md-button ng-disabled="isStarted" ngf-select ng-model="input_files[file]" class="md-raised">
                                                Select file
-                                            </md-button> 
+                                            </md-button>
                                             <p class="input-text">{{ input_files[file].name }}</p>
                                         </div>
                                     </div>
                                     <div layout="row" layout-align="start center">
-                                        <div layout="column" flex class="right-padded">
+                                        <div layout="column" flex class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Input items from products</span>
-                                            <div layout="row">
+                                            <div layout="row" class="side-padded">
                                                 <md-input-container flex>
-                                                    <label>{{ task.product_input }} amount</label>  
+                                                    <label>{{ task.product_input }} amount</label>
                                                     <input required ng-model="task.product_input_amount">
                                                 </md-input-container>
                                                 <span class="input-text">{{ task.product_input_measure }}</span>
                                             </div>
                                         </div>
-                                        <div layout="column" flex>
+                                        <div layout="column" flex class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Labware to use</span>
-                                            <div layout="row">
+                                            <div layout="row" class="side-padded">
                                                 <md-input-container flex="20">
                                                     <label>Labware amount</label>
                                                     <input type="number" required ng-model="task.labware_amount">
@@ -75,15 +75,16 @@
                                                     <md-not-found>
                                                         There where no items found matching your query in the inventory.
                                                     </md-not-found>
-                                                </md-autocomplete> 
+                                                </md-autocomplete>
                                             </div>
                                         </div>
                                     </div>
                                     <div layout="row">
-                                        <div ng-repeat="field in task.input_fields" flex="33">
+                                        <div ng-repeat="field in task.input_fields" flex="50"
+                                            class="task-field-container">
                                             <span class="field-label primary-label">{{ field.label }}</span>
-                                            <gtl-input-field 
-                                                is-disabled="isStarted" 
+                                            <gtl-input-field
+                                                is-disabled="isStarted"
                                                 field="field"
                                                 calculations="task.calculation_fields">
                                             </gtl-input-field>
@@ -94,9 +95,9 @@
                             <v-pane ng-show="task.step_fields.length > 0">
                                 <v-pane-header>Steps</v-pane-header>
                                 <v-pane-content>
-                                    <div ng-repeat="field in task.step_fields">
+                                    <div ng-repeat="field in task.step_fields" class="task-field-container bottom-margin">
                                         <span class="field-label primary-label">{{ field.label }}</span>
-                                        <gtl-step-field is-disabled="isStarted" 
+                                        <gtl-step-field is-disabled="isStarted"
                                             calculations="task.calculation_fields"
                                             field="field">
                                         </gtl-step-field>
@@ -107,7 +108,8 @@
                                 <v-pane-header>Constants</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row" layout-align="start center" layout-wrap>
-                                        <div ng-repeat="field in task.variable_fields" flex="33">
+                                        <div ng-repeat="field in task.variable_fields"
+                                             class="task-field-container bottom-margin" flex="50">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-variable-field is-disabled="isStarted" field="field">
                                             </gtl-variable-field>
@@ -119,7 +121,8 @@
                                 <v-pane-header>Calculations</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row">
-                                        <div ng-repeat="field in task.calculation_fields" flex="33">
+                                        <div ng-repeat="field in task.calculation_fields" flex="50"
+                                            class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-calculation-field is-disabled="isStarted" field="field">
                                             </gtl-calculation-field>
@@ -131,13 +134,15 @@
                                 <v-pane-header>Outputs</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row" ng-show="task.output_files.length > 0">
-                                        <div ng-repeat="file in task.output_files" flex="33">
-                                            <span class="field-label">{{ file }}</span>
+                                        <div ng-repeat="file in task.output_files" flex="50"
+                                            class="task-field-container bottom-margin">
+                                            <span class="field-label primary-label">{{ file }}</span>
                                             <md-button ng-click="getOutputFile(file)">Get {{ file }} file</md-button>
                                         </div>
                                     </div>
                                     <div layout="row" ng-show="task.output_fields.length > 0">
-                                        <div ng-repeat="field in task.output_fields" flex="33">
+                                        <div ng-repeat="field in task.output_fields" flex="50"
+                                            class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-output-field is-disabled="isStarted" field="field">
                                             </gtl-output-field>

@@ -1,17 +1,17 @@
-<div class="gm-task-field" 
+<div class="gm-task-field"
     layout="column" flex>
     <div ng-if="field.from_input_file" class="field-label">From input file</div>
     <div ng-if="field.from_calculation" class="field-label">Using <i>{{ calc.label }}</i> to calculate amount</div>
     <div layout="row" layout-align="start center" ng-if="!field.from_input_file">
         <md-input-container class="task-field-amount">
             <label>Amount</label>
-            <input type="number" step="1" 
+            <input type="number" step="1"
                 ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
                 ng-required="!field.from_calculation && !field.from_input_file"
                 aria-label="{{ field.name }} amount"
                 ng-model="field.amount">
         </md-input-container>
-        <span class="field-text">
+        <span class="field-text right-padded">
             {{ field.measure }}
         </span>
         <md-autocomplete flex
@@ -34,6 +34,22 @@
             <md-not-found>
                 There where no items found matching your query in the inventory.
             </md-not-found>
-        </md-autocomplete> 
+        </md-autocomplete>
+    </div>
+    <div layout="row" layout-align="start center" ng-if="!field.from_input_file">
+        <md-input-container flex>
+            <label>Destination barcode</label>
+            <input
+                ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
+                aria-label="{{ field.name }} destination barcode"
+                ng-model="field.destination_barcode">
+        </md-input-container>
+        <md-input-container flex>
+            <label>Destination coordinates</label>
+            <input
+                ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
+                aria-label="{{ field.name }} destination coordinates"
+                ng-model="field.destination_coordinates">
+        </md-input-container>
     </div>
 </div>
