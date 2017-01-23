@@ -60,6 +60,23 @@
                             </md-select>
                         </md-input-container>
                     </div>
+                    <div layout="row">
+                        <md-input-container>
+                            <label>Concentration</label>
+                            <input type="number"
+                                ng-model="item.concentration">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Concentration measure</label>
+                            <md-select ng-required="item.concentration"
+                                ng-model="item.concentration_measure">
+                                <md-option ng-repeat="measure in measures"
+                                    ng-value="measure.symbol">
+                                    {{ measure.name }} ({{ measure.symbol }})
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
                     <md-input-container flex>
                         <label>Location</label>
                         <md-select required ng-model="item.location">

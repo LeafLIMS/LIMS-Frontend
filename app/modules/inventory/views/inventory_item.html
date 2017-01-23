@@ -123,6 +123,20 @@
                     </md-input-container>
                 </div>
                 <div layout="row">
+                    <i flex layout="row" layout-align="start center">
+                        {{ item.location_path }}
+                    </i>
+                    <md-input-container flex>
+                        <label>Location</label>
+                        <md-select required ng-model="item.location">
+                            <md-option ng-repeat="location in locations"
+                                ng-value="location.code">
+                                {{ location.display_name }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout="row">
                     <md-input-container class="read-only">
                         <label>Amount</label>
                         <input required type="number" 
@@ -140,11 +154,17 @@
                         </md-select>
                     </md-input-container>
                     <md-input-container flex>
-                        <label>Location</label>
-                        <md-select required ng-model="item.location">
-                            <md-option ng-repeat="location in locations"
-                                ng-value="location.code">
-                                {{ location.display_name }}
+                        <label>Concentration</label>
+                        <input type="number"
+                               ng-model="item.concentration">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Concentration measure</label>
+                        <md-select ng-required="item.concentration"
+                                   ng-model="item.concentration_measure">
+                            <md-option ng-repeat="measure in measures"
+                                ng-value="measure.symbol">
+                                {{ measure.name }} ({{ measure.symbol }})
                             </md-option>
                         </md-select>
                     </md-input-container>
