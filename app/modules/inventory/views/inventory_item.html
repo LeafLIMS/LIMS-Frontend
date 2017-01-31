@@ -45,7 +45,7 @@
         </div>
     </md-toolbar>
     <div layout="row" flex> 
-        <div flex="33" class="coloured-section" layout="column">
+        <div flex="33" layout="column" class="side-padded">
             <md-input-container>
                 <label>Name</label>
                 <input required name="name" ng-model="item.name">
@@ -109,9 +109,9 @@
             </div>
             <gtl-permissions-widget input-data="item"></gtl-permissions-widget>
         </div>
-        <div layout="column" flex class="top-padded side-padded">
-            <div layout="column">
-                <h3 class="section-subheader">Inventory</h3>
+        <div layout="column" flex>
+            <h3 class="side-padded section-subheader">Inventory</h3>
+            <md-card layout="column" class="padded">
                 <div layout="row">
                     <md-input-container flex>
                         <label>Identifier</label>
@@ -120,20 +120,6 @@
                     <md-input-container flex>
                         <label>Barcode</label>
                         <input ng-model="item.barcode">
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <i flex layout="row" layout-align="start center">
-                        {{ item.location_path }}
-                    </i>
-                    <md-input-container flex>
-                        <label>Location</label>
-                        <md-select required ng-model="item.location">
-                            <md-option ng-repeat="location in locations"
-                                ng-value="location.code">
-                                {{ location.display_name }}
-                            </md-option>
-                        </md-select>
                     </md-input-container>
                 </div>
                 <div layout="row">
@@ -169,80 +155,98 @@
                         </md-select>
                     </md-input-container>
                 </div>
-            </div>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>Location</label>
+                        <md-select required ng-model="item.location">
+                            <md-option ng-repeat="location in locations"
+                                ng-value="location.code">
+                                {{ location.display_name }}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <i flex layout="row" layout-align="start center">
+                        {{ item.location_path }}
+                    </i>
+                </div>
+            </md-card>
             <div layout="row">
                 <div flex>
-                    <h3 class="section-subheader">Properties</h3>
-                    <md-table-container>
-                        <table md-table class="properties-table">
-                            <thead md-head>
-                                <tr md-row>
-                                    <th md-column>
-                                        Name</th>
-                                    <th md-column>
-                                        Value</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody md-body>
-                                <tr md-row ng-repeat="prop in item.properties">
-                                    <td md-cell>
-                                        <md-input-container ng-show="!prop.id">
-                                            <label>Name</label>
-                                            <input
-                                                required
-                                                ng-model="prop.name">
-                                        </md-input-container>
-                                        <b ng-show="prop.id">{{ prop.name }}</b>
-                                    </td>
-                                    <td md-cell>
-                                        <md-input-container>
-                                            <textarea
-                                                rows="5"
-                                                required
-                                                ng-model="prop.value"></textarea>
-                                        </md-input-container>
-                                    </td>
-                                    <td md-cell>
-                                        <md-button class="md-icon-button"
-                                            ng-click="removeProperty($index)">
-                                            <md-icon>delete</md-icon>
-                                        </md-button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </md-table-container>
-                    <md-button ng-click="addProperty()" flex>
-                        <md-icon>add</md-icon>
-                        Add property
-                    </md-button>
+                    <h3 class="side-padded section-subheader">Properties</h3>
+                    <md-card>
+                        <md-table-container>
+                            <table md-table class="properties-table">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column>
+                                            Name</th>
+                                        <th md-column>
+                                            Value</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row ng-repeat="prop in item.properties">
+                                        <td md-cell>
+                                            <md-input-container ng-show="!prop.id">
+                                                <label>Name</label>
+                                                <input
+                                                    required
+                                                    ng-model="prop.name">
+                                            </md-input-container>
+                                            <b ng-show="prop.id">{{ prop.name }}</b>
+                                        </td>
+                                        <td md-cell>
+                                            <md-input-container>
+                                                <textarea
+                                                    rows="5"
+                                                    required
+                                                    ng-model="prop.value"></textarea>
+                                            </md-input-container>
+                                        </td>
+                                        <td md-cell>
+                                            <md-button class="md-icon-button"
+                                                ng-click="removeProperty($index)">
+                                                <md-icon>delete</md-icon>
+                                            </md-button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-button ng-click="addProperty()" flex>
+                            <md-icon>add</md-icon>
+                            Add property
+                        </md-button>
+                    </md-card>
                 </div>
                 <div flex="40">
-                    <h3 class="section-subheader">History</h3>
-                    <md-list class="md-dense">
-                        <md-list-item class="md-2-line" ng-repeat="tfr in item.transfers">
-                            <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && tfr.is_addition">add</md-icon>
-                            <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && !tfr.is_addition">done</md-icon>
-                            <md-icon class="md-avatar-icon md-warn" ng-if="!tfr.transfer_complete">hourglass_empty</md-icon>
-                            <div class="md-list-item-text">
-                                <h3>{{ tfr.amount_taken }}{{ tfr.amount_measure }}</h3> 
-                                <p>{{ tfr.date_created|date:"medium" }}</p>
-                            </div>
-                            <md-button 
-                                ng-if="!tfr.transfer_complete" 
-                                ng-click="completeTransfer(tfr)"
-                                class="md-secondary md-icon-button md-primary">
-                                <md-icon>done</md-icon>
-                            </md-button>
-                            <md-button 
-                                ng-if="!tfr.transfer_complete" 
-                                ng-click="cancelTransfer(tfr)"
-                                class="md-secondary md-icon-button md-warn">
-                                <md-icon>close</md-icon>
-                            </md-button>
-                        </md-list-item>
-                    </md-list>
+                    <h3 class="side-padded section-subheader">History</h3>
+                    <md-card>
+                        <md-list class="md-dense">
+                            <md-list-item class="md-2-line" ng-repeat="tfr in item.transfers">
+                                <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && tfr.is_addition">add</md-icon>
+                                <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && !tfr.is_addition">done</md-icon>
+                                <md-icon class="md-avatar-icon md-warn" ng-if="!tfr.transfer_complete">hourglass_empty</md-icon>
+                                <div class="md-list-item-text">
+                                    <h3>{{ tfr.amount_taken }}{{ tfr.amount_measure }}</h3> 
+                                    <p>{{ tfr.date_created|date:"medium" }}</p>
+                                </div>
+                                <md-button 
+                                    ng-if="!tfr.transfer_complete" 
+                                    ng-click="completeTransfer(tfr)"
+                                    class="md-secondary md-icon-button md-primary">
+                                    <md-icon>done</md-icon>
+                                </md-button>
+                                <md-button 
+                                    ng-if="!tfr.transfer_complete" 
+                                    ng-click="cancelTransfer(tfr)"
+                                    class="md-secondary md-icon-button md-warn">
+                                    <md-icon>close</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </md-card>
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@
         <md-dialog-content layout="column" layout-padding>
             <div layout="row" layout-alig="start center" ng-repeat="item in items">
                 <md-autocomplete
-                    flex="70"
+                    flex="40"
                     required
                     md-selected-item="item.item"
                     md-search-text="searchItemText"
@@ -29,7 +29,7 @@
                     </md-not-found>
                 </md-autocomplete>
                 <div layout="row" flex>
-                    <md-input-container flex>
+                    <md-input-container flex="10">
                         <label>Amount</label>
                         <input required ng-disabled="!item.item"
                             name="amount" type="number" ng-model="item.amount">
@@ -38,6 +38,14 @@
                         </div>
                     </md-input-container>
                     <span class="postfix-text">{{ item.item.amount_measure }}</span>
+                    <md-input-container flex>
+                        <label>Destination barcode</label>
+                        <input ng-model="item.barcode">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Destination coordinate</label>
+                        <input ng-model="item.coodinates">
+                    </md-input-container>
                 </div>
                 <md-button ng-click="removeItem($index)" class="md-icon-button">
                     <md-icon>remove_circle</md-icon>

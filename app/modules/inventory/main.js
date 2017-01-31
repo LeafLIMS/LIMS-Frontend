@@ -231,7 +231,8 @@ app.controller('TransferItemsCtrl', function($scope, $mdDialog, $q, InventorySer
             var transfer = {
                 amount: obj.amount,
                 measure: obj.item.amount_measure,
-                transfer_complete: true,
+                destination_barcode: obj.destination_barcode,
+                destination_coordinates: obj.destination_coordinates,
             };
             var p = InventoryService.createTransfer(obj.item.id, transfer)
             promises.push(p);
