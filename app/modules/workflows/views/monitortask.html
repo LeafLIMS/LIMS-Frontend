@@ -97,22 +97,22 @@
                                 <v-pane-content>
                                     <div ng-repeat="field in task.step_fields" class="task-field-container bottom-margin">
                                         <span class="field-label primary-label">{{ field.label }}</span>
-                                        <div ng-repeat="p in field.properties">
+                                        <div ng-repeat="p in field.properties" class="padded">
                                             <span class="field-label">{{ p.label }}</span>
                                             {{ p.amount }}{{ p.measure }}
                                         </div>
-                                        <div>{{ field.description }}</div>
+                                        <div class="padded">{{ field.description }}</div>
                                     </div>
                                 </v-pane-content>
                             </v-pane>
                             <v-pane ng-if="task.variable_fields.length > 0">
-                                <v-pane-header>Constants</v-pane-header>
+                                <v-pane-header>Variables</v-pane-header>
                                 <v-pane-content>
                                     <div layout="row" layout-align="start center" layout-wrap>
                                         <div ng-repeat="field in task.variable_fields" flex="50"
                                             class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
-                                            <div class="input-item">
+                                            <div class="input-item padded">
                                                 {{ field.amount }}{{ field.measure }}
                                             </div>
                                         </div>
