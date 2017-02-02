@@ -19,97 +19,135 @@
         </md-button>
     </div>
 </md-toolbar>
-<md-card>
-    <md-table-toolbar>
-        <div class="md-toolbar-tools">
-            <span>{{ filters || 'Items currently stocked in inventory' }}</span>
-            <span flex></span>
-            <md-input-container class="md-body-1 toolbar-input">
-                <md-icon>search</md-icon>
-                <input type="search" ng-model="query.search" aria-label="Search inventory">
-            </md-input-container>
-            <md-menu>
-                <md-button aria-label="Table filters"
-                    class="md-icon-button"
-                    ng-click="$mdOpenMenu($event)">
-                    <md-icon md-menu-origin>filter_list</md-icon>
-                </md-button>
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <md-button ng-click="toggleFilter('in_inventory')">
-                            <md-icon 
-                                ng-if="!hasFilter('in_inventory')"
-                                md-menu-align-target>check_box_outline_blank</md-icon>
-                            <md-icon 
-                                ng-if="hasFilter('in_inventory')"
-                                md-menu-align-target>check_box</md-icon>
-                            Show only available items 
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-            <md-menu>
-                <md-button aria-label="Table actions"
-                    class="md-icon-button"
-                    ng-click="$mdOpenMenu($event)">
-                    <md-icon md-menu-origin>more_vert</md-icon>
-                </md-button>
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <md-button ng-click="deleteItems(selectedItems)"
-                            ng-disabled="selectedItems.length == 0">
-                            <md-icon md-menu-align-target>delete</md-icon>
-                            Delete Item(s) 
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="addToSet(selectedItems)"
-                            ng-disabled="selectedItems.length == 0">
-                            <md-icon md-menu-align-target>add_to_photos</md-icon>
-                            Add to set 
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
-        </div>
-    </md-table-toolbar>
-    <md-table-container>
-        <table md-table md-row-select ng-model="selectedItems">
-            <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
-                <tr md-row>
-                    <th md-column md-order-by="identifier">Identifier</th>
-                    <th md-column md-order-by="name">Name</th>
-                    <th md-column md-order-by="item_type__name">Type</th>
-                    <!--<th md-column>Tags</th>-->
-                    <th md-column md-order-by="in_inventory">Available</th>
-                    <th md-column md-order-by="amount_available">Amount</th>
-                    <th md-column md-order-by="location__name">Location</th>
-                </tr>
-            </thead>
-            <tbody md-body>
-                <tr md-row md-select="item" ng-repeat="item in items"
-                    ui-sref="inventory_item({id: item.id})">
-                    <td md-cell>{{ item.identifier }}</td>
-                    <td md-cell>{{ item.name }}</td>
-                    <td md-cell>{{ item.item_type }}</td>
-                    <!--<td md-cell>{{ item.tags.join(', ') }}</td>-->
-                    <td md-cell>
-                        <md-icon class="positive"
-                            ng-show="item.in_inventory">check_circle</md-icon>
-                        <md-icon class="negative"
-                            ng-show="!item.in_inventory">cancel</md-icon>
-                    </td>
-                    <td md-cell>{{ item.amount_available }}{{ item.amount_measure }}</td>
-                    <td md-cell>{{ item.location_path }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </md-table-container>
-    <md-table-pagination md-limit="query.limit" md-page="items.meta.current"
-        md-total="{{ items.meta.count }}" md-options="[10,20,50,100]"
-        md-on-paginate="onPaginateItems" md-page-select>
-    </md-table-pagination>
-</md-card>
+<div layout="row">
+    <md-card flex>
+        <md-table-toolbar>
+            <div class="md-toolbar-tools">
+                <span>{{ filters || 'Items currently stocked in inventory' }}</span>
+                <span flex></span>
+                <md-input-container class="md-body-1 toolbar-input">
+                    <md-icon>search</md-icon>
+                    <input type="search" ng-model="query.search" aria-label="Search inventory">
+                </md-input-container>
+                <md-menu>
+                    <md-button aria-label="Table filters"
+                        class="md-icon-button"
+                        ng-click="$mdOpenMenu($event)">
+                        <md-icon md-menu-origin>filter_list</md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="toggleFilter('in_inventory')">
+                                <md-icon 
+                                    ng-if="!hasFilter('in_inventory')"
+                                    md-menu-align-target>check_box_outline_blank</md-icon>
+                                <md-icon 
+                                    ng-if="hasFilter('in_inventory')"
+                                    md-menu-align-target>check_box</md-icon>
+                                Show only available items 
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu>
+                    <md-button aria-label="Table actions"
+                        class="md-icon-button"
+                        ng-click="$mdOpenMenu($event)">
+                        <md-icon md-menu-origin>more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="deleteItems(selectedItems)"
+                                ng-disabled="selectedItems.length == 0">
+                                <md-icon md-menu-align-target>delete</md-icon>
+                                Delete Item(s) 
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="addToSet(selectedItems)"
+                                ng-disabled="selectedItems.length == 0">
+                                <md-icon md-menu-align-target>add_to_photos</md-icon>
+                                Add to set 
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+        </md-table-toolbar>
+        <md-table-container>
+            <table md-table md-row-select ng-model="selectedItems">
+                <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
+                    <tr md-row>
+                        <th md-column md-order-by="identifier">Identifier</th>
+                        <th md-column md-order-by="name">Name</th>
+                        <th md-column md-order-by="item_type__name">Type</th>
+                        <!--<th md-column>Tags</th>-->
+                        <th md-column md-order-by="in_inventory">Available</th>
+                        <th md-column md-order-by="amount_available">Amount</th>
+                        <th md-column md-order-by="location__name">Location</th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select="item" ng-repeat="item in items"
+                        ui-sref="inventory_item({id: item.id})">
+                        <td md-cell>{{ item.identifier }}</td>
+                        <td md-cell>{{ item.name }}</td>
+                        <td md-cell>{{ item.item_type }}</td>
+                        <!--<td md-cell>{{ item.tags.join(', ') }}</td>-->
+                        <td md-cell>
+                            <md-icon class="positive"
+                                ng-show="item.in_inventory">check_circle</md-icon>
+                            <md-icon class="negative"
+                                ng-show="!item.in_inventory">cancel</md-icon>
+                        </td>
+                        <td md-cell>{{ item.amount_available }}{{ item.amount_measure }}</td>
+                        <td md-cell>{{ item.location_path }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <md-table-pagination md-limit="query.limit" md-page="items.meta.current"
+            md-total="{{ items.meta.count }}" md-options="[10,20,50,100]"
+            md-on-paginate="onPaginateItems" md-page-select>
+        </md-table-pagination>
+    </md-card>
+    <md-card flex="30">
+        <md-table-toolbar>
+            <div class="md-toolbar-tools">
+                <span>Item transfers</span>
+                <span flex></span>
+                <md-input-container class="md-body-1 toolbar-input">
+                    <md-icon>search</md-icon>
+                    <input type="search" ng-model="transfer_query.search"
+                           aria-label="Search transfers">
+                </md-input-container>
+            </div>
+        </md-table-toolbar>
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column md-order-by="identifier">Item</th>
+                        <th md-column md-order-by="name">Barcode</th>
+                        <th md-column md-order-by="item_type__name">Coordinates</th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select="item" ng-repeat="item in transfers"
+                        ui-sref="inventory_item({id: item.item})">
+                        <td md-cell>{{ item.item_name }}</td>
+                        <td md-cell>{{ item.barcode }}</td>
+                        <td md-cell>{{ item.coordinates }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <md-table-pagination md-limit="transfer_query.limit" md-page="transfers.meta.current"
+            md-total="{{ transfers.meta.count }}" md-options="[10,20]"
+            md-on-paginate="onPaginateTfrItems" md-page-select>
+        </md-table-pagination>
+    </md-card>
+</div>
 <md-card>
     <md-table-toolbar>
         <div class="md-toolbar-tools">

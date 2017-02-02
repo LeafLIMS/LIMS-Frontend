@@ -19,6 +19,10 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
         limit: 10,
     };
 
+    $scope.transfer_query = {
+        limit: 10,
+    };
+
     $scope.selectedItems = [];
     $scope.selectedSets = [];
 
@@ -191,6 +195,25 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
             $scope.refreshSetData();
         });
     };
+
+    $scope.refreshTransferData = function() {
+        InventoryService.transfers($scope.transfer_query).then(function(data) {
+            $scope.transfers = data;
+        });
+    };
+    $scope.refreshTransferData();
+
+    $scope.onPaginateTfrItems = function(page, limit) {
+        $scope.transfer_query.page = page;
+        $scope.transfer_query.limit = limit;
+        $scope.refreshTransferData();
+    };
+
+    $scope.$watch('transfer_query.search', function(n, o) {
+        if (n !== o) {
+            $scope.refreshTransferData();
+        }
+    });
 
 });
 
@@ -615,6 +638,13 @@ app.service('InventoryService', function(Restangular) {
         return Restangular.all('inventory')
             .withHttpConfig({transformRequest: angular.identity})
             .customPOST(data, 'importitems', {}, headers);
+    };
+
+    this.transfers = function(params) {
+        if (!params) {
+            var params = {};
+        }
+        return Restangular.all('transfers').getList(params);
     };
 
     this.completeTransfer = function(itemId, transferId) {
