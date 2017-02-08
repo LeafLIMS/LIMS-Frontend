@@ -11,7 +11,8 @@
             <span class="md-headline" flex>
                 {{ product.product_identifier }}: {{ product.name }}
             </span>
-            <span ng-if="product.on_run">On run</span>
+            <span ng-if="product.on_run">
+                <md-icon class="md-primary">linear_scale</md-icon> On run</span>
         </md-card-title-text>
     </md-card-title>
     <form novalidate name="productForm" class="padded">
@@ -87,32 +88,60 @@
             <h3 class="section-subheader">Designs</h3>
             <p>{{ product.design_format }}</p>
         </div>
-        <div>
-            <h3 class="section-subheader">
-                Inventory items
-            </h3>
-            <md-list class="md-dense">
-                <md-list-item
-                    class="md-2-line"
-                    ui-sref="inventory_item({id: item.id})"
-                    ng-repeat="item in product.linked_inventory">
-                    <md-icon md-svg-icon="alt:drawing"
-                        class="md-avatar-icon"></md-icon>
-                    <div class="md-list-item-text">
-                        <h3>{{ item.identifier}}: {{ item.name }}</h3>
-                        <p>{{ item.item_type }}</p>
-                    </div>
-                    <md-button class="md-secondary md-warn md-icon-button"
-                        ng-click="removeInventoryItem($index)">
-                        <md-icon>remove_circle</md-icon>
-                    </md-button>
-                </md-list-item>
-            </md-list>
-            <md-button
-                ng-click="addInventoryItem()">
-                <md-icon>add</md-icon>
-                Add item from inventory
-            </md-button>
+        <div layout="row">
+            <div flex>
+                <h3 class="section-subheader">
+                    Inventory items
+                </h3>
+                <md-list class="md-dense">
+                    <md-list-item
+                        class="md-2-line"
+                        ui-sref="inventory_item({id: item.id})"
+                        ng-repeat="item in product.linked_inventory">
+                        <md-icon md-svg-icon="alt:drawing"></md-icon>
+                        <div class="md-list-item-text">
+                            <h3>{{ item.identifier}}: {{ item.name }}</h3>
+                            <p>{{ item.item_type }}</p>
+                        </div>
+                        <md-button class="md-secondary md-icon-button"
+                            ng-click="removeInventoryItem($index)">
+                            <md-icon>remove_circle</md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <md-button
+                    ng-click="addInventoryItem()">
+                    <md-icon>add</md-icon>
+                    Add item from inventory
+                </md-button>
+            </div>
+            <div flex class="left-padded">
+                <h3 class="section-subheader">
+                    Attachments
+                </h3>
+                <md-list class="md-dense">
+                    <md-list-item
+                        class="md-3-line"
+                        ng-href="{{ item.attachment }}"
+                        ng-repeat="item in product.attachments">
+                        <md-icon>attachment</md-icon>
+                        <div class="md-list-item-text">
+                            <h3>{{ item.attachment_name }}</h3>
+                            <h4>{{ item.date_created|date:"medium" }}<h4>
+                            <p>{{ item.created_by }}</p>
+                        </div>
+                        <md-button class="md-secondary md-icon-button"
+                            ng-click="removeAttachment(item.id)">
+                            <md-icon>remove_circle</md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <md-button
+                    ng-click="addAttachment()">
+                    <md-icon>add</md-icon>
+                    Add attachment
+                </md-button>
+            </div>
         </div>
         <div ng-show="product.data.length > 0">
             <h3 class="section-subheader">History</h3>
@@ -121,15 +150,12 @@
                     class="md-3-line"
                     ng-repeat="entry in product.data | limitTo:3">
                     <md-icon
-                        class="md-avatar-icon"
                         ng-if="entry.state == 'active'">hourglass_empty</md-icon>
                     <md-icon
-                        class="md-avatar-icon"
                         ng-if="entry.state == 'succeeded' || entry.state == 'repeat succeeded'">
                         done
                     </md-icon>
                     <md-icon
-                        class="md-avatar-icon"
                         ng-if="entry.state == 'failed' || entry.state == 'repeat failed'">
                         close
                     </md-icon>

@@ -528,6 +528,44 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         });
     };
 
+    $scope.addAttachment = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/projects/views/addattachment.html',
+            controller: function($scope, $mdDialog, ProjectService,
+                InventoryService, product) {
+
+                $scope.cancel = $mdDialog.cancel;
+
+                $scope.add = function() {
+                    var params = new FormData();
+                    params.append('attachment', $scope.attachment);
+                    ProjectService.addAttachment(product.id, params).then(function() {
+                        $mdDialog.hide();
+                    });
+                };
+            },
+            locals: {
+                product: $scope.product,
+            },
+        }).then(function() {
+            getProduct();
+        });
+    };
+
+    $scope.removeAttachment = function(attachmentId) {
+        $mdDialog.show(
+            $mdDialog.confirm()
+            .title('Remove this attachment?')
+            .ok('Yes')
+            .cancel('No')
+        ).then(function() {
+            ProjectService.deleteAttachment($stateParams.productId, attachmentId).then(
+                   function(data) {
+                       getProduct();
+                   });
+        });
+    };
+
     $scope.designs = [];
     $scope.getDesigns = function() {
     };
@@ -718,6 +756,19 @@ app.service('ProjectService', function(Restangular) {
 
     this.deleteProduct = function(productId) {
         return Restangular.one('products', productId).remove();
+    };
+
+    this.addAttachment = function(productId, data) {
+        return Restangular.one('products', productId)
+               .withHttpConfig({transformRequest: angular.identity})
+               .customPOST(data, 'add_attachment', undefined, {
+                    'Content-Type': undefined,
+                });
+    };
+
+    this.deleteAttachment = function(productId, attachmentId) {
+        return Restangular.one('products', productId)
+               .customDELETE('delete_attachment', {id: attachmentId});
     };
 
     this.productStatuses = function(params) {

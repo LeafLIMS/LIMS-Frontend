@@ -1,0 +1,30 @@
+<md-dialog aria-label="Add an attachment" flex="60">
+    <form ng-submit="add()">
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Add attachment to product</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" layout="row" layout-align="start center">
+                <span flex>{{ attachment.name }}</span>
+                <md-button
+                    aria-label="Select an attachment file"
+                    ngf-select
+                    required
+                    ng-model="attachment">
+                    Choose attachment file
+                </md-button>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">Add</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
