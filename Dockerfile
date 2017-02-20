@@ -4,11 +4,11 @@
 FROM ubuntu:latest
 
 # Set API_URL for 'app' server - default http://localhost:8000 will be used
-ENV API_URL http://localhost:8000
+ENV API_URL=http://localhost:8000
 
 # Set LISTEN_HOST (currently ignored - will respond to any hostname) and LISTEN_PORT for 'web' server - default http://localhost:9000/
-ENV LISTEN_HOST localhost
-ENV LISTEN_PORT 9000
+ENV LISTEN_HOST=localhost
+ENV LISTEN_PORT=9000
 
 ENV HOME /root
 EXPOSE $LISTEN_PORT
