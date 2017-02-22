@@ -404,10 +404,18 @@ app.controller('FinishTaskCtrl', function($scope, $rootScope, $mdDialog,
     $scope.finishTask = function() {
         var failed = _.reduce(_.filter($scope.task.data, function(obj) {
             return obj.state == 'failed' || obj.state == 'repeat failed';
-        }), function(obj) {
-            return obj.product;
-        });
-        RunService.finishTask(run.id, failed).then(function(data) {
+        }), function(acc, obj) {
+            if (acc === '') {
+                return obj.product;
+            } else {
+                return acc + ',' + obj.product;
+            }
+        }, '');
+        var results = {
+            failures: failed,
+            restart_task_at: $scope.task.current_task,
+        };
+        RunService.finishTask(run.id, results).then(function(data) {
             $mdDialog.hide();
             if (data.is_active === false) {
                 $rootScope.$broadcast('run-ended');
@@ -966,8 +974,8 @@ app.service('RunService', function(Restangular) {
         return Restangular.one('runs', runId).customGET('monitor_task');
     };
 
-    this.finishTask = function(runId, failedProducts) {
-        return Restangular.one('runs', runId).customPOST({failed_products: failedProducts},
+    this.finishTask = function(runId, resultData) {
+        return Restangular.one('runs', runId).customPOST(resultData,
                                                          'finish_task');
     };
 
