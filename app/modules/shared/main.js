@@ -49,7 +49,7 @@ app.controller('AppCtrl', function($scope, $mdSidenav, UserService, $state) {
 app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
     PageTitle, UserService) {
 
-    PageTitle.set('GET LIMS');
+    PageTitle.set('Leaf LIMS');
 
     if (UserService.isLoggedIn()) {
         $state.go('app.dashboard');
@@ -68,7 +68,7 @@ app.controller('WelcomeCtrl', function(loginModal, $state, $mdDialog,
 app.controller('AccountCtrl', function($scope, PageTitle, UserService, CountryService,
             AddressService) {
 
-    PageTitle.set('GeneMill: Account settings');
+    PageTitle.set('Account settings');
 
     UserService.getUserDetails(UserService.getUser().id).then(function(data) {
         $scope.user = data;
