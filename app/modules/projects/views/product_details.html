@@ -86,7 +86,21 @@
         </div>
         <div layout="column" ng-if="product.design_format">
             <h3 class="section-subheader">Designs</h3>
-            <p>{{ product.design_format }}</p>
+            <div class="sbol-visual centered">
+                <div class="sbolv {{ el.role }}"
+                     ng-repeat="el in product.sbol_diagram">
+                    <a ui-sref="inventory_item({id: el.item})" ng-if="el.item">
+                        {{ el.name }}
+                    </a>
+                    <span ng-if="!el.item">{{ el.name }}</span>
+                </div>
+            </div>
+            <div class="padded border" layout="row">
+                <p flex><b>Design format:</b> {{ product.design_format }}</p>
+                <md-button
+                    aria-label="Select a design file as replacement"
+                    ngf-select="replaceDesign($file)">Replace design</md-button>
+            </div>
         </div>
         <div layout="row">
             <div flex>

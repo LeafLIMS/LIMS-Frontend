@@ -432,7 +432,6 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         ProjectService.getProduct($stateParams.productId).then(function(data) {
             $scope.product = data;
             $scope.pText = data.product_type;
-            $scope.getDesigns();
         });
     };
     getProduct();
@@ -566,8 +565,21 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         });
     };
 
-    $scope.designs = [];
-    $scope.getDesigns = function() {
+    $scope.replaceDesign = function(file) {
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var design_data = {
+                    design_file: event.target.result,
+                };
+                console.log(design_data);
+                ProjectService.replaceDesign($stateParams.productId, design_data).then(
+                       function(data) {
+                           getProduct();
+                       });
+            }
+            reader.readAsText(file);
+        }
     };
 
     $scope.getHistory = function(productId) {
@@ -756,6 +768,10 @@ app.service('ProjectService', function(Restangular) {
 
     this.deleteProduct = function(productId) {
         return Restangular.one('products', productId).remove();
+    };
+
+    this.replaceDesign = function(productId, data) {
+        return Restangular.one('products', productId).customPOST(data, 'replace_design');
     };
 
     this.addAttachment = function(productId, data) {
