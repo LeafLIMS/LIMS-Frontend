@@ -30,15 +30,6 @@
                         Update CRM account
                     </md-button>
                 </md-menu-item>
-                <md-divider></md-divider>
-                <md-menu-item>
-                    <md-button
-                        ng-disabled="selected.length == 0"
-                        ng-click="deleteItems(selected)">
-                        <md-icon md-menu-align-target>delete</md-icon>
-                        Delete Item(s)
-                    </md-button>
-                </md-menu-item>
             </md-menu-content>
         </md-menu>
     </div>
@@ -76,14 +67,22 @@
                     </td>
                     <td md-cell layout="row" layout-align="end">
                         <md-button class="md-icon-button"
+                            ng-if="item.username != 'AnonymousUser'"
                             aria-label="Edit item"
                             ng-click="changePassword(item.id)">
                             <md-icon>vpn_key</md-icon>
                         </md-button>
                         <md-button class="md-icon-button"
+                            ng-if="item.username != 'AnonymousUser'"
                             aria-label="Edit item"
                             ng-click="editItem(item.id)">
                             <md-icon>edit</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                            ng-if="item.username != 'AnonymousUser'"
+                            aria-label="Delete item"
+                            ng-click="deleteItem(item.id)">
+                            <md-icon>delete</md-icon>
                         </md-button>
                     </td>
                 </tr>
