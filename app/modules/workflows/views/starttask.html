@@ -50,32 +50,40 @@
                                         </div>
                                         <div layout="column" flex class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Labware to use</span>
-                                            <div layout="row" class="side-padded">
-                                                <md-input-container flex="20">
-                                                    <label>Labware amount</label>
-                                                    <input type="number" required ng-model="task.labware_amount">
-                                                </md-input-container>
-                                                <md-autocomplete
-                                                    flex
-                                                    md-selected-item-change="setLabwareItem(lwItem)"
-                                                    md-selected-item="lwItem"
-                                                    md-search-text="lwText"
-                                                    md-items="item in filterLabwareItems(lwText, task.labware)"
-                                                    md-item-text="item.name"
-                                                    md-min-length="0"
-                                                    md-select-on-match
-                                                    required
-                                                    md-floating-label="Choose {{ task.labware }} from inventory">
-                                                    <md-item-template>
-                                                        <span md-highlight-text="lwText"
-                                                            md-highlight-flags="^i">
-                                                            {{ item.identifier }}: {{ item.name }}
-                                                        </span>
-                                                    </md-item-template>
-                                                    <md-not-found>
-                                                        There where no items found matching your query in the inventory.
-                                                    </md-not-found>
-                                                </md-autocomplete>
+                                            <div layout="column" class="side-padded top-padded">
+                                                <md-checkbox ng-model="task.labware_not_required">Labware is not required for this task</md-checkbox>
+                                                <div layout="row">
+                                                    <md-input-container
+                                                        flex="20"
+                                                        ng-hide="task.labware_not_required">
+                                                        <label>Labware amount</label>
+                                                        <input type="number"
+                                                            ng-required="!task.labware_not_required"
+                                                            ng-model="task.labware_amount">
+                                                    </md-input-container>
+                                                    <md-autocomplete
+                                                        flex
+                                                        md-selected-item-change="setLabwareItem(lwItem)"
+                                                        md-selected-item="lwItem"
+                                                        md-search-text="lwText"
+                                                        md-items="item in filterLabwareItems(lwText, task.labware)"
+                                                        md-item-text="item.name"
+                                                        md-min-length="0"
+                                                        md-select-on-match
+                                                        ng-required="!task.labware_not_required"
+                                                        ng-hide="task.labware_not_required"
+                                                        md-floating-label="Choose {{ task.labware }} from inventory">
+                                                        <md-item-template>
+                                                            <span md-highlight-text="lwText"
+                                                                md-highlight-flags="^i">
+                                                                {{ item.identifier }}: {{ item.name }}
+                                                            </span>
+                                                        </md-item-template>
+                                                        <md-not-found>
+                                                            There where no items found matching your query in the inventory.
+                                                        </md-not-found>
+                                                    </md-autocomplete>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
