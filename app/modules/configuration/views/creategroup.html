@@ -16,12 +16,31 @@
                     <input md-maxlength="255"
                         required ng-model="group.name">
                 </md-input-container>
+                <md-autocomplete
+                    flex
+                    md-selected-item="selectedItem"
+                    md-search-text="itemSearchText"
+                    md-items="item in getItems(itemSearchText)"
+                    md-item-text="item.name"
+                    md-selected-item-change="setGroup()"
+                    md-select-on-match
+                    md-min-length="0"
+                    md-floating-label="Select a group to inherit permissions from">
+                    <md-item-template>
+                        <span md-highlight-text="itemSearchText">
+                            {{ item.name }}
+                        </span>
+                    </md-item-template>
+                </md-autocomplete>
+                <!--
                 <gm-multi-select
+                    ng-show="!selectedItem"
                     available="permissions"
                     selected="group.permissions"
                     selected-label="Selected permissions"
                     available-label="Available permissions">
                 </gm-multi-select>
+                -->
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">

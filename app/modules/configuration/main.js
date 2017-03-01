@@ -1327,6 +1327,7 @@ app.controller('GroupsConfigurationCtrl', function($scope, PageTitle,
 app.controller('GroupDialogCtrl', function($scope, $mdDialog,
     GroupService, groupId) {
 
+    $scope.selectedItem;
     $scope.permissions = [];
     GroupService.permissions({limit: 200}).then(function(data) {
         _.each(data, function(obj) {
@@ -1334,11 +1335,19 @@ app.controller('GroupDialogCtrl', function($scope, $mdDialog,
         });
     });
 
+    GroupService.groups().then(function(data) {
+        $scope.groups = data;
+    });
+
     $scope.getItems = function(searchText) {
         var st = searchText.toLowerCase();
         return _.filter($scope.groups, function(obj) {
             return obj.name.toLowerCase().indexOf(st) > -1;
         });
+    };
+
+    $scope.setGroup = function() {
+        $scope.group.permissions = $scope.selectedItem.permissions;
     };
 
     var getGroup = function(groupId) {
