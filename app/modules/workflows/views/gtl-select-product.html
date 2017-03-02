@@ -6,26 +6,26 @@
         </md-input-container>
     </div>
     <div layout="row">
-        <md-button 
+        <md-button
             class="md-icon-button"
-            ng-click="selectAll(selected)">
-            <md-icon>done_all</md-icon> 
+            ng-click="selectAll(productsAvailable, selected)">
+            <md-icon>done_all</md-icon>
         </md-button>
-        <md-button 
+        <md-button
             class="md-icon-button"
-            ng-click="deselectAll(selected)">
-            <md-icon>clear</md-icon> 
+            ng-click="deselectAll(productsAvailable, selected)">
+            <md-icon>clear</md-icon>
         </md-button>
         <span flex></span>
-        <md-button 
+        <md-button
             class="md-icon-button"
-            ng-click="selectAll(selectedToUse)">
-            <md-icon>done_all</md-icon> 
+            ng-click="selectAll(productsAvailable, selectedToUse)">
+            <md-icon>done_all</md-icon>
         </md-button>
-        <md-button 
+        <md-button
             class="md-icon-button"
-            ng-click="deselectAll(selectedToUse)">
-            <md-icon>clear</md-icon> 
+            ng-click="deselectAll(productsAvailable, selectedToUse)">
+            <md-icon>clear</md-icon>
         </md-button>
     </div>
 </div>

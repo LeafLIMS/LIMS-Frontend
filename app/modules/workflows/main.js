@@ -746,17 +746,17 @@ app.directive('gtlSelectProduct', function(ProjectService) {
             $scope.selected = [];
             $scope.selectedToUse = [];
 
-            $scope.selectAll = function() {
-                _.each($scope.productsAvailable, function(obj) {
-                    $scope.selected.push(obj);
+            $scope.selectAll = function(choices, selectedList) {
+                _.each(choices, function(obj) {
+                    selectedList.push(obj);
                 });
             };
 
-            $scope.deselectAll = function() {
-                _.each($scope.productsAvailable, function(obj) {
-                    var idx = $scope.selected.indexOf(obj);
+            $scope.deselectAll = function(choices, selectedList) {
+                _.each(choices, function(obj) {
+                    var idx = selectedList.indexOf(obj);
                     if (idx > -1) {
-                        $scope.selected.splice(idx, 1);
+                        selectedList.splice(idx, 1);
                     }
                 });
             };
@@ -787,7 +787,7 @@ app.directive('gtlSelectProduct', function(ProjectService) {
                 return _.find(list, {id: item.id}) ? true : false;
             };
 
-            $scope.removeItem = function() {
+            $scope.removeFromSelected = function() {
                 _.each($scope.selectedToUse, function(obj) {
                     var idx = $scope.productsList.indexOf(obj);
                     if (idx > -1) {
