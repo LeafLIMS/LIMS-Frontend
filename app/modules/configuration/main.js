@@ -1709,16 +1709,19 @@ app.controller('FileTemplateWizardCtrl', function($scope, $mdDialog,
                 is_identifier: true,
             });
         } else if (fileType == 'input' && fileFor == 'inventory') {
-            $scope.filetemplate.fields.push({
-                name: 'barcode',
-                map_to: 'barcode',
-                required: true,
-                is_identifier: true,
-            }, {
-                name: 'name',
-                map_to: 'name',
-                required: true,
-            });
+            var identifiers = ['barcode', 'name'];
+            for (var i = 0; i < $scope.inventoryFields.length; i++) {
+                var is_an_identifier = false;
+                if (identifiers.indexOf($scope.inventoryFields[i]) != -1) {
+                    is_an_identifier = true;
+                }
+                $scope.filetemplate.fields.push({
+                    name: $scope.inventoryFields[i].replace('_', ' '),
+                    map_to: $scope.inventoryFields[i],
+                    required: true,
+                    is_identifier: is_an_identifier,
+                });
+            }
         }
     };
 
