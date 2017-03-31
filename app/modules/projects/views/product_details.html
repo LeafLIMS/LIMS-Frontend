@@ -87,12 +87,13 @@
         <div layout="column" ng-if="product.design_format">
             <h3 class="section-subheader">Designs</h3>
             <div class="sbol-visual centered">
-                <div class="sbolv {{ el.role }}"
-                     ng-repeat="el in product.sbol_diagram">
-                    <a ui-sref="inventory_item({id: el.item})" ng-if="el.item">
-                        {{ el.name }}
-                    </a>
-                    <span ng-if="!el.item">{{ el.name }}</span>
+                <div class="sbol-visual component" ng-repeat="comp in product.sbol_diagram">
+                    <div class="sbolv {{ el.role }}" ng-repeat="el in comp">
+                        <a ui-sref="inventory_item({id: el.item})" ng-if="el.item">
+                            {{ el.name }}
+                        </a>
+                        <span ng-if="!el.item">{{ el.name }}</span>
+                    </div>
                 </div>
             </div>
             <div class="padded border" layout="row">
