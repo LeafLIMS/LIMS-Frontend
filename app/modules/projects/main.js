@@ -205,7 +205,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
 
     $scope.query = {
         ordering: 'product_identifier',
-        limit: 200,
+        limit: 10,
         project: $stateParams.id,
     };
 
@@ -243,7 +243,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         $scope.initialProductCount = data.length;
     });
 
-    $scope.$watch('productFilter', function(n, o) {
+    $scope.$watch('query.search', function(n, o) {
         $scope.returnProductData().then(function(data) {
             $scope.products = data;
         });
@@ -365,7 +365,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         });
     };
 
-    $scope.deleteProduct = function() {
+    $scope.deleteItems = function(selected) {
         var sl = $scope.selected.length;
         var confirmDelete = $mdDialog.confirm()
             .title('Are you sure you want to delete these ' + sl + ' products?')

@@ -281,7 +281,7 @@ md-list.detail-list md-list-item {
 .read-only {
     input {
         color: $fontcolour !important;
-        cursor: not-allowed;
+        border: none;
     }
     md-select {
         cursor: not-allowed;

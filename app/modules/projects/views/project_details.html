@@ -18,15 +18,6 @@
                 </md-button>
                 <md-menu-content>
                     <md-menu-item>
-                        <md-button ng-disabled="selected.length == 0"
-                            ng-click="deleteProduct(currentProductId)">
-                            <md-icon md-menu-align-target>
-                                delete_sweep</md-icon>
-                            Delete selected
-                        </md-button>
-                    </md-menu-item>
-                    <md-divider></md-divider>
-                    <md-menu-item>
                         <md-button ng-click="setArchiveStatus()">
                             <md-icon ng-if="project.archive"
                                 md-menu-align-target>check_box</md-icon>
@@ -58,17 +49,18 @@
                 <input required ng-model="project.name">
             </md-input-container>
             <md-input-container>
-                <label>Description</label>
-                <textarea ng-model="project.description"></textarea>
-            </md-input-container>
-            <md-input-container>
                 <label>Primary lab contact</label>
                 <md-select ng-model="project.primary_lab_contact">
                     <md-option ng-repeat="member in staff"
                         ng-value="member.username">{{ member.username }}</md-option>
                 </md-select>
+                <p></p>
             </md-input-container>
-            <div ng-if="crmEnabled">
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model="project.description"></textarea>
+            </md-input-container>
+            <div ng-if="crmEnabled" layout="column">
                 <h3 layout="row" layout-align="start center"
                     class="section-subheader">
                     CRM details
@@ -128,6 +120,52 @@
                 flex>
                 <h3 class="side-padded section-subheader">Products</h3>
                 <md-card layout="column">
+                    <md-table-toolbar>
+                        <div class="md-toolbar-tools">
+                            <md-input-container class="md-body-1 toolbar-input">
+                                <md-icon>search</md-icon>
+                                <input type="search" ng-model="query.search">
+                            </md-input-container>
+                            <span flex></span>
+                            <md-menu>
+                                <md-button aria-label="Table filters"
+                                    class="md-icon-button"
+                                    ng-click="$mdOpenMenu($event)">
+                                    <md-icon md-menu-origin>filter_list</md-icon>
+                                </md-button>
+                                <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <md-button ng-click="toggleFilter('archive')">
+                                            <md-icon
+                                                ng-if="hasFilter('archive')"
+                                                md-menu-align-target>check_box_outline_blank</md-icon>
+                                            <md-icon
+                                                ng-if="!hasFilter('archive')"
+                                                md-menu-align-target>check_box</md-icon>
+                                            Show archived projects
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                            <md-menu>
+                                <md-button aria-label="Table actions"
+                                    class="md-icon-button"
+                                    ng-click="$mdOpenMenu($event)">
+                                    <md-icon md-menu-origin>more_vert</md-icon>
+                                </md-button>
+                                <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <md-button
+                                            ng-disabled="selected.length == 0"
+                                            ng-click="deleteItems(selected)">
+                                            <md-icon md-menu-align-target>delete</md-icon>
+                                            Delete Item(s)
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </div>
+                    </md-table-toolbar>
                     <md-table-container>
                         <table md-table md-row-select ng-model="selected">
                             <thead md-head md-order="query.ordering" md-on-reorder="onSortItems">
