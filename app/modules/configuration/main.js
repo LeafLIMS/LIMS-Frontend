@@ -225,7 +225,7 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
     $scope.addTask = function() {
         if ($scope.selectedTask) {
             $scope.order.push($scope.selectedTask);
-            $scope.taskSearchText = '';
+            $scope.taskSearchText = undefined;
             $scope.selectedTask = undefined;
         }
     };

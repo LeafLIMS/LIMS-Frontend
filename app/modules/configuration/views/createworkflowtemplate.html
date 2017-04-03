@@ -28,9 +28,8 @@
                         md-floating-label="Select task to add">
                         <md-item-template>
                             <span md-highlight-text="tasksSearchText">
-                                {{ task.name }}
+                                {{ task.name }} ({{ task.created_by }})
                             </span>
-                            {{ task.created_by }}
                         </md-item-template>
                     </md-autocomplete>
                 </div>
