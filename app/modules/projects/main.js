@@ -264,13 +264,13 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
     };
 
     $scope.onSortItems = function(order) {
-        updateProjectData();
+        $scope.getProductData();
     };
 
     $scope.onPaginateItems = function(page, limit) {
         $scope.query.page = page;
         $scope.query.limit = limit;
-        updateProjectData();
+        $scope.getProductData();
     };
 
 	var updateDelayed = function() {
