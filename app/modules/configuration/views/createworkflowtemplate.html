@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create a workflow template" flex="50">
+<md-dialog aria-label="Create a workflow template" flex="80">
     <form ng-submit="save()" novalidate>
         <md-toolbar class="md-primary">
             <div class="md-toolbar-tools">
@@ -9,47 +9,58 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-dialog-content class="task" layout="column">
+        <md-dialog-content layout="column">
             <div class="md-dialog-content" layout="column">
                 <md-input-container flex>
                     <label>Name of template</label>
                     <input required ng-model="workflow.name">
                 </md-input-container>
-                <div layout="row" layout="start center">
-                    <md-autocomplete 
-                        flex
-                        md-selected-item="selectedTask"
-                        md-search-text="taskSearchText"
-                        md-items="task in queryTasks(taskSearchText)"
-                        md-item-text="task.name"
-                        md-selected-item-change="addTask()"
-                        md-select-on-match
-                        md-min-length="0"
-                        md-floating-label="Select task to add">
-                        <md-item-template>
-                            <span md-highlight-text="tasksSearchText">
-                                {{ task.name }} ({{ task.created_by }})
-                            </span>
-                        </md-item-template>
-                    </md-autocomplete>
-                </div>
-                <md-list ui-sortable ng-model="order">
-                    <md-list-item 
-                        class="md-3-line"
-                        ng-repeat="item in order track by $index"> 
-                        <md-icon class="md-avatar-icon">storage</md-icon>
-                        <div class="md-list-item-text">
-                            <h3>{{ item.name }}</h3>
-                            <h4>{{ item.created_by }}</h4>
-                            <p>{{ item.date_created|date:"medium" }}</p>
-                        </div>
-                        <md-button class="md-icon-button md-secondary"
-                            ng-click="removeTask($index)">
-                            <md-icon>remove_circle</md-icon>
-                        </md-button>
+                <div layout="row">
+                    <div flex layout="column">
+                        <md-input-container class="no-error">
+                            <md-icon>search</md-icon>
+                            <input type="search" ng-model="query.search">
+                        </md-input-container>
+                        <md-list>
+                            <md-list-item
+                                class="md-3-line"
+                                ng-repeat="item in tasks track by $index">
+                                <div class="md-list-item-text">
+                                    <h3>{{ item.name }}</h3>
+                                    <h4>{{ item.created_by }}</h4>
+                                    <p>{{ item.date_created|date:"medium" }}</p>
+                                </div>
+                                <md-button class="md-icon-button md-secondary"
+                                    ng-click="addTask(item)">
+                                    <md-icon>add_circle</md-icon>
+                                </md-button>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                    <div flex class="left-padded">
+                        <md-list ui-sortable ng-model="order">
+                            <md-list-item ng-if="order.length == 0">
+                                There are currently no tasks part of this template.
+                            </md-list-item>
+                            <md-list-item
+                                class="md-3-line bottom-margin md-whiteframe-1dp"
+                                ng-repeat="item in order track by $index">
+                                <div class="md-avatar md-avatar-icon number-avatar">
+                                    {{ $index + 1 }}</div>
+                                <div class="md-list-item-text">
+                                    <h3>{{ item.name }}</h3>
+                                    <h4>{{ item.created_by }}</h4>
+                                    <p>{{ item.date_created|date:"medium" }}</p>
+                                </div>
+                                <md-button class="md-icon-button md-secondary"
+                                    ng-click="removeTask($index)">
+                                    <md-icon>remove_circle</md-icon>
+                                </md-button>
 
-                    </md-list-item>
-                </md-list>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </div>
                 <gtl-permissions-widget input-data="workflow"></gtl-permissions-widget>
             </div>
         </md-dialog-content>

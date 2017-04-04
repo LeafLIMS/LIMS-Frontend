@@ -222,21 +222,23 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
     };
     getWorkflow(workflowId);
 
-    $scope.addTask = function() {
-        if ($scope.selectedTask) {
-            $scope.order.push($scope.selectedTask);
-            $scope.taskSearchText = undefined;
-            $scope.selectedTask = undefined;
-        }
+    $scope.query = {
+        limit: 20,
     };
 
-    $scope.queryTasks = function(searchText) {
-        searchText = searchText.toLowerCase();
-        return _.filter(tasks, function(obj) {
-            if (obj.name.toLowerCase().indexOf(searchText) > -1) {
-                return obj;
-            }
+    $scope.getTasks = function() {
+        WorkflowService.availableTasks($scope.query).then(function(data) {
+            $scope.tasks = data;
         });
+    };
+    $scope.getTasks();
+
+    $scope.$watch('query.search', function(n,o) {
+        $scope.getTasks();
+    }, true);
+
+    $scope.addTask = function(task) {
+        $scope.order.push(task);
     };
 
     $scope.removeTask = function(index) {

@@ -153,6 +153,11 @@ v-pane-header {
     border-bottom-color: $primary;
 }
 
+// Sortables
+.ui-sortable-handle {
+    cursor: grab !important;
+}
+
 // App-wide elements
 .no-padding {
     padding: 0 !important;
@@ -328,6 +333,13 @@ input.noedit {
     height: 1em;
     line-height: 1em;
     color: darken($highlight, 10%);
+}
+
+.number-avatar {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 1.5em;
 }
 
 // View animations
