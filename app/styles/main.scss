@@ -910,6 +910,12 @@ md-list-item.selected {
     overflow-y: auto;
 }
 
+.run-edit-button {
+    position: absolute;
+    right: 0;
+    top: $padding;
+}
+
 //
 // Equipment
 //

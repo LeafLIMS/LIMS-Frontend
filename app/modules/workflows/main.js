@@ -120,6 +120,16 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
         });
     };
 
+    $scope.editRun = function() {
+        $mdDialog.show({
+            templateUrl: 'modules/workflows/views/edit-run.html',
+            controller: 'EditRunCtrl',
+            locals: {
+                run: $scope.run,
+            },
+        });
+    };
+
     $scope.toNewRun = function(workflowId) {
         /*
         $mdDialog.show({
@@ -182,6 +192,47 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
 
     $scope.exists = function(item, list) {
         return list.indexOf(item) > -1;
+    };
+
+});
+
+
+app.controller('EditRunCtrl', function($scope, $rootScope, $mdDialog, WorkflowService,
+    RunService, run) {
+
+    $scope.cancel = $mdDialog.cancel;
+
+    $scope.currentTasks = run.tasks;
+
+    $scope.query = {
+        limit: 20,
+    };
+
+    $scope.getTasks = function() {
+        WorkflowService.availableTasks($scope.query).then(function(data) {
+            $scope.tasks = data;
+        });
+    };
+    $scope.getTasks();
+
+    $scope.$watch('query.search', function(n,o) {
+        $scope.getTasks();
+    }, true);
+
+    $scope.addTask = function(task) {
+        $scope.currentTasks.push(task);
+    };
+
+    $scope.removeTask = function(index) {
+        $scope.currentTasks.splice(index, 1);
+    };
+
+    $scope.save = function() {
+        var order = _.map($scope.currentTasks, 'id').join(',');
+        RunService.updateRun(run.id, {tasks: order}).then(function(data) {
+            $rootScope.$broadcast('run-updated');
+            $mdDialog.hide();
+        });
     };
 
 });

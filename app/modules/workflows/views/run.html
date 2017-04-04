@@ -78,24 +78,27 @@
         <div class="workflow-preview">
             <span class="bg-container"></span>
             <div class="workflow-preview-container">
-                <div class="gm-workflow-task-preview" flex 
-                     ng-repeat="t in run.tasks" 
+                <div class="gm-workflow-task-preview" flex
+                     ng-repeat="t in run.tasks"
                      ng-class="{'current-task': $index == run.current_task, 'finished': !run.is_active}">
                     <div class="task-preview-header" layout="row">
                         <span flex></span>
                         <span>{{ $index + 1 }}</span>
                     </div>
-                    <div class="task-preview-content" layout-fill layout="column" 
+                    <div class="task-preview-content" layout-fill layout="column"
                         layout-align="center center">
                         <span layout="row">
                             <span>{{ t.name|limitTo:"15" }}</span>
                             <span ng-show="t.name.length > 15">&hellip;</span>
                         </span>
-                        <md-icon class="white-icon" 
+                        <md-icon class="white-icon"
                             ng-show="$index == run.current_task && run.task_in_progress">
                             play_arrow</md-icon>
                     </div>
-                </div> 
+                </div>
+                <md-button class="md-icon-button run-edit-button"
+                           ng-if="run.is_active"
+                           ng-click="editRun()"><md-icon>edit</md-icon></md-button>
             </div>
         </div>
         <div ng-show="run.products.length == 0" class="not-available" 

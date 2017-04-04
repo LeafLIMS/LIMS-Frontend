@@ -1,0 +1,68 @@
+<md-dialog aria-label="Edit tasks on run" flex="80">
+    <form ng-submit="save()" novalidate>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools">
+                <h2>Edit tasks on run</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout="column">
+            <div class="md-dialog-content" layout="row">
+                <div flex layout="column">
+                    <md-input-container class="no-error">
+                        <md-icon>search</md-icon>
+                        <input type="search" ng-model="query.search">
+                    </md-input-container>
+                    <md-list>
+                        <md-list-item
+                            class="md-3-line"
+                            ng-repeat="item in tasks track by $index">
+                            <div class="md-list-item-text">
+                                <h3>{{ item.name }}</h3>
+                                <h4>{{ item.created_by }}</h4>
+                                <p>{{ item.date_created|date:"medium" }}</p>
+                            </div>
+                            <md-button class="md-icon-button md-secondary"
+                                ng-click="addTask(item)">
+                                <md-icon>add_circle</md-icon>
+                            </md-button>
+                        </md-list-item>
+                    </md-list>
+                </div>
+                <div flex class="left-padded">
+                    <md-list ui-sortable ng-model="currentTasks">
+                        <md-list-item ng-if="currentTasks.length == 0">
+                            There are currently no tasks part of this template.
+                        </md-list-item>
+                        <md-list-item
+                            class="md-3-line bottom-margin md-whiteframe-1dp"
+                            ng-repeat="item in currentTasks track by $index">
+                            <div class="md-avatar md-avatar-icon number-avatar">
+                                {{ $index + 1 }}</div>
+                            <div class="md-list-item-text">
+                                <h3>{{ item.name }}</h3>
+                                <h4>{{ item.created_by }}</h4>
+                                <p>{{ item.date_created|date:"medium" }}</p>
+                            </div>
+                            <md-button class="md-icon-button md-secondary"
+                                ng-click="removeTask($index)">
+                                <md-icon>remove_circle</md-icon>
+                            </md-button>
+
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="cancel()" class="md-secondary">Cancel</md-button>
+            <span flex></span>
+            <md-button type="submit" class="md-primary">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
