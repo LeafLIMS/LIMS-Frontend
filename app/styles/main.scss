@@ -62,6 +62,13 @@ md-list.sub-nav md-list-item .md-list-item-inner {
     font-weight: normal;
 }
 
+// TODO: REMOVE ONCE OVERFLOW ON MD-LIST FIXED!!
+md-list-item .md-secondary {
+    position: absolute;
+    right: $padding;
+    top: $padding;
+}
+
 md-cell md-input-container {
     width: 100%;
 }
