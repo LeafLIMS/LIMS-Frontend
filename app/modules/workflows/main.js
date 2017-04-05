@@ -68,6 +68,18 @@ app.controller('WorkflowsCtrl', function($scope, PageTitle,
 
 });
 
+app.filter('filterByType', function() {
+    return function(input, values) {
+        var output = [];
+        for (var i = 0; i < input.length; i++) {
+            if (values.indexOf(input[i].item_type) !== -1) {
+                output.push(input[i]);
+            }
+        }
+        return output
+    }
+});
+
 app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
     ProjectService, RunService, $mdDialog, $state, $stateParams, $rootScope) {
 
@@ -76,8 +88,17 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
     var getRunData = function() {
         RunService.getRun($stateParams.id).then(function(data) {
             $scope.run = data;
+            $scope.exclude = $scope.run.exclude.split(',');
+            // Pick out any excluded items
+            for (var i = 0; i < $scope.run.products.length; i++) {
+                for (var j = 0; j < $scope.run.products[i].linked_inventory.length; j++) {
+                    if ($scope.exclude.indexOf(""+$scope.run.products[i].linked_inventory[j].id) !== -1) {
+                        $scope.run.products[i].linked_inventory[j].excluded = true;
+                    }
+                }
+            }
             $scope.current_task = $scope.run.tasks[$scope.run.current_task];
-            $scope.input_filter = {item_type: $scope.current_task.product_input};
+            $scope.input_filter = $scope.current_task.valid_product_input_types;
         }).catch(function(err) {
             if (err.status == 404) {
                 $rootScope.$broadcast('run-not-found');
@@ -142,6 +163,17 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
         });
         */
     };
+
+    $scope.excludeItem = function(item) {
+        if ($scope.exclude.indexOf(item.id.toString()) !== -1) {
+            item.excluded = false;
+            $scope.exclude.splice($scope.exclude.indexOf(item.id.toString()), 1);
+        } else {
+            $scope.exclude.push(item.id.toString());
+            item.excluded = true;
+        }
+        RunService.updateRun($scope.run.id, {exclude: $scope.exclude.join(",")});
+    }
 
     $scope.stopRun = function() {
         var confirmDelete = $mdDialog.confirm()
@@ -299,7 +331,6 @@ app.controller('StartTaskCtrl', function($scope, $rootScope, $mdDialog,
     $scope.run = run;
 
     WorkflowService.getTask(task.id).then(function(data) {
-        console.log(data);
         $scope.task = data;
     });
 
@@ -326,7 +357,6 @@ app.controller('StartTaskCtrl', function($scope, $rootScope, $mdDialog,
         };
         RunService.startTask(run.id, params, doCheck).then(function(data) {
             $scope.errorMessage = '';
-            console.log(data);
             if (!doCheck) {
                 $mdDialog.show({
                     templateUrl: 'modules/workflows/views/monitortask.html',
@@ -510,10 +540,8 @@ app.controller('doTaskCtrl', function($scope, $rootScope, $mdDialog, UserService
     $scope.cancel = $mdDialog.cancel;
 
     $scope.$on('field-amount-changed', function(e, data) {
-        console.log(e, data);
         WorkflowService.recalculate($scope.task.id, $scope.task).then(function(data) {
             $scope.task = data.plain();
-            console.log('TASK DATA', $scope.task);
         });
     });
 

@@ -101,15 +101,15 @@
                            ng-click="editRun()"><md-icon>edit</md-icon></md-button>
             </div>
         </div>
-        <div ng-show="run.products.length == 0" class="not-available" 
+        <div ng-show="run.products.length == 0" class="not-available"
             layout="column"
             layout-align="center center" flex>
             No products on run
         </div>
-        <div ng-repeat="product in run.products" layout="row" 
+        <div ng-repeat="product in run.products" layout="row"
             layout-align="center center"
             class="active-workflow-product-container">
-            <div class="active-workflow-product" 
+            <div class="active-workflow-product"
                 flex="30"
                 layout-align="start center"
                 layout="row">
@@ -120,7 +120,7 @@
                     ng-checked="exists(product, selected)"
                     aria-label="Select {{ product.name }}">
                 </md-checkbox>
-                <span flex> 
+                <span flex>
                     <b>
                         <a ui-sref="product_details({id: product.project, productId: product.id})">
                             {{ product.product_identifier }}
@@ -134,16 +134,19 @@
             <div
                 ng-if="run.is_active"
                 flex>
-                <span class="task-product-item" 
-                      ng-repeat="item in product.linked_inventory | filter:input_filter">
+                <span class="task-product-item"
+                      ng-click="excludeItem(item)"
+                      ng-class="{'excluded': item.excluded}"
+                      ng-repeat="item in product.linked_inventory | filterByType:input_filter">
                     <i>{{ item.identifier }}</i>
                     <b>{{ item.name }}</b>
-                    &nbsp;({{ item.item_type }}) 
+                    &nbsp;({{ item.item_type }})
+                    <md-icon class="md-18">close</md-icon>
                 </span>
             </div>
         </div>
     </div>
-    <div ng-show="!run" class="not-available" 
+    <div ng-show="!run" class="not-available"
         layout="column"
         layout-align="center center" flex>
         No runs currently available
