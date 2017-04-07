@@ -20,6 +20,7 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
     };
 
     $scope.transfer_query = {
+        transfer_complete: 'False',
         limit: 10,
     };
 
@@ -128,6 +129,8 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
         $mdDialog.show({
             templateUrl: 'modules/inventory/views/importitems.html',
             controller: 'ImportItemsCtrl',
+        }).then(function() {
+            $scope.refreshItemData();
         });
     };
 
@@ -135,6 +138,8 @@ app.controller('InventoryCtrl', function($scope, PageTitle, InventoryService,
         $mdDialog.show({
             templateUrl: 'modules/inventory/views/transferitems.html',
             controller: 'TransferItemsCtrl',
+        }).then(function() {
+            $scope.refreshTransferData();
         });
     };
 
