@@ -25,23 +25,15 @@
                         </md-option>
                     </md-select>
                 </md-input-container>
-                <md-autocomplete flex
-                    md-selected-item-change="setProductType(pItem)"
-                    md-selected-item="pItem"
-                    md-search-text="pText"
-                    md-items="item in filterProductType(pText)"
-                    md-item-text="item.name"
-                    md-min-length="0"
-                    md-select-on-match
-                    required
-                    md-floating-label="Product type">
-                    <md-item-template>
-                        <span md-highlight-text="pText"
-                            md-highlight-flags="^i">
-                        {{ item.display_name }}
-                        </span>
-                    </md-item-template>
-                </md-autocomplete>
+                <md-input-container>
+                    <label>Product type</label>
+                    <md-select ng-model="product.product_type" required>
+                        <md-option ng-repeat="item in productTypes"
+                                   ng-value="item.name">
+                            {{ item.display_name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
                 <md-input-container>
                     <label>Optimised for</label>
                     <md-select ng-model="product.optimised_for"

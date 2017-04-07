@@ -436,6 +436,10 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
     };
     getProduct();
 
+    InventoryService.itemTypes({limit: 200}).then(function(data) {
+        $scope.productTypes = data;
+    });
+
     $scope.filterProductType = function(filterText) {
         return InventoryService.itemTypes({search: filterText});
     };
@@ -620,21 +624,13 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
         $scope.organisms = data;
     });
 
-    InventoryService.itemTypes().then(function(data) {
+    InventoryService.itemTypes({limit: 200}).then(function(data) {
         $scope.product_types = data;
     });
 
     ProjectService.productStatuses().then(function(data) {
         $scope.productstatuses = data;
     });
-
-    $scope.filterProductType = function(filterText) {
-        return InventoryService.itemTypes({search: filterText});
-    };
-
-    $scope.setProductType = function(item) {
-        $scope.product.product_type = item.name;
-    };
 
     $scope.cancel = function() {
         $mdDialog.cancel();
