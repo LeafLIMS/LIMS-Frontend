@@ -24,7 +24,7 @@
                                             <div layout="row" class="input-item" layout-align="start center"
                                                 ng-repeat="(pid, product) in task.product_inputs" >
                                                 <span class="input-amount">
-                                                    {{ product.amount }}{{ product.measure }}
+                                                    {{ product.amount }} {{ product.measure }}
                                                 </span>
                                                 <span flex>
                                                     <b>{{ inmap[product.inventory_identifier].name }}</b>
@@ -51,7 +51,7 @@
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <div class="input-item">
                                                 <span class="input-amount">
-                                                    {{ field.amount }}{{ field.measure }}
+                                                    {{ field.amount }} {{ field.measure }}
                                                 </span>
                                                 <span flex>
                                                     <b>{{ inmap[field.inventory_identifier].name }}</b>
@@ -69,7 +69,7 @@
                                         <span class="field-label primary-label">{{ field.label }}</span>
                                         <div class="input-item">
                                             <span class="input-amount">
-                                                {{ field.amount }}{{ field.measure }}
+                                                {{ field.amount }} {{ field.measure }}
                                             </span>
                                             <span flex>
                                                 <b>{{ field.lookup_type }}</b>
@@ -156,8 +156,8 @@
                             <tr md-row ng-repeat="r in requirements">
                                 <td md-cell>{{ r.item.name }}</td>
                                 <td md-cell>{{ r.item.identifier }}</td>
-                                <td md-cell>{{ r.amount_taken }}{{ r.amount_measure.symbol }}</td>
-                                <td md-cell>{{ r.item.amount_available }}{{ r.item.amount_measure.symbol }}</td>
+                                <td md-cell>{{ r.amount_to_take }} {{ r.amount_measure.symbol }}</td>
+                                <td md-cell>{{ r.item.amount_available }} {{ r.item.amount_measure.symbol }}</td>
                                 <td md-cell>{{ r.item.location.name }}</td>
                             </tr>
                         </tbody>
