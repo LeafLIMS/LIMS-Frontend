@@ -138,10 +138,10 @@
                       ng-click="excludeItem(item)"
                       ng-class="{'excluded': item.excluded}"
                       ng-repeat="item in product.linked_inventory | filterByType:input_filter">
+                    <md-icon ng-if="item.excluded" class="md-18">not_interested</md-icon>
                     <i>{{ item.identifier }}</i>
                     <b>{{ item.name }}</b>
                     &nbsp;({{ item.item_type }})
-                    <md-icon class="md-18">close</md-icon>
                 </span>
             </div>
         </div>

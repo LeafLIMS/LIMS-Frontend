@@ -88,7 +88,11 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
     var getRunData = function() {
         RunService.getRun($stateParams.id).then(function(data) {
             $scope.run = data;
-            $scope.exclude = $scope.run.exclude.split(',');
+            if ($scope.run.exclude) {
+                $scope.exclude = $scope.run.exclude.split(',');
+            } else {
+                $scope.exclude = [];
+            }
             // Pick out any excluded items
             for (var i = 0; i < $scope.run.products.length; i++) {
                 for (var j = 0; j < $scope.run.products[i].linked_inventory.length; j++) {
