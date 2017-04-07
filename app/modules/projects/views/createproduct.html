@@ -46,6 +46,7 @@
                     <label>Optimised for</label>
                     <md-select ng-model="product.optimised_for"
                         aria-label="Optimised for">
+                        <md-option></md-option>
                         <md-option ng-repeat="org in organisms" ng-value="org.id">
                             {{ org.name }}</md-option>
                     </md-select>
@@ -61,13 +62,13 @@
                         </md-select>
                     </md-input-container>
                     <div flex>
-                        {{ designfile.name }}
                         <md-button 
                             aria-label="Select a design file"
                             ngf-select
                             ng-model="design_file">
                             Choose file
                         </md-button>
+                        {{ design_file.name }}
                     </div>
                 </div>
             </div>
