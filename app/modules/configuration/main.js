@@ -660,6 +660,8 @@ app.controller('ItemTypeDialogCtrl', function($scope, $mdDialog,
     $scope.setParent = function() {
         if ($scope.selectedItem) {
             $scope.itemtype.parent = $scope.selectedItem.name;
+        } else {
+            $scope.itemtype.parent = '';
         }
     };
 
