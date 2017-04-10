@@ -29,7 +29,7 @@
                 </div>
                 <span flex></span>
             </md-list-item>
-            <md-subheader>Last 5 runs</md-subheader>
+            <md-subheader>Last 5 finished runs</md-subheader>
             <md-list-item ng-repeat="run in finishedRuns | limitTo:'5'" 
                 ui-sref-active="selected"
                 ui-sref="app.workflows.run({id: run.id})"

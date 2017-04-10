@@ -114,6 +114,13 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
 
     $rootScope.$on('run-updated', getRunData);
 
+    $scope.itemFromProduct = function(transfer, product) {
+        var exists = _.filter(product.linked_inventory, function(obj) {
+            return transfer.item.identifier == obj.identifier
+        });
+        return exists.length > 0 ? true : false;
+    };
+
     $scope.addToRun = function() {
         $mdDialog.show({
             templateUrl: 'modules/workflows/views/addtorun.html',

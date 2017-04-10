@@ -144,6 +144,17 @@
                     &nbsp;({{ item.item_type }})
                 </span>
             </div>
+            <div
+                ng-if="!run.is_active"
+                flex>
+                <span class="task-product-item"
+                      ng-if="itemFromProduct(item, product)"
+                      ng-repeat="item in run.transfers">
+                    <i>{{ item.item.identifier }}</i>
+                    <b>{{ item.item.name }}</b>
+                    &nbsp;({{ item.item.item_type.name }})
+                </span>
+            </div>
         </div>
     </div>
     <div ng-show="!run" class="not-available"
