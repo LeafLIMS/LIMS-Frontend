@@ -625,7 +625,7 @@ app.controller('CreateProductCtrl', function($scope, $mdDialog, ProjectService,
     });
 
     InventoryService.itemTypes({limit: 200}).then(function(data) {
-        $scope.product_types = data;
+        $scope.productTypes = data;
     });
 
     ProjectService.productStatuses().then(function(data) {
