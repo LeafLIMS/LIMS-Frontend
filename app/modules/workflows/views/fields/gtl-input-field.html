@@ -40,14 +40,14 @@
         <md-input-container flex>
             <label>Destination barcode</label>
             <input
-                ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
+                ng-disabled="isDisabled || field.from_input_file"
                 aria-label="{{ field.name }} destination barcode"
                 ng-model="field.destination_barcode">
         </md-input-container>
         <md-input-container flex>
             <label>Destination coordinates</label>
             <input
-                ng-disabled="field.from_calculation || isDisabled || field.from_input_file"
+                ng-disabled="isDisabled || field.from_input_file"
                 aria-label="{{ field.name }} destination coordinates"
                 ng-model="field.destination_coordinates">
         </md-input-container>
