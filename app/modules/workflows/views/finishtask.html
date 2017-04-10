@@ -10,26 +10,54 @@
     </md-toolbar>
     <md-dialog-content class="task" layout="column">
         <div class="dialog-error-message" ng-if="errorMessage">{{ errorMessage }}</div>
-        <div class="md-dialog-content">
-            <md-list>
-                <md-list-item ng-repeat="entry in task.data" layout="row" layout-align="start center">
-                    <span flex>{{ entry.product_name }}</span>
-                    <md-select ng-model="entry.state">
-                        <md-option value="succeeded">Succeeded</md-option>
-                        <md-option value="failed">Failed</md-option>
-                        <md-option value="repeat succeeded">Repeat succeeded</md-option>
-                        <md-option value="repeat failed">Repeat failed</md-option>
-                    </md-select>
-                </md-list-item>
-            </md-list>
-            <div layout="row">
-                <span flex></span>
-                <md-input-container>
-                    <label>Restart task at</label>
-                    <input type="range" min="1" ng-model="task.current_task">
-                </md-input-container>
-            </div>
+        <div class="padded" layout="row">
+            <md-input-container flex>
+                <label>State</label>
+                <md-select ng-model="state" ng-disabled="selected.length == 0">
+                    <md-option value="succeeded">Succeeded</md-option>
+                    <md-option value="failed">Failed</md-option>
+                    <md-option value="repeat succeeded">Repeat succeeded</md-option>
+                    <md-option value="repeat failed">Repeat failed</md-option>
+                </md-select>
+            </md-input-container>
+            <span flex></span>
+            <md-input-container flex>
+                <label>Reason for failure</label>
+                <textarea ng-model="reason" rows="3"></textarea>
+            </md-input-container>
+            <md-input-container flex="15">
+                <label>Restart task at</label>
+                <md-select ng-model="task.current_task">
+                    <md-option ng-repeat="t in tasks_available"
+                               ng-value="$index">
+                        {{ $index + 1 }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
         </div>
+        <md-table-container>
+            <table md-table md-row-select ng-model="selected">
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column>Product</th>
+                        <th md-column>Status</th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select="entry" ng-repeat="entry in task.data">
+                        <td md-cell>{{ entry.product_name }}</td>
+                        <td md-cell>
+                            <md-select ng-model="entry.state">
+                                <md-option value="succeeded">Succeeded</md-option>
+                                <md-option value="failed">Failed</md-option>
+                                <md-option value="repeat succeeded">Repeat succeeded</md-option>
+                                <md-option value="repeat failed">Repeat failed</md-option>
+                            </md-select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
     </md-dialog-content>
     <md-dialog-actions layout="row">
         <md-button ng-click="cancel()">Cancel</md-button>

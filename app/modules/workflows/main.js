@@ -472,12 +472,16 @@ app.controller('MonitorTaskCtrl', function($scope, $rootScope, $mdDialog,
 app.controller('FinishTaskCtrl', function($scope, $rootScope, $mdDialog,
     RunService, InventoryService, WorkflowService, task, run) {
 
+    $scope.cancel = $mdDialog.cancel;
+
     $scope.task_name = task.name;
 
+    $scope.selected = [];
     $scope.failed = [];
 
     RunService.monitorTask(run.id).then(function(data) {
         $scope.task = data;
+        $scope.tasks_available = data.tasks.split(',');
 
         _.map($scope.task.data, function(obj) {
             if (obj.state == 'active') {
@@ -485,6 +489,12 @@ app.controller('FinishTaskCtrl', function($scope, $rootScope, $mdDialog,
             }
         });
     });
+
+    $scope.$watch('state', function(n) {
+        for (var i = 0; i < $scope.selected.length; i++) {
+            $scope.selected[i].state = n;
+        }
+    }, true);
 
     $scope.finishTask = function() {
         var failed = _.reduce(_.filter($scope.task.data, function(obj) {
@@ -497,6 +507,7 @@ app.controller('FinishTaskCtrl', function($scope, $rootScope, $mdDialog,
             }
         }, '');
         var results = {
+            notes: $scope.reason,
             failures: failed,
             restart_task_at: $scope.task.current_task,
         };
