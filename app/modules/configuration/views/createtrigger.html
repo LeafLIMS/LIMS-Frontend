@@ -43,30 +43,41 @@
                     <textarea ng-model="trigger.email_template" rows="6"></textarea>
                 </md-input-container>
                 <h3 class="section-subheader">Conditions</h3>
-                <div ng-repeat="c in conditions" layout="row">
-                    <md-input-container flex>
-                        <label>Field</label>
-                        <md-select ng-model="c.field" required>
-                            <md-option
-                                ng-value="f"
-                                ng-repeat="f in conditionFields">{{ f }}</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Operator</label>
-                        <md-select ng-model="c.operator" required>
-                            <md-option ng-repeat="o in operators"
-                                       ng-value="o.value">{{ o.name }}</md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container flex>
-                        <label>Value</label>
-                        <input ng-model="c.value" required>
-                    </md-input-container>
-                    <div layout="column" layout-align="center center">
-                        <md-button class="md-icon-button" ng-click="deleteCondition($index)">
-                            <md-icon>delete</md-icon>
-                        </md-button>
+                <div ng-repeat="c in conditions" layout="column">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label>Field</label>
+                            <md-select ng-model="c.field"
+                                       ng-disabled="c.fire_on_create"
+                                       ng-required="!c.fire_on_create">
+                                <md-option
+                                    ng-value="f"
+                                    ng-repeat="f in conditionFields">{{ f }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Operator</label>
+                            <md-select ng-model="c.operator"
+                                       ng-disabled="c.fire_on_create"
+                                       ng-required="!c.fire_on_create">
+                                <md-option ng-repeat="o in operators"
+                                           ng-value="o.value">{{ o.name }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label>Value</label>
+                            <input ng-model="c.value"
+                                   ng-disabled="c.fire_on_create"
+                                   ng-required="!c.fire_on_create">
+                        </md-input-container>
+                        <div layout="column" layout-align="center center">
+                            <md-button class="md-icon-button" ng-click="deleteCondition($index)">
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                    <div>
+                        <md-checkbox ng-model="c.fire_on_create">Trigger when created</md-checkbox>
                     </div>
                 </div>
                 <md-button ng-click="addCondition()">

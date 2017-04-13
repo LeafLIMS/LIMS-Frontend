@@ -121,7 +121,7 @@ app.controller('TriggerDialogCtrl', function($scope, $mdDialog,
     getTrigger(triggerId);
 
     var parseFields = function(fieldData) {
-        var fields = [];
+        var fields = ['id'];
         _.each(fieldData['actions']['POST'], function(field, fieldName) {
             if (!field.read_only) {
                 fields.push(fieldName);
@@ -131,7 +131,6 @@ app.controller('TriggerDialogCtrl', function($scope, $mdDialog,
     };
 
     $scope.setConditionFields = function(model) {
-        console.log(model);
         var modelData = _.find($scope.models, {model: model});
         AlertService.getModelFields(modelData.endpoint).then(function(data) {
             $scope.conditionFields = parseFields(data);
@@ -242,6 +241,10 @@ app.service('AlertService', function(Restangular) {
 
     this.updateTriggerset = function(triggersetId, data) {
         return Restangular.one('triggersets', triggersetId).patch(data);
+    };
+
+    this.deleteTriggerset = function(triggersetId) {
+        return Restangular.one('triggersets', triggersetId).remove();
     };
 
     this.getTriggers = function(triggerId) {
