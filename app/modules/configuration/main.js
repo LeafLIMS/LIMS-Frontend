@@ -400,7 +400,7 @@ app.controller('WorkflowTasksDialogCtrl', function($scope, $mdDialog,
     };
 
     $scope.addField = function(fieldType) {
-        $scope.task[fieldType + '_fields'].push({});
+        $scope.task[fieldType + '_fields'].push({amount: 0});
     };
 
     $scope.saveField = function(fieldType, field) {

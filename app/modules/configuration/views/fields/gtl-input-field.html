@@ -13,7 +13,6 @@
                 ng-disabled="field.from_calculation || field.from_input_file"
                 ng-required="!field.from_calculation && !field.from_input_file"
                 aria-label="{{ field.name }} amount"
-                ng-init="field.amount = 0"
                 ng-model="field.amount">
         </md-input-container>
         <md-autocomplete flex
