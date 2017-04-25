@@ -390,6 +390,7 @@ module.exports = function(grunt) {
                       '*.html',
                       'modules/**/*.html',
                       'modules/config.js',
+                      'styles/*.css',
                       'images/{,*/}*.{webp,svg}',
                       'styles/fonts/{,*/}*.*',
                     ],
