@@ -76,8 +76,8 @@
                 </md-input-container>
             </div>
         </div>
-        <div layout="column" ng-if="product.design_format">
-            <h3 class="section-subheader">Designs</h3>
+        <h3 class="section-subheader">Designs</h3>
+        <div layout="column" ng-if="product.has_design_file">
             <div class="sbol-visual centered">
                 <div class="sbol-visual component" ng-repeat="comp in product.sbol_diagram">
                     <div class="sbolv {{ el.role }}" ng-repeat="el in comp">
@@ -93,6 +93,24 @@
                 <md-button
                     aria-label="Select a design file as replacement"
                     ngf-select="replaceDesign($file)">Replace design</md-button>
+            </div>
+        </div>
+        <div class="padded border" layout="row" ng-if="!product.has_design_file">
+            <md-input-container flex>
+                <label>Product design format</label>
+                <md-select ng-model="product.design_format">
+                    <md-option disabled>SBOL</md-option>
+                    <md-option value="gb">GenBank</md-option>
+                    <md-option value="csv">CSV</md-option>
+                </md-select>
+            </md-input-container>
+            <div flex>
+                <md-button
+                    aria-label="Select a design file"
+                    ngf-select="replaceDesign($file)">
+                    Choose file
+                </md-button>
+                {{ design_file.name }}
             </div>
         </div>
         <div layout="row">
