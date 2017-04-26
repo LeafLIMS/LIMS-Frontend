@@ -656,26 +656,7 @@ app.controller('ItemTypeDialogCtrl', function($scope, $mdDialog,
     };
     getItemType(itemtypeId);
 
-    // Ng-show when open == parent
-    $scope.setParent = function() {
-        if ($scope.selectedItem) {
-            $scope.itemtype.parent = $scope.selectedItem.name;
-        } else {
-            $scope.itemtype.parent = '';
-        }
-    };
-
-    $scope.queryItems = function(searchText) {
-        searchText = searchText.toLowerCase();
-        return _.filter(itemtypes, function(obj) {
-            if (obj.level > 0) {
-                obj.pad = new Array(obj.level + 1).join(' -- ');
-            }
-            if (obj.name.toLowerCase().indexOf(searchText) > -1) {
-                return obj;
-            }
-        });
-    };
+    $scope.itemTypes = itemtypes;
 
     $scope.save = function() {
         if (itemtypeId) {
