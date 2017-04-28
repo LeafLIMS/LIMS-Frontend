@@ -61,25 +61,6 @@
                 <label>Description</label>
                 <textarea ng-model="item.description" rows="3"></textarea>
             </md-input-container>
-            <!--
-            <div>
-                <md-chips ng-model="item.tags" md-autocomplete-snap
-                    flex
-                    md-transform-chip="makeChip($chip)">
-                    <md-autocomplete
-                        md-selected-item="selectedTag"
-                        md-search-text="searchText"
-                        md-items="tag in tags"
-                        md-item-text="tag.name"
-                        md-floating-label="Tag this item">
-                        <span md-highlight-text="searchText">{{ tag.name }}</span>
-                    </md-autocomplete>
-                    <md-chip-template>
-                        <span>{{ $chip.name }}</span>
-                    </md-chip-template>
-                </md-chips>
-            </div>
-            -->
             <div class="top-padded" layout="column">
                 <div layout="row">
                     <md-input-container flex class="read-only">
@@ -223,6 +204,9 @@
                 <div flex="40">
                     <h3 class="side-padded section-subheader">History</h3>
                     <md-card>
+                        <i ng-if="item.transfers.length == 0" class="padded">
+                            No actions have been performed on this item.
+                        </i>
                         <md-list class="md-dense">
                             <md-list-item class="md-2-line" ng-repeat="tfr in item.transfers">
                                 <md-icon class="md-avatar-icon" ng-if="tfr.transfer_complete && tfr.is_addition">add</md-icon>

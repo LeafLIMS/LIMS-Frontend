@@ -479,6 +479,7 @@ input.noedit {
         padding: 0 !important;
     }
     .md-cell:first-child {
+        padding-left: $padding !important;
         padding-right: $padding !important;
     }
     textarea {
