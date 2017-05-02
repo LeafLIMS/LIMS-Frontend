@@ -44,8 +44,8 @@
             </md-menu>
         </div>
     </md-toolbar>
-    <div layout="row" flex> 
-        <div flex="33" layout="column" class="side-padded">
+    <div layout-gt-xs="row" flex>
+        <div flex-gt-sm="33" flex-sm="50" layout="column" class="side-padded">
             <md-input-container>
                 <label>Name</label>
                 <input required name="name" ng-model="item.name">
@@ -90,7 +90,7 @@
             </div>
             <gtl-permissions-widget input-data="item"></gtl-permissions-widget>
         </div>
-        <div layout="column" flex>
+        <div layout="column" flex flex-sm="50">
             <h3 class="side-padded section-subheader">Inventory</h3>
             <md-card layout="column" class="padded">
                 <div layout="row">
@@ -103,14 +103,14 @@
                         <input ng-model="item.barcode">
                     </md-input-container>
                 </div>
-                <div layout="row">
-                    <md-input-container class="read-only">
+                <div layout-gt-xs="row" layout-xs="column">
+                    <md-input-container flex-gt-xs class="read-only">
                         <label>Amount</label>
                         <input required type="number" 
                             disabled
                             ng-model="item.amount_available">
                     </md-input-container>
-                    <md-input-container flex class="read-only">
+                    <md-input-container flex-gt-xs class="read-only">
                         <label>Measure</label>
                         <md-select required ng-model="item.amount_measure">
                             <md-option ng-repeat="measure in measures"
@@ -120,12 +120,12 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <md-input-container flex>
+                    <md-input-container flex-gt-xs>
                         <label>Concentration</label>
                         <input type="number"
                                ng-model="item.concentration">
                     </md-input-container>
-                    <md-input-container flex>
+                    <md-input-container flex-gt-xs>
                         <label>Concentration measure</label>
                         <md-select ng-required="item.concentration"
                                    ng-model="item.concentration_measure">
@@ -136,8 +136,8 @@
                         </md-select>
                     </md-input-container>
                 </div>
-                <div layout="row">
-                    <md-input-container flex>
+                <div layout-gt-xs="row" layout-xs="column">
+                    <md-input-container flex-gt-xs>
                         <label>Location</label>
                         <md-select required ng-model="item.location">
                             <md-option ng-repeat="location in locations"
@@ -151,7 +151,7 @@
                     </i>
                 </div>
             </md-card>
-            <div layout="row">
+            <div layout-gt-sm="row">
                 <div flex>
                     <h3 class="side-padded section-subheader">Properties</h3>
                     <md-card>
@@ -201,7 +201,7 @@
                         </md-button>
                     </md-card>
                 </div>
-                <div flex="40">
+                <div flex-gt-sm="40">
                     <h3 class="side-padded section-subheader">History</h3>
                     <md-card>
                         <i ng-if="item.transfers.length == 0" class="padded">

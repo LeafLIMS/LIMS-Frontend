@@ -1,4 +1,4 @@
-<md-dialog aria-label="Task" flex="95">
+<md-dialog aria-label="Task" flex="100" flex-gt-xs="95">
     <form name="form" ng-submit="form.$valid && complete()" novalidate>
         <md-toolbar> 
             <div class="md-toolbar-tools">
@@ -37,7 +37,7 @@
                                             <p class="input-text">{{ input_files[file].name }}</p>
                                         </div>
                                     </div>
-                                    <div layout="row" layout-align="start center">
+                                    <div layout-gt-xs="row" layout-align="start center">
                                         <div layout="column" flex class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">Input items from products</span>
                                             <div layout="row" class="side-padded">
@@ -87,8 +87,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div layout="row">
-                                        <div ng-repeat="field in task.input_fields" flex="50"
+                                    <div layout-gt-xs="row">
+                                        <div ng-repeat="field in task.input_fields" flex-gt-xs="50"
                                             class="task-field-container">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-input-field
@@ -113,11 +113,11 @@
                                 </v-pane-content>
                             </v-pane>
                             <v-pane ng-show="task.variable_fields.length > 0">
-                                <v-pane-header>Constants</v-pane-header>
+                                <v-pane-header>Variables</v-pane-header>
                                 <v-pane-content>
-                                    <div layout="row" layout-align="start center" layout-wrap>
+                                    <div layout-gt-xs="row" layout-align="start center" layout-wrap>
                                         <div ng-repeat="field in task.variable_fields"
-                                             class="task-field-container bottom-margin" flex="50">
+                                             class="task-field-container bottom-margin" flex-gt-xs="50">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-variable-field is-disabled="isStarted" field="field">
                                             </gtl-variable-field>
@@ -128,8 +128,8 @@
                             <v-pane ng-show="task.calculation_fields.length > 0">
                                 <v-pane-header>Calculations</v-pane-header>
                                 <v-pane-content>
-                                    <div layout="row">
-                                        <div ng-repeat="field in task.calculation_fields" flex="50"
+                                    <div layout-gt-xs="row">
+                                        <div ng-repeat="field in task.calculation_fields" flex-gt-xs="50"
                                             class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-calculation-field is-disabled="isStarted" field="field">
@@ -141,15 +141,15 @@
                             <v-pane ng-show="task.output_files.length > 0 || task.output_fields.length > 0">
                                 <v-pane-header>Outputs</v-pane-header>
                                 <v-pane-content>
-                                    <div layout="row" ng-show="task.output_files.length > 0">
-                                        <div ng-repeat="file in task.output_files" flex="50"
+                                    <div layout-gt-xs="row" ng-show="task.output_files.length > 0">
+                                        <div ng-repeat="file in task.output_files" flex-gt-xs="50"
                                             class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ file }}</span>
                                             <md-button ng-click="getOutputFile(file)">Get {{ file }} file</md-button>
                                         </div>
                                     </div>
-                                    <div layout="row" ng-show="task.output_fields.length > 0">
-                                        <div ng-repeat="field in task.output_fields" flex="50"
+                                    <div layout-gt-xs="row" ng-show="task.output_fields.length > 0">
+                                        <div ng-repeat="field in task.output_fields" flex-gt-xs="50"
                                             class="task-field-container bottom-margin">
                                             <span class="field-label primary-label">{{ field.label }}</span>
                                             <gtl-output-field is-disabled="isStarted" field="field">

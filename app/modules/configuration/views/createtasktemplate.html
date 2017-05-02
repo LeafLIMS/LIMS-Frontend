@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create a task template" flex="95">
+<md-dialog aria-label="Create a task template"  flex="100" flex-gt-xs="95">
     <form name="taskForm" ng-submit="save()" novalidate ng-show="task">
         <md-toolbar class="md-primary">
             <div class="md-toolbar-tools">
@@ -11,8 +11,8 @@
         </md-toolbar>
         <md-dialog-content class="task" layout="column">
             <div class="md-dialog-content" layout="column">
-                <div layout="row">
-                    <div flex="75">
+                <div layout-gt-xs="row">
+                    <div flex-gt-xs="75">
                         <div layout="row">
                             <md-input-container flex="40">
                                 <label>Name of template</label>
@@ -112,7 +112,7 @@
                                 </span>
                             </md-autocomplete>
                         </md-chips>
-                        <div layout="row">
+                        <div layout-gt-xs="row">
                             <md-chips flex
                                 class="right-padded"
                                 ng-model="task.input_files"
@@ -189,7 +189,7 @@
                 </div>
                 <div ng-show="task.id">
                     <h3>Fields</h3>
-                    <div layout="row">
+                    <div layout-gt-xs="row">
                         <div flex="33" layout="column">
                             <h4>Inputs</h4> 
                             <!-- Stuff this; just do it in a directive! -->

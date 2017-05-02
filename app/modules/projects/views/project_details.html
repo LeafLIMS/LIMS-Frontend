@@ -38,8 +38,8 @@
             </md-menu>
         </div>
     </md-toolbar>
-    <div layout="row" flex>
-        <div layout="column" flex="35" class="side-padded top-padded">
+    <div layout="row" layout-xs="column" flex-xs="none">
+        <div layout="column" flex-gt-xs="35" class="side-padded top-padded">
             <md-input-container class="read-only">
                 <label>Date started</label>
                 <input disabled value="{{ project.date_started|date:'medium' }}">

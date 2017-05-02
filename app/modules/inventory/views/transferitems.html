@@ -1,4 +1,4 @@
-<md-dialog aria-label="Transfer items" flex="60">
+<md-dialog aria-label="Transfer items"  flex="100" flex-gt-xs="80" flex-gt-md="60">
     <form name="form" ng-submit="form.$valid && transfer()" novalidate>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -10,9 +10,11 @@
             </div>
         </md-toolbar>
         <md-dialog-content layout="column" layout-padding>
-            <div layout="row" layout-alig="start center" ng-repeat="item in items">
+            <div layout="row"
+                 layout-align="start center" ng-repeat="item in items">
                 <md-autocomplete
-                    flex="40"
+                    flex-gt-xs="40"
+                    flex-xs="25"
                     required
                     md-selected-item="item.item"
                     md-search-text="searchItemText"
@@ -28,8 +30,8 @@
                         There where no matches found for "{{ searchItemText }}"
                     </md-not-found>
                 </md-autocomplete>
-                <div layout="row" flex>
-                    <md-input-container flex="10">
+                <div layout-gt-xs="row" flex>
+                    <md-input-container flex-gt-xs="10">
                         <label>Amount</label>
                         <input required ng-disabled="!item.item"
                             name="amount" type="number" ng-model="item.amount">
@@ -38,11 +40,11 @@
                         </div>
                     </md-input-container>
                     <span class="postfix-text">{{ item.item.amount_measure }}</span>
-                    <md-input-container flex>
+                    <md-input-container flex-gt-xs>
                         <label>Destination barcode</label>
                         <input ng-model="item.barcode">
                     </md-input-container>
-                    <md-input-container flex>
+                    <md-input-container flex-gt-xs>
                         <label>Destination coordinate</label>
                         <input ng-model="item.coordinates">
                     </md-input-container>

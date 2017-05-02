@@ -1,4 +1,4 @@
-<md-dialog aria-label="Restock item" flex="80">
+<md-dialog aria-label="Restock item"  flex="100" flex-gt-xs="90" flex-gt-md="70">
     <form name="form" ng-submit="form.$valid && add()" novalidate>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -10,15 +10,15 @@
             </div>
         </md-toolbar>
         <md-dialog-content layout="column" layout-padding>
-            <div layout="row" class="no-padding">
-                <md-input-container flex>
+            <div layout-gt-xs="row" layout-xs="column" class="no-padding">
+                <md-input-container flex-gt-xs>
                     <label>Name</label>
                     <input required name="name" ng-model="item.name">
                     <div ng-messages="form.name.$invalid">
                         <div ng-message="required">A name is required</div>
                     </div>
                 </md-input-container>
-                <md-input-container flex>
+                <md-input-container flex-gt-xs>
                     <label>Product type</label>
                     <md-select ng-model="item.item_type" required>
                         <md-option ng-repeat="itm in item_types"
@@ -28,17 +28,17 @@
                     </md-select>
                 </md-input-container>
             </div>
-            <div layout="row" class="no-padding">
-                <md-input-container flex>
+            <div layout-gt-xs="row" layout-xs="column" class="no-padding">
+                <md-input-container flex-gt-xs>
                     <label>Identifier</label>
                     <input ng-model="item.identifier" required>
                 </md-input-container>
-                <md-input-container flex>
+                <md-input-container flex-gt-xs>
                     <label>Barcode</label>
                     <input ng-model="item.barcode" type="number" required>
                 </md-input-container>
             </div>
-            <div layout="row" class="no-padding">
+            <div layout-gt-xs="row" class="no-padding">
                 <div layout="row" flex>
                     <md-input-container flex>
                         <label>Amount</label>
@@ -56,7 +56,7 @@
                     </md-input-container>
                 </div>
                 <div layout="row" flex>
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>Concentration</label>
                         <input type="number"
                             ng-model="item.concentration">

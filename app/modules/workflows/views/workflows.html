@@ -1,5 +1,5 @@
-<div layout="row" class="no-padding" flex>
-    <div flex="30" layout="column" layout-fill> 
+<div layout-gt-xs="row" class="no-padding" flex>
+    <div flex-gt-xs="30"  layout-gt-xs="column">
         <md-toolbar class="md-primary md-hue-1 no-padding">
             <div class="md-toolbar-tools">
                 <md-button ng-click="startNewRun()">
@@ -51,7 +51,7 @@
             </md-list-item>
         </md-list>
     </div>
-    <div ui-view="workflow" flex layout-fill>
+    <div ui-view="workflow" flex>
         <md-toolbar class="md-primary md-hue-1 no-padding">
             <div class="md-toolbar-tools"></div>
         </md-toolbar>

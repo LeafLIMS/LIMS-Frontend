@@ -623,7 +623,6 @@ input.noedit {
 }
 
 .active-workflow-product {
-    width: 10em;
     padding: 0 $padding;
     font-size: 0.9em;
     min-height: 4.5em;
@@ -851,6 +850,10 @@ md-list-item.selected {
     }
 }
 
+.task-product-item:first-child {
+    margin-left: 0.5em;
+}
+
 .task-product-item {
     display: inline-block;
     padding: 0.25em 0.75em;
@@ -994,4 +997,9 @@ md-list-item.selected {
 
 .equipment-status-broken, .equipment-status-broken md-icon {
     color: #ccc;
+}
+
+// Configuration section
+.configuration-nav {
+    overflow-y: scroll;
 }
