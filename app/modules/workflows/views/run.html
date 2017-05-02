@@ -91,6 +91,7 @@
                             <span>{{ t.name|limitTo:"15" }}</span>
                             <span ng-show="t.name.length > 15">&hellip;</span>
                         </span>
+                        <md-tooltip md-direction="top">{{ t.name }}</md-tooltip>
                         <md-icon class="white-icon"
                             ng-show="$index == run.current_task && run.task_in_progress">
                             play_arrow</md-icon>
