@@ -586,6 +586,12 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         }
     };
 
+    $scope.refreshDesign = function() {
+        ProjectService.refreshDesign($stateParams.productId).then(function(data) {
+            getProduct();
+        });
+    };
+
     $scope.getHistory = function(productId) {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/product_history.html',
@@ -768,6 +774,10 @@ app.service('ProjectService', function(Restangular) {
 
     this.replaceDesign = function(productId, data) {
         return Restangular.one('products', productId).customPOST(data, 'replace_design');
+    };
+
+    this.refreshDesign = function(productId) {
+        return Restangular.one('products', productId).customPOST(null, 'refresh_design');
     };
 
     this.addAttachment = function(productId, data) {

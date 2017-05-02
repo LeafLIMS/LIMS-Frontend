@@ -78,6 +78,11 @@
         </div>
         <h3 class="section-subheader">Designs</h3>
         <div layout="column" ng-if="product.has_design_file">
+            <md-button class="md-icon-button" ng-click="refreshDesign()">
+                <md-tooltip>Update the design from file checking for new items in the inventory
+                </md-tooltip>
+                <md-icon>refresh</md-icon>
+            </md-button>
             <div class="sbol-visual centered">
                 <div class="sbol-visual component" ng-repeat="comp in product.sbol_diagram">
                     <div class="sbolv {{ el.role }}" ng-repeat="el in comp">
