@@ -18,100 +18,76 @@
                         <div ng-message="required">A name is required</div>
                     </div>
                 </md-input-container>
-                <md-autocomplete
-                    flex
-                    required
-                    md-selected-item="selectedItemType"
-                    md-search-text="searchItemText"
-                    md-items="itm in searchItemTypes(searchItemText)"
-                    md-item-text="itm.name"
-                    md-selected-item-change="setIncludeUrl(itm)"
-                    md-select-on-match
-                    md-min-length="0"
-                    md-floating-label="Type of item">
-                    <span md-highlight-text="searchText">{{ itm.display_name }}</span>
-                </md-autocomplete>
+                <md-input-container flex>
+                    <label>Product type</label>
+                    <md-select ng-model="item.item_type" required>
+                        <md-option ng-repeat="itm in item_types"
+                                   ng-value="itm.name">
+                            {{ itm.display_name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
             </div>
             <div layout="row" class="no-padding">
-                <div flex="50" layout="column">
-                    <div layout="row">
-                        <md-input-container flex>
-                            <label>Identifier</label>
-                            <input ng-model="item.identifier" required>
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label>Barcode</label>
-                            <input ng-model="item.barcode" type="number" required>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <md-input-container>
-                            <label>Amount</label>
-                            <input required type="number"
-                                ng-model="item.amount_available">
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label>Measure</label>
-                            <md-select required ng-model="item.amount_measure">
-                                <md-option ng-repeat="measure in measures"
-                                    ng-value="measure.symbol">
-                                    {{ measure.name }} ({{ measure.symbol }})
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <div layout="row">
-                        <md-input-container>
-                            <label>Concentration</label>
-                            <input type="number"
-                                ng-model="item.concentration">
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label>Concentration measure</label>
-                            <md-select ng-required="item.concentration"
-                                ng-model="item.concentration_measure">
-                                <md-option ng-repeat="measure in measures"
-                                    ng-value="measure.symbol">
-                                    {{ measure.name }} ({{ measure.symbol }})
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
+                <md-input-container flex>
+                    <label>Identifier</label>
+                    <input ng-model="item.identifier" required>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Barcode</label>
+                    <input ng-model="item.barcode" type="number" required>
+                </md-input-container>
+            </div>
+            <div layout="row" class="no-padding">
+                <div layout="row" flex>
                     <md-input-container flex>
-                        <label>Location</label>
-                        <md-select required ng-model="item.location">
-                            <md-option ng-repeat="location in locations"
-                                ng-value="location.code">
-                                {{ location.display_name }}
+                        <label>Amount</label>
+                        <input required type="number"
+                            ng-model="item.amount_available">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Measure</label>
+                        <md-select required ng-model="item.amount_measure">
+                            <md-option ng-repeat="measure in measures"
+                                ng-value="measure.symbol">
+                                {{ measure.name }} ({{ measure.symbol }})
                             </md-option>
                         </md-select>
                     </md-input-container>
                 </div>
-                <div layout="column" flex>
+                <div layout="row" flex>
                     <md-input-container>
-                        <label>Description</label>
-                        <textarea ng-model="item.description" rows="4"></textarea>
+                        <label>Concentration</label>
+                        <input type="number"
+                            ng-model="item.concentration">
                     </md-input-container>
-                    <!--
-                    <md-chips ng-model="item.tags" md-autocomplete-snap
-                        md-transform-chip="makeChip($chip)">
-                        <md-autocomplete
-                            md-selected-item="selectedTag"
-                            md-search-text="searchText"
-                            md-items="tag in tags"
-                            md-item-text="tag.name"
-                            md-floating-label="Tag this item">
-                            <span md-highlight-text="searchText">{{ tag.name }}</span>
-                        </md-autocomplete>
-                        <md-chip-template>
-                            <span>{{ $chip.name }}</span>
-                        </md-chip-template>
-                    </md-chips>
-                    -->
+                    <md-input-container flex>
+                        <label>Concentration measure</label>
+                        <md-select ng-required="item.concentration"
+                            ng-model="item.concentration_measure">
+                            <md-option ng-repeat="measure in measures"
+                                ng-value="measure.symbol">
+                                {{ measure.name }} ({{ measure.symbol }})
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                 </div>
             </div>
+            <md-input-container class="no-padding">
+                <label>Location</label>
+                <md-select required ng-model="item.location">
+                    <md-option ng-repeat="location in locations"
+                        ng-value="location.code">
+                        {{ location.display_name }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <textarea ng-model="item.description" rows="4"></textarea>
+            </md-input-container>
             <h3 class="section-subheader">Properties</h3>
-            <div layout="row" layout-align="start center" 
+            <div layout="row" layout-align="start center"
                 ng-repeat="prop in item.properties">
                 <md-input-container flex>
                     <label>Name</label>

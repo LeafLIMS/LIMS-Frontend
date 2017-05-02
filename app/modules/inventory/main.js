@@ -284,36 +284,25 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
         $mdDialog.hide();
     };
 
-    InventoryService.locations({limit: 100}).then(
+    InventoryService.locations({limit: 200}).then(
         function(data) {
             $scope.locations = data;
         });
 
-    InventoryService.itemTypes({limit: 100}).then(
+    InventoryService.itemTypes({limit: 200}).then(
         function(data) {
             $scope.item_types = data;
         });
 
-    InventoryService.measures({limit: 100}).then(
+    InventoryService.measures({limit: 200}).then(
         function(data) {
             $scope.measures = data;
         });
 
-    OrganismService.organisms({limit: 100}).then(
+    OrganismService.organisms({limit: 200}).then(
         function(data) {
             $scope.organisms = data;
         });
-
-    $scope.searchItemTypes = function(searchText) {
-        if (!searchText) {
-            return $scope.item_types;
-        }
-        var lSearchText = searchText.toLowerCase();
-        var results = _.filter($scope.item_types, function(itm) {
-            return itm.name.toLowerCase().indexOf(lSearchText) > -1;
-        });
-        return results;
-    };
 
     $scope.addProperty = function() {
         $scope.item.properties.push({name: '', value: ''});
@@ -328,8 +317,6 @@ app.controller('AddItemCtrl', function($scope, $mdDialog, InventoryService,
     };
 
     $scope.add = function() {
-        $scope.item.added_by = UserService.getUser().username;
-        $scope.item.item_type = $scope.selectedItemType.name;
         InventoryService.saveItem($scope.item).then(
             function(data) {
                 $mdDialog.hide();
