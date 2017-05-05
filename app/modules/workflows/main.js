@@ -96,7 +96,8 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
             // Pick out any excluded items
             for (var i = 0; i < $scope.run.products.length; i++) {
                 for (var j = 0; j < $scope.run.products[i].linked_inventory.length; j++) {
-                    if ($scope.exclude.indexOf(""+$scope.run.products[i].linked_inventory[j].id) !== -1) {
+                    if ($scope.exclude.indexOf(
+                            $scope.run.products[i].linked_inventory[j].id.toString()) !== -1) {
                         $scope.run.products[i].linked_inventory[j].excluded = true;
                     }
                 }
@@ -183,7 +184,7 @@ app.controller('ActiveRunCtrl', function($scope, PageTitle, WorkflowService,
             $scope.exclude.push(item.id.toString());
             item.excluded = true;
         }
-        RunService.updateRun($scope.run.id, {exclude: $scope.exclude.join(",")});
+        RunService.updateRun($scope.run.id, {exclude: $scope.exclude.join(',')});
     }
 
     $scope.stopRun = function() {
@@ -258,7 +259,7 @@ app.controller('EditRunCtrl', function($scope, $rootScope, $mdDialog, WorkflowSe
     };
     $scope.getTasks();
 
-    $scope.$watch('query.search', function(n,o) {
+    $scope.$watch('query.search', function(n, o) {
         $scope.getTasks();
     }, true);
 

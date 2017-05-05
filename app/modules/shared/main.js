@@ -79,7 +79,7 @@ app.controller('AccountCtrl', function($scope, PageTitle, UserService, CountrySe
     $scope.save = function() {
         var data = {
             first_name: $scope.user.first_name,
-            last_name: $scope.user.last_name
+            last_name: $scope.user.last_name,
         };
         UserService.updateUserDetails($scope.user.id, data);
     };

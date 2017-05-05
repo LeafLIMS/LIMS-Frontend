@@ -122,7 +122,7 @@ app.controller('TriggerDialogCtrl', function($scope, $mdDialog,
 
     var parseFields = function(fieldData) {
         var fields = ['id'];
-        _.each(fieldData['actions']['POST'], function(field, fieldName) {
+        _.each(fieldData.actions.POST, function(field, fieldName) {
             if (!field.read_only) {
                 fields.push(fieldName);
             }
@@ -219,7 +219,7 @@ app.service('AlertService', function(Restangular) {
 
     this.triggersets = function(params) {
         if (!params) {
-            var params = {};
+            params = {};
         }
         return Restangular.all('triggersets').getList(params);
     };
@@ -230,7 +230,7 @@ app.service('AlertService', function(Restangular) {
 
     this.triggers = function(params) {
         if (!params) {
-            var params = {};
+            params = {};
         }
         return Restangular.all('triggers').getList(params);
     };

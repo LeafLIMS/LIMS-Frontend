@@ -2,7 +2,7 @@
 
 var app = angular.module('limsFrontend');
 
-app.controller('OrdersCtrl', function($scope, PageTitle, OrderService, UserService) {
+app.controller('OrdersCtrl', function($scope, PageTitle, OrderService, UserService, $mdDialog) {
 
     PageTitle.set('Orders');
     $scope.removePadding = true;
@@ -90,14 +90,17 @@ app.directive('gtlSubValue', function($sce, $compile) {
             var processObject = function(obj) {
                 var out = '';
                 _.each(obj, function(value, key) {
-                    out += '<div layout="row"><b flex="25">'+ key + '</b><span flex class="order-item-value">' + value + '</span></div>';
+                    out += '<div layout="row"><b flex="25">' + key +
+                           '</b><span flex class="order-item-value">' +
+                           value + '</span></div>';
                 });
                 return out;
             };
 
             if (Array.isArray($scope.data)) {
                 for (var i = 0; i < $scope.data.length; i++) {
-                    output += '<div class="subvalue-group">' + processObject($scope.data[i]) + '</div>';
+                    output += '<div class="subvalue-group">' +
+                              processObject($scope.data[i]) + '</div>';
                 }
             } else {
                 output += processObject($scope.data);
@@ -105,7 +108,7 @@ app.directive('gtlSubValue', function($sce, $compile) {
 
             var compiled = $compile(output)($scope);
             elem.append(compiled);
-        }
+        },
     }
 });
 

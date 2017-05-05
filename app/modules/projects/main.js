@@ -133,7 +133,7 @@ app.controller('ProjectsCtrl', function($scope, PageTitle, ProjectService,
             },
             locals: {
                 crmEnabled: $scope.crmEnabled,
-            }
+            },
         });
     };
 
@@ -273,7 +273,7 @@ app.controller('ProjectDetailsCtrl', function($scope, PageTitle,
         $scope.getProductData();
     };
 
-	var updateDelayed = function() {
+    var updateDelayed = function() {
         $scope.$apply(function() { updateProjectData() });
     };
 
@@ -573,11 +573,10 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         if (file) {
             var reader = new FileReader();
             reader.onload = function(event) {
-                var design_data = {
+                var designData = {
                     design_file: event.target.result,
                 };
-                console.log(design_data);
-                ProjectService.replaceDesign($stateParams.productId, design_data).then(
+                ProjectService.replaceDesign($stateParams.productId, designData).then(
                        function(data) {
                            getProduct();
                        });
@@ -601,7 +600,7 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
             },
             locals: {
                 product: $scope.product,
-            }
+            },
         });
 
     };

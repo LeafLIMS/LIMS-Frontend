@@ -634,7 +634,7 @@ app.service('InventoryService', function(Restangular) {
 
     this.transfers = function(params) {
         if (!params) {
-            var params = {};
+            params = {};
         }
         return Restangular.all('transfers').getList(params);
     };

@@ -233,7 +233,7 @@ app.controller('WorkflowDialogCtrl', function($scope, $mdDialog,
     };
     $scope.getTasks();
 
-    $scope.$watch('query.search', function(n,o) {
+    $scope.$watch('query.search', function(n, o) {
         $scope.getTasks();
     }, true);
 
@@ -1312,7 +1312,7 @@ app.controller('GroupsConfigurationCtrl', function($scope, PageTitle,
 app.controller('GroupDialogCtrl', function($scope, $mdDialog,
     GroupService, groupId) {
 
-    $scope.selectedItem;
+    $scope.selectedItem = undefined;
     $scope.permissions = [];
     GroupService.permissions({limit: 200}).then(function(data) {
         _.each(data, function(obj) {
@@ -1696,15 +1696,15 @@ app.controller('FileTemplateWizardCtrl', function($scope, $mdDialog,
         } else if (fileType == 'input' && fileFor == 'inventory') {
             var identifiers = ['barcode', 'name'];
             for (var i = 0; i < $scope.inventoryFields.length; i++) {
-                var is_an_identifier = false;
+                var isAnIdentifier = false;
                 if (identifiers.indexOf($scope.inventoryFields[i]) != -1) {
-                    is_an_identifier = true;
+                    isAnIdentifier = true;
                 }
                 $scope.filetemplate.fields.push({
                     name: $scope.inventoryFields[i].replace('_', ' '),
                     map_to: $scope.inventoryFields[i],
                     required: true,
-                    is_identifier: is_an_identifier,
+                    is_identifier: isAnIdentifier,
                 });
             }
         }
