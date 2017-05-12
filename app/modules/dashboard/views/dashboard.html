@@ -4,10 +4,14 @@
     <div layout-gt-xs="row">
         <div layout="column" flex>
             <h3 class="section-subheader">Project statuses</h3>
-            <canvas id="doughnut" class="chart chart-doughnut"
-                  chart-data="project_status_stats.results"
-                  chart-labels="project_status_stats.labels">
+            <canvas ng-if="project_status_stats.results.length > 0"
+                    id="doughnut" class="chart chart-doughnut"
+                    chart-data="project_status_stats.results"
+                    chart-labels="project_status_stats.labels">
             </canvas>
+            <i ng-if="project_status_stats.results.length == 0">
+                No statuses to display
+            </i>
             <h3 class="section-subheader">Latest Projects</h3>
             <md-list class="md-dense">
                 <md-list-item ng-repeat="p in projects"
@@ -29,21 +33,24 @@
         </div>
         <div layout="column" flex>
             <h3 class="section-subheader">Product statuses</h3>
-            <canvas id="doughnut" class="chart chart-doughnut"
-                  chart-data="product_status_stats.results"
-                  chart-labels="product_status_stats.labels">
+            <canvas ng-if="product_status_stats.results.length > 0"
+                    id="doughnut" class="chart chart-doughnut"
+                    chart-data="product_status_stats.results"
+                    chart-labels="product_status_stats.labels">
             </canvas>
+            <i ng-if="product_status_stats.results.length == 0">
+                No statuses to display
+            </i>
             <h3 class="section-subheader">Active runs</h3>
             <md-list class="md-dense">
                 <md-list-item ng-repeat="run in activeRuns"
                     ui-sref="app.workflows.run({id: run.id})"
-                    class="md-3-line">
+                    class="md-2-line">
                     <div class="md-list-item-text">
                         <h3>
                             {{ run.name }}
                             <span class="product-count">{{ run.products.length }} products</span>
                         </h3>
-                        <h4>~</h4>
                         <p>Started: {{ run.date_started|date:"short" }} by {{ run.started_by }}</p>
                     </div>
                 </md-list-item>
@@ -54,45 +61,23 @@
         </div>
         <div layout="column" flex>
             <h3 class="section-subheader">Equipment statuses</h3>
-            <canvas id="doughnut" class="chart chart-doughnut"
-                  chart-data="equipment_stats.results"
-                  chart-labels="equipment_stats.labels">
+            <canvas ng-if="equipment_stats.results.length > 0"
+                    id="doughnut" class="chart chart-doughnut"
+                    chart-data="equipment_stats.results"
+                    chart-labels="equipment_stats.labels">
             </canvas>
+            <i ng-if="equipment_stats.results.length == 0">
+                No statuses to display
+            </i>
             <h3 class="section-subheader">Equipment</h3>
             <md-list class="md-dense">
-                <md-subheader>Equipment currently active</md-subheader>
                 <md-list-item ng-if="activeEquipment.length == 0">
                     All equipment idle
                 </md-list-item>
-                <md-list-item ng-repeat="e in activeEquipment"
+                <md-list-item ng-repeat="e in equipment"
                     ui-sref="app.equipment"
                     class="md-2-line">
-                    <div class="md-list-item-text">
-                        <h3>
-                            {{ e.name }}
-                        </h3>
-                        <h4>{{ e.status_display }}</h4>
-                    </div>
-                    <md-menu class="md-secondary">
-                        <md-button class="md-icon-button"
-                            ng-click="$mdOpenMenu()">
-                            <md-icon>notifications</md-icon>
-                        </md-button>
-                        <md-menu-content width="4">
-                            <md-menu-item ng-repeat="(code,status) in equipment_statuses">
-                                <md-button
-                                    ng-click="changeStatus(code, e)">
-                                    <md-icon>{{ status_icons[code] }}</md-icon>
-                                    {{ status }}
-                                </md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </md-list-item>
-                <md-subheader ng-if="errorEquipment.length > 0">Equipment with errors</md-subheader>
-                <md-list-item ng-repeat="e in errorEquipment"
-                    ui-sref="app.equipment"
-                    class="md-2-line">
+                    <md-icon>{{ status_icons[e.status] }}</md-icon>
                     <div class="md-list-item-text">
                         <h3>
                             {{ e.name }}

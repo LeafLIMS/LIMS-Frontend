@@ -44,6 +44,10 @@ app.service('EquipmentService', function(Restangular) {
         return Restangular.all('equipment').getList(params);
     };
 
+    this.not_idle = function() {
+        return Restangular.all('equipment').customGET('not_idle');
+    };
+
     this.equipmentStats = function(field, params) {
         if (!params) {
             params = {

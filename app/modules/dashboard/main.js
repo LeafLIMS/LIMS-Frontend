@@ -30,25 +30,24 @@ app.controller('DashboardCtrl', function($scope, PageTitle,
         }
     });
 
-    ProjectService.projects({limit: 5, ordering: '-id'}).then(function(data) {
+    ProjectService.projects({limit: 5, ordering: '-id', archive: 'False'}).then(function(data) {
         $scope.projects = data;
     });
 
-    ProjectService.projectStats('crm_project__status').then(function(data) {
+    ProjectService.projectStats('crm_project__status', {archive: 'False'})
+        .then(function(data) {
         $scope.project_status_stats = toDataset('crm_project__status', data);
     });
 
-    ProjectService.productStats('status__name').then(function(data) {
+    ProjectService.productStats('status__name', {project__archive: 'False'})
+        .then(function(data) {
         $scope.product_status_stats = toDataset('status__name', data);
     });
 
     var getEquipment = function() {
-        EquipmentService.equipment({status: 'active'}).then(function(data) {
-            $scope.activeEquipment = data;
-        });
 
-        EquipmentService.equipment({status: 'error'}).then(function(data) {
-            $scope.errorEquipment = data;
+        EquipmentService.not_idle().then(function(data) {
+            $scope.equipment = data;
         });
 
         EquipmentService.equipmentStats('status').then(function(data) {
@@ -80,8 +79,10 @@ app.controller('DashboardCtrl', function($scope, PageTitle,
                 toLabel = 'None';
             }
             toValue = obj[filter + '__count'];
-            results.labels.push(toLabel);
-            results.results.push(toValue);
+            if (toValue > 0) {
+                results.labels.push(toLabel);
+                results.results.push(toValue);
+            }
         });
         return results;
     };
