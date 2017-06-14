@@ -591,6 +591,23 @@ app.controller('ProductDetailsCtrl', function($scope, $stateParams,
         });
     };
 
+    $scope.downloadDesign = function(type) {
+        ProjectService.downloadDesign($scope.product.id, type).then(function(data) {
+            var fileUrl = URL.createObjectURL(data);
+            var a = document.createElement('a');
+            a.href  = fileUrl;
+            a.target = '_self';
+            var ext = $scope.product.design_format;
+            if (type == 'sbol') {
+                ext = 'sbol';
+            }
+            a.download = $scope.product.product_identifier + '_design.' + ext;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    };
+
     $scope.getHistory = function(productId) {
         $mdDialog.show({
             templateUrl: 'modules/projects/views/product_history.html',
@@ -777,6 +794,12 @@ app.service('ProjectService', function(Restangular) {
 
     this.refreshDesign = function(productId) {
         return Restangular.one('products', productId).customPOST(null, 'refresh_design');
+    };
+
+    this.downloadDesign = function(productId, designType) {
+        var params = {file_format: designType};
+        return Restangular.one('products', productId).withHttpConfig({responseType: 'blob'})
+               .customGET('download_design', params);
     };
 
     this.addAttachment = function(productId, data) {

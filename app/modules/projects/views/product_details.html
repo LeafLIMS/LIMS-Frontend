@@ -98,6 +98,26 @@
                 <md-button
                     aria-label="Select a design file as replacement"
                     ngf-select="replaceDesign($file)">Replace design</md-button>
+                <md-menu width="6">
+                    <md-button ng-click="$mdMenu.open($event)">
+                        Download design
+                        <md-icon md-menu-align-target>expand_more</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                        <md-menu-item>
+                            <md-button
+                                ng-click="downloadDesign()"
+                                aria-label="Download design as {{ product.design_format }}">
+                                As .{{ product.design_format }} format
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button
+                                ng-click="downloadDesign('sbol')"
+                                aria-label="Download design as SBOL">As SBOL</md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </div>
         <div class="padded border" layout="row" ng-if="!product.has_design_file">
