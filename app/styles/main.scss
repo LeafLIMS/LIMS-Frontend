@@ -713,6 +713,20 @@ input.noedit {
     }
 }
 
+.sbol-inventory-link {
+    font-weight: bold;
+    text-decoration: none;
+    color: $primary2;
+}
+
+.sbol-inventory-link:hover {
+    color: $primary;
+}
+
+.sbol-inventory-name {
+    font-style: italic;
+}
+
 .product-list {
     padding: 0;
     height: 40em;

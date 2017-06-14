@@ -86,10 +86,11 @@
             <div class="sbol-visual centered">
                 <div class="sbol-visual component" ng-repeat="comp in product.sbol_diagram">
                     <div class="sbolv {{ el.role }}" ng-repeat="el in comp">
-                        <a ui-sref="inventory_item({id: el.item})" ng-if="el.item">
+                        <a ui-sref="inventory_item({id: el.item})" class="sbol-inventory-link"
+                           ng-if="el.item">
                             {{ el.name }}
                         </a>
-                        <span ng-if="!el.item">{{ el.name }}</span>
+                        <span class="sbol-inventory-name" ng-if="!el.item">{{ el.name }}</span>
                     </div>
                 </div>
             </div>
