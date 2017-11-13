@@ -1,0 +1,15 @@
+<template>
+    <h2>Settings</h2>
+    <div class="ui inverted stackable pointing primary menu">
+        <a class="item" repeat.for="route of router.routes" if.bind="route.name"
+           map-href="route.bind: route.name">
+            ${route.title}
+        </a>
+        <a repeat.for="[name, item] of settings"
+           if.bind="settings"
+           class="item ${activeSection == item.section ? 'active' : ''}"
+           map-href="route.bind: '${item.section}-settings'">
+            ${name}
+        </a>
+    </div>
+</template>

@@ -1,0 +1,51 @@
+<template>
+    <div class="ui two column wide stackable grid">
+        <div class="row">
+            <ui-field label="Username" required class="column">
+                <input value.bind="item.username & validate">
+            </ui-field>
+            <ui-field label="Email" required class="column">
+                <input value.bind="item.email & validate">
+            </ui-field>
+        </div>
+        <ui-field label="Password" required class="sixteen wide column">
+            <input value.bind="item.password & validate" type="password">
+        </ui-field>
+        <div class="row">
+            <ui-field label="First name" class="column">
+                <input value.bind="item.first_name & validate">
+            </ui-field>
+            <ui-field label="Last name" class="column">
+                <input value.bind="item.last_name & validate">
+            </ui-field>
+        </div>
+    </div>
+    <h4>Groups</h4>
+    <div class="ui fluid action input">
+        <ui-autocomplete value.bind="group"
+                         from="groups"
+                         store-value="name"
+                         placeholder="Choose group">
+        </ui-autocomplete>
+        <button class="ui button" click.delegate="addGroup()">Add</button>
+    </div>
+    <div class="ui scrollable list">
+        <div class="item" repeat.for="p of item.groups">
+            ${p}
+            <button class="ui right floated circular icon button"
+                    click.delegate="removeGroup($index)">
+                <i class="delete icon"></i>
+            </button>
+        </div>
+    </div>
+    <div if.bind="item.id">
+        <h4>CRM</h4>
+        <div if.bind="item.crmaccount">
+            ${item.crmaccount.account_details}
+        </div>
+        <button class="ui basic button" if.bind="!item.crmaccount && item.id"
+                click.delegate="linkAccount()">Link account</button>
+        <button class="ui basic button" if.bind="item.crmaccount"
+                click.delegate="unlinkAccount()">Remove account</button>
+    </div>
+</template>

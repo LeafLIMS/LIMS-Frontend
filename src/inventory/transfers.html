@@ -1,0 +1,38 @@
+<template>
+    <div class="au-animate page">
+        <h2><a class="dim" route-href="route: inventory">Inventory |</a> All Transfers</h2>
+        <ui-table-header search.bind="query.search">
+        </ui-table-header>
+        <ui-table-wrapper>
+            <table ui-table>
+                <thead>
+                    <tr as-element="ui-table-sort" query.bind="query">
+                        <th></th>
+                        <th sort-by="item_name">Name</th>
+                        <th sort-by="barcode">Barcode</th>
+                        <th sort-by="coordinates">Coordinates</th>
+                        <th>Amount available</th>
+                        <th>Amount taken</th>
+                        <th sort-by="date_created">Date created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ui-table-row="route: transferDetail; params.bind: {barcode: row.barcode}"
+                        repeat.for="row of transfers.results">
+                        <td as-element="ui-table-select" select-to.bind="selected"
+                            select-as.bind="row"></td>
+                        <td>${row.item_name}</td>
+                        <td>${row.barcode}</td>
+                        <td>${row.coordinates}</td>
+                        <td>${row.amount_available}${row.amount_measure}</td>
+                        <td>${row.amount_taken}${row.amount_measure}</td>
+                        <td>${row.date_created|dateFormat}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ui-table-wrapper>
+        <ui-table-pagination page.bind="transfers.meta.current" limit.bind="query.limit"
+                             limitOptions.bind="[10,20,50,100]" total.bind="transfers.meta.count">
+        </ui-table-pagination>
+    </div>
+</template>

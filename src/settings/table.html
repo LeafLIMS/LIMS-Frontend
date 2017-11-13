@@ -1,0 +1,75 @@
+<template>
+    <require from="./path-walker"></require>
+    <require from="./display-value"></require>
+    <form class="ui form new item slide-down au-animate" if.bind="createItem"
+          submit.delegate="updateItem ? update() : save()" novalidate>
+        <h3 class="ui top attached inverted primary header">
+            ${updateItem? 'Update' : 'New'} Item
+        </h3>
+        <div class="ui attached ${isSaving ? 'loading' : ''} segment">
+            <compose view.bind="createTemplate" model.bind="item"></compose>
+            <ll-template-hook name="settings-create-${subsection}" source.bind="item">
+            </ll-template-hook>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+    <ui-table-header search.bind="query.search">
+        <button click.delegate="create()" class="ui primary small basic button">
+            <i class="plus icon"></i>
+            Create new
+        </button>
+        <ui-dropdown-menu class="item"
+                     icon="ellipsis vertical">
+            <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
+                                   click.delegate="deleteItems()" icon="erase">
+                Delete selected
+            </ui-dropdown-menu-item>
+        </ui-dropdown-menu>
+    </ui-table-header>
+    <div class="ui attached message" if.bind="tableError">
+        <ui-error-message error-source.bind="tableError"></ui-error-message>
+    </div>
+    <div class="ui loading very padded attached segment" if.bind="isLoading"></div>
+    <ui-table-wrapper if.bind="!isLoading">
+        <table ui-table>
+            <thead>
+                <tr as-element="ui-table-sort" query.bind="query">
+                    <th></th>
+                    <th repeat.for="header of tableHeaders">${header}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="row of table.results">
+                    <td as-element="ui-table-select" select-to.bind="selected"
+                        select-as.bind="row"></td>
+                    <td repeat.for="field of tableFields" as-element="display-value"
+                        text.bind="row|pathWalker:field"></td>
+                    <td class="right aligned">
+                        <div class="ui icon buttons">
+                            <button if.bind="extraButtons" repeat.for="b of extraButtons"
+                                    class="ui basic grey button"
+                                    click.delegate="b['action'](row)">
+                                <i class="${b.icon} icon"></i>
+                            </button>
+                            <button class="ui primary basic button"
+                                    click.delegate="edit(row)">
+                                <i class="edit icon"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ui-table-wrapper>
+    <ui-table-pagination page.bind="table.meta.current" limit.bind="query.limit"
+                         limitOptions.bind="[10,20,50,100]" total.bind="table.meta.count">
+    </ui-table-pagination>
+
+</template>

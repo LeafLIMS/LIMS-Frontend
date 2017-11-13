@@ -1,0 +1,90 @@
+<template>
+    <form class="ui form au-animate page" submit.delegate="save()" novalidate>
+        <h2><a class="dim" route-href="route: workflows">Workflow runs:</a> ${run.name}</h2>
+
+        <h3 class="ui inverted primary top attached in_progress task header">
+            <div class="ui circular white label">${taskPosition}</div>
+            Finish Task:
+            ${task_name}
+        </h3>
+        <div class="ui attached segment">
+            <div class="ui two column wide grid">
+                <ui-field label="Set selected as" class="column">
+                    <ui-dropdown value.bind="state" change.delegate="setState($event)">
+                        <ui-item repeat.for="[v, d] of finishOptions"
+                                 value.bind="v">${d}</ui-item>
+                    </ui-dropdown>
+                </ui-field>
+                <div class="column">
+                    <ui-field label="Restart failed at task" class="column">
+                        <ui-dropdown value.bind="restartTaskAt">
+                            <ui-item repeat.for="t of run.tasks"
+                                     value.bind="$index">${$index + 1}: ${t.name}</ui-item>
+                        </ui-dropdown>
+                    </ui-field>
+                    <ui-field label="Add note to data" class="column">
+                        <textarea value.bind="notes" rows="3"></textarea>
+                    </ui-field>
+                </div>
+            </div>
+        </div>
+        <ui-table-wrapper>
+            <table ui-table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="four wide">Name</th>
+                        <th class="four wide">Inputs</th>
+                        <th class="four wide">Outputs</th>
+                        <th class="three wide">State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr repeat.for="row of results">
+                        <td as-element="ui-table-select" select-to.bind="selected"
+                            select-as.bind="row"></td>
+                        <td>${row.product_name}</td>
+                        <td>
+                            <div class="ui blue labels">
+                                <div class="ui label"
+                                     repeat.for="input of row.data.product_input_amounts">
+                                    ${input.name}
+                                    <div class="detail">
+                                        ${input.amount}${input.measure}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="ui orange labels">
+                                <div class="ui label"
+                                     repeat.for="output of row.data.output_fields">
+                                    ${output.label}
+                                    <div class="detail">
+                                        ${output.amount}${output.measure}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <ui-dropdown value.bind="row.state">
+                                <ui-item repeat.for="[v, d] of finishOptions"
+                                         value.bind="v">${d}</ui-item>
+                            </ui-dropdown>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ui-table-wrapper>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <a route-href="route: performTask; params.bind: {id: run.id}"
+               if.bind="run.id"
+               class="ui button">Cancel</a>
+            <button type="submit"
+               class="ui primary button">Done</button>
+        </div>
+    </form>
+</template>

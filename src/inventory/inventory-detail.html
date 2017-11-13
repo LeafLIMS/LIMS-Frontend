@@ -1,0 +1,151 @@
+<template>
+    <require from="./ll-dispense-amount"></require>
+    <require from="./ll-restock-amount"></require>
+    <div class="au-animate slide-in">
+        <h2><a class="dim" route-href="route: inventory">Inventory:</a> ${item.name}</h2>
+        <div class="ui inverted stackable primary menu">
+            <a class="item" click.delegate="dispense = true">
+                <i class="icon sign out"></i>
+                Dispense amount
+            </a>
+            <a class="item" click.delegate="restock = true">
+                <i class="icon sign in"></i>
+                Restock
+            </a>
+        </div>
+        <ll-dispense-amount source.bind="item" toggle.bind="dispense"></ll-dispense-amount>
+        <ll-restock-amount source.bind="item" toggle.bind="restock"></ll-restock-amount>
+        <div class="ui two column grid form segment no gutter">
+            <div class="middle aligned column">
+                <ui-boolean source.bind="item.in_inventory" size="big"></ui-boolean>
+                Item is available in <i>${item.location_path}</i>
+            </div>
+            <ui-field class="column" label="Change location">
+                <ui-dropdown value.bind="item.location" required placeholder="Location">
+                    <ui-item class="item" repeat.for="loc of locations.results"
+                             value.bind="loc.code">${loc.display_name}</ui-item>
+                </ui-dropdown>
+            </ui-field>
+        </div>
+        <div class="ui stackable grid no gutter">
+            <form class="ui eleven wide column form" novalidate>
+                <div class="ui segment">
+                    <div class="ui grid two column wide">
+                        <ui-field class="column" label="Name" required>
+                            <input name="name" value.bind="item.name & validate & debounce:1000"
+                                   placeholder="Item name">
+                        </ui-field>
+                        <ui-field class="column" required label="Type">
+                            <ui-dropdown value.bind="item.item_type" required>
+                                <ui-item class="item" repeat.for="type of itemTypes.results"
+                                         value.bind="type.name">${type.display_name}</ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                    <div class="ui grid two column wide">
+                        <ui-field class="column" label="Barcode">
+                            <input name="barcode" value.bind="item.barcode & debounce:500"
+                                   placeholder="Barcode">
+                        </ui-field>
+                        <ui-field class="column" label="Identifier">
+                            <input name="identifier" value.bind="item.identifier & debounce:500"
+                                   placeholder="Identifier">
+                        </ui-field>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <h3>Amount</h3>
+                    <div class="ui grid four column wide">
+                        <div class="middle aligned column">${item.amount_available}</div>
+                        <ui-field class="column" label="Amount measure">
+                            <ui-dropdown value.bind="item.amount_measure" required>
+                                <ui-item repeat.for="m of measures.results"
+                                         value.bind="m.symbol">${m.symbol}</ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                        <ui-field class="column" label="Concentration">
+                            <input name="identifier" value.bind="item.concentration & debounce:1000"
+                                   placeholder="Concentration">
+                        </ui-field>
+                        <ui-field class="column" label="Concentration measure">
+                            <ui-dropdown value.bind="item.concentration_measure">
+                                <ui-item repeat.for="m of measures.results"
+                                         value.bind="m.symbol">${m.symbol}</ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <h3>Properties</h3>
+                    <div class="ui two column wide grid" repeat.for="p of item.properties">
+                        <ui-field class="column" label="Name">
+                            <input name="prop_${index}" value.bind="p.name & validate & debounce:1000">
+                        </ui-field>
+                        <div class="ui two column wide grid">
+                            <ui-field class="fourteen wide column" label="Value">
+                                <textarea name="val_${index}"
+                                          value.bind="p.value & validate & debounce:1000"></textarea>
+                            </ui-field>
+                            <div class="middle aligned two wide column">
+                            <button class="ui circular icon button"
+                                    click.delegate="removeProperty($index)">
+                                <i class="remove icon"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ui button" click.delegate="addProperty()">
+                        <i class="icon add"></i> Add
+                    </button>
+                </div>
+            </form>
+            <div class="five wide column">
+                <div class="ui segment">
+                    <p><b>Last updated:</b> ${item.last_updated_on}</p>
+                    <p><b>Added on:</b> ${item.added_on}</p>
+                    <p><b>Added by:</b> ${item.added_by}</p>
+                    <ui-accordion>
+                        <ui-accordion-content title="Description">
+                            ${item.description}
+                        </ui-accordion-content>
+                    </ui-accordion>
+                </div>
+                <div class="ui segment">
+                    <h3>Permissions</h3>
+                    <ll-permissions object="inventory" object-for.bind="item"></ll-permissions>
+                </div>
+                <div class="ui segment">
+                    <h3>History</h3>
+                    <div class="ui relaxed list">
+                        <div class="item" repeat.for="t of item.transfers">
+                            <i if.bind="!t.is_addition" class="icon sign out"></i>
+                            <i if.bind="t.is_addition" class="icon sign in"></i>
+                            <div class="content">
+                                <div class="header">
+                                    <span if.bind="t.is_addition">Added </span>
+                                    <span if.bind="!t.is_addition">Removed </span>
+                                    ${t.amount_taken}${t.amount_measure} on
+                                     ${t.date_created|dateFormat}
+                                </div>
+                                <div if.bind="t.barcode">Location: ${t.barcode}/${t.coordinates}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div if.bind="item.transfers.length == 0">
+                        Original amount
+                    </div>
+                    <h4>Created from</h4>
+                    <div if.bind="item.created_from.length > 0" class="ui selection list">
+                        <a class="item"
+                           repeat.for="source of item.created_from"
+                           route-href="route: inventoryDetail; params.bind: {id: source.id}">
+                            <span class="header">${source.name}</span> ${source.item_type}
+                        </a>
+                    </div>
+                    <div if.bind="item.created_from.length == 0">
+                        Original item
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

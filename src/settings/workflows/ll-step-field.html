@@ -1,0 +1,56 @@
+<template class="ui violet top attached segment custom stepfield">
+    <ui-field label="Field label" required>
+        <input value.bind="field.label & validate">
+    </ui-field>
+    <ui-field label="Description">
+        <textarea rows="3" value.bind="field.description & validate"></textarea>
+    </ui-field>
+    <div class="ui four column wide vertically padded grid">
+        <div class="column" repeat.for="prop of field.properties">
+            <div class="ui top attached segment">
+                <ui-field label="Property label" required>
+                    <input value.bind="prop.label & validate">
+                </ui-field>
+                <ui-field label="Use calculation for amount">
+                    <ui-checkbox checked.bind="prop.from_calculation"></ui-checkbox>
+                </ui-field>
+                <ui-field if.bind="prop.from_calculation" label="Calculation"
+                          required.bind="prop.from_calculation">
+                    <ui-dropdown value.bind="prop.calculation_used & validate">
+                        <ui-item repeat.for="calc of calculations" value.bind="calc.id">
+                            ${ calc.label }
+                        </ui-item>
+                    </ui-dropdown>
+                </ui-field>
+                <ui-field label="Measure not required">
+                    <ui-checkbox checked.bind="prop.measure_not_required"></ui-checkbox>
+                </ui-field>
+                <div class="ui two column wide grid">
+                    <div class="column">
+                        <ui-field label="Property amount" required.bind="!prop.from_calculation">
+                            <input value.bind="prop.amount & validate">
+                        </ui-field>
+                    </div>
+                    <div class="column">
+                        <ui-field label="Input measure"
+                                  required.bind="!prop.measure_not_required">
+                            <ui-autocomplete from="measures"
+                                    value.bind="prop.measure & validate"
+                                    store-value="symbol"
+                                    display-value="symbol"
+                                    default-text.bind="prop.measure"
+                                    placeholder="Select measure">
+                            </ui-autocomplete>
+                        </ui-field>
+                    </div>
+                </div>
+            </div>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeProperty($index)">
+                <i class="delete icon"></i>
+            </div>
+        </div>
+    </div>
+    <button click.delegate="addProperty()"
+            class="ui basic violet button">Add property</button>
+</template>

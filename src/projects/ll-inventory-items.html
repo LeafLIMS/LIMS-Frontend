@@ -1,0 +1,19 @@
+<template>
+    <h3 class="ui top attached header">Inventory items</h3>
+    <div class="ui attached clearing segment" repeat.for="item of source">
+        <a class="ui circular right floated small compact icon button"
+           click.delegate="removeItem($index)">
+            <i class="icon minus"></i>
+        </a>
+        <a map-href="route: inventory/inventoryDetail; params.bind: {id: item.id}">
+            ${item.name}<br>
+            ${item.item_type}
+        </a>
+    </div>
+    <div class="ui bottom attached right aligned segment">
+        <a class="ui basic button" click.delegate="addItem()">
+            <i class="icon add"></i>
+            Add items
+        </a>
+    </div>
+</template>

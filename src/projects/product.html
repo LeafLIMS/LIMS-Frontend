@@ -1,0 +1,49 @@
+<template class="product">
+    <require from="./ll-inventory-items"></require>
+    <require from="./ll-product-attachments"></require>
+    <form class="ui form" submit.delegate="save()" novalidate>
+        <div class="ui grid two column wide">
+            <ui-field class="column" label="Name" required>
+                <input name="name" value.bind="product.name" placeholder="Product name">
+            </ui-field>
+            <ui-field class="column" required label="Product type">
+                <ui-dropdown value.bind="product.product_type" required>
+                    <ui-item class="item" repeat.for="type of itemTypes.results"
+                             value.bind="type.name">${type.display_name}</ui-item>
+                </ui-dropdown>
+            </ui-field>
+        </div>
+        <ui-field label="Product status" required>
+            <ui-dropdown value.bind="product.status" required>
+                <ui-item repeat.for="status of productStatuses.results"
+                         value.bind="status.name">${status.name}</ui-item>
+            </ui-dropdown>
+        </ui-field>
+        <p></p>
+        <ll-template-hook name="product-detail-top" source.bind="product"></ll-template-hook>
+        <div class="ui grid two column wide">
+            <div class="column">
+                <ll-inventory-items source.bind="product.linked_inventory"
+                                    source-id.bind="product.id"></ll-inventory-items>
+            </div>
+            <div class="column">
+                <ll-product-attachments source.bind="product.attachments"
+                                        source-id.bind="product.id"></ll-product-attachments>
+            </div>
+        </div>
+        <ll-template-hook name="product-detail-bottom" source.bind="product"></ll-template-hook>
+        <div class="ui grid two column wide segment">
+            <span class="column">
+                <b>Created on:</b> ${product.created_on|dateFormat}
+            </span>
+            <span class="column">
+                <b>Last modified:</b> ${product.last_modified_on|dateFormat}
+            </span>
+        </div>
+        <div class="right aligned">
+            <div class="ui active inline loader" if.bind="isSaving"></div>
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

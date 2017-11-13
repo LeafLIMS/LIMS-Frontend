@@ -1,0 +1,29 @@
+<template>
+    <h3 class="ui top attached header">Attachments</h3>
+    <div class="ui attached clearing segment" repeat.for="item of source">
+        <a class="ui circular right floated small compact icon button"
+           click.delegate="removeAttachment($index, item)">
+            <i class="icon minus"></i>
+        </a>
+        <a href.bind="item.attachment">
+            ${item.attachment_name}
+        </a>
+    </div>
+    <div class="ui attached message" if.bind="error">
+        <ui-error-message error-source.bind="error"></ui-error-message>
+    </div>
+    <div class="ui attached segment" if.bind="addNew">
+        <p if.bind="message">${message}</p>
+        <div class="ui input">
+            <input type="file" files.bind="attachmentFile" placeholder="Choose file to attach">
+        </div>
+    </div>
+    <div class="ui bottom attached right aligned segment">
+        <a class="ui basic button" click.delegate="addNew = true" if.bind="!addNew">
+            <i class="icon add"></i>
+            Add attachment
+        </a>
+        <a class="ui primary button" click.delegate="addAttachment()" if.bind="addNew">Save</a>
+        <a class="ui basic button" click.delegate="addNew = false" if.bind="addNew">Cancel</a>
+    </div>
+</template>

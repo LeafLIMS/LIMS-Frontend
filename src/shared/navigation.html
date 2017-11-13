@@ -1,0 +1,46 @@
+<template>
+    <div if.bind="accountPane" class="au-animate slide-out account-pane">
+        <div class="account-pane-header">
+            <img src="img/leaflims-logo.svg" class="responsive-image">
+            Welcome ${payload.username}
+        </div>
+        <div class="fluid ui basic white buttons">
+            <button class="ui icon button" click.delegate="showAccountDialog()">
+                <i class="user icon"></i>
+            </button>
+            <button class="ui icon button" click.delegate="showPasswordDialog()">
+                <i class="privacy icon"></i>
+            </button>
+            <button class="ui icon button" click.trigger="logout()">
+                <i class="sign out icon"></i>
+            </button>
+        </div>
+        <div class="alerts-container">
+            <h4 class="ui header">Alerts</h4>
+            <div class="ui selection list alerts-list">
+                <div if.bind="alerts.results.length == 0" class="item">No alerts</div>
+                <div class="item" repeat.for="alert of alerts.results"
+                     click.delegate="dismissAlert(alert)">
+                    <i class="alarm icon ${alert.triggeralert.triggerset.severity}"></i>
+                    <div class="content">
+                        <div class="header">${alert.triggeralert.triggerset.name}</div>
+                        ${alert.triggeralert.fired|dateFormat}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div if.bind="router.currentInstruction.config.nav"
+         class="ui compact massive inverted left fixed vertical full height labelled icon menu">
+        <a class="item user-details darker ${accountPane ? 'pane-active' : ''}"
+           click.delegate="toggleAccountPane()">
+            <i class="user circle icon"></i>
+        </a>
+        <a repeat.for="row of router.navigation"
+           if.bind="(row.settings.admin && isAdmin) || !row.settings.admin"
+           class="item ${row.isActive ? 'active' : ''}"
+           href.bind="row.href">
+            <i class="icon ${row.settings.icon}"></i>
+        </a>
+    </div>
+</template>

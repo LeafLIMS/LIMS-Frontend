@@ -1,0 +1,10 @@
+<template class="ui brown top attached segment custom">
+    <ui-field label="Field label" required>
+        <input value.bind="field.label & validate">
+    </ui-field>
+    <ui-field label="Calculation" required>
+        <textarea value.bind="field.calculation & validate"
+                  rows="4"
+                  placeholder="Calculation"></textarea>
+    </ui-field>
+</template>

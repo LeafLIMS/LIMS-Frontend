@@ -1,0 +1,84 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">Dispense multiple items</h3>
+        <div class="ui attached segment">
+            <div class="ui top attached segment">
+                <ui-field label="Search for items">
+                    <input value.bind="searchText & debounce">
+                </ui-field>
+            </div>
+            <ui-table-wrapper>
+                <table ui-table>
+                    <thead>
+                        <tr>
+                            <th sort-by="identifier">Identifier</th>
+                            <th sort-by="barcode">Barcode</th>
+                            <th sort-by="name">Name</th>
+                            <th sort-by="item_type__name">Type</th>
+                            <th>Amount available</th>
+                            <th sort-by="location">Location</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr repeat.for="row of items.results">
+                            <td>${row.identifier}</td>
+                            <td>${row.barcode}</td>
+                            <td>${row.name}</td>
+                            <td>${row.item_type}</td>
+                            <td>
+                                ${row.amount_available}${row.amount_measure}
+                                &nbsp;
+                                <i if.bind="row.concentration">
+                                    (${row.concentration}${row.concentration_measure})
+                                </i>
+                            </td>
+                            <td>${row.location_path}</td>
+                            <td>
+                                <button class="ui circular icon button"
+                                        click.delegate="addItem(row)">
+                                    <i class="add icon"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ui-table-wrapper>
+            <h4 class="section-header">Items to dispense</h4>
+            <div class="ui five column wide padded grid">
+                <div class="row" repeat.for="item of dispense">
+                    <div class="column"><b>${item.name}</b></div>
+                    <div class="column">
+                        <div class="ui right labeled fluid input">
+                            <input value.bind="item.dispense_amount & validate"
+                                   placeholder="Amount to dispense">
+                            <div class="ui basic label">${item.amount_measure}</div>
+                        </div>
+                    </div>
+                    <ui-field class="column">
+                        <input value.bind="item.destination_barcode & validate"
+                               placeholder="Destination barcode">
+                    </ui-field>
+                    <ui-field class="column">
+                        <input value.bind="item.destination_coordinates & validate"
+                               placeholder="Destination coordinates">
+                    </ui-field>
+                    <div class="right aligned column">
+                        <button class="ui circular icon button"
+                                click.delegate="removeItem($index)">
+                            <i class="remove icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Dispense</button>
+        </div>
+    </form>
+</template>

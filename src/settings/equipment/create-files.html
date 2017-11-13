@@ -1,0 +1,43 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Enabled?">
+        <ui-checkbox checked.bind="item.is_enabled"></ui-checkbox>
+    </ui-field>
+    <ui-field label="Equipment" required>
+        <ui-autocomplete from="equipment"
+                store-value="name"
+                display-value="name"
+                value.bind="item.equipment & validate"
+                default-text.bind="item.equipment"
+                placeholder="Lookup equipment">
+        </ui-autocomplete>
+    </ui-field>
+    <ui-field label="From prefix">
+        <input value.bind="item.copy_from_prefix & validate">
+    </ui-field>
+    <ui-field label="To prefix">
+        <input value.bind="item.copy_to_prefix & validate">
+    </ui-field>
+    <h3>Locations</h3>
+    <div class="ui segments">
+        <div class="ui segment" repeat.for="location of item.locations">
+            <button class="ui right floated circular icon button"
+                    click.delegate="removeLocation($index)">
+                <i class="delete icon"></i>
+            </button>
+            <div class="ui two column wide grid">
+                <ui-field label="Copy from" class="column" required>
+                    <input value.bind="location.copy_from & validate">
+                </ui-field>
+                <ui-field label="Copy to" class="column" required>
+                    <input value.bind="location.copy_to & validate">
+                </ui-field>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addLocation()">
+        Add location
+    </button>
+</template>

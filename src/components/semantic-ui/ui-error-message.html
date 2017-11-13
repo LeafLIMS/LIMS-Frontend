@@ -1,0 +1,10 @@
+<template>
+    <div class="ui visible icon error message" if.bind="error">
+        <i class="warning circle icon"></i>
+        <div class="content">
+            <p if.bind="error.message">${error.message}</p>
+            <p if.bind="!error.message">${error.statusText}</p>
+        </div>
+        <div class="ui top right attached tiny basic red label">Error ${error.status}</div>
+    </div>
+</template>

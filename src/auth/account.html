@@ -1,0 +1,54 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <div class="header section-heading">Account</div>
+        <ux-dialog-body>
+            <div class="content">
+                <div class="ui two column wide grid form">
+                    <ui-field label="First name" class="column">
+                        <input value.bind="user.first_name">
+                    </ui-field>
+                    <ui-field label="Last name" class="column">
+                        <input value.bind="user.last_name">
+                    </ui-field>
+                </div>
+                <div class="ui horizontal divider">Addresses</div>
+                <form class="ui clearing segment form" submit.delegate="save(address)"
+                      repeat.for="address of user.addresses">
+                    <ui-field label="Institute name" required>
+                        <input value.bind="address.institute_name & validate">
+                    </ui-field>
+                    <ui-field label="Address" required>
+                        <input value.bind="address.address_1 & validate">
+                    </ui-field>
+                    <ui-field label="Address 2">
+                        <input value.bind="address.address_2 & validate">
+                    </ui-field>
+                    <ui-field label="City" required>
+                        <input value.bind="address.city & validate">
+                    </ui-field>
+                    <ui-field label="Postcode" required>
+                        <input value.bind="address.postcode & validate">
+                    </ui-field>
+                    <ui-field label="Country" required>
+                        <input value.bind="address.country & validate">
+                    </ui-field>
+                    <div class="ui divider"></div>
+                    <button class="ui basic red button"
+                            click.delegate="removeAddress($index)">
+                        Remove</button>
+                    <button class="ui right floated primary button" type="submit">
+                        Save</button>
+                </form>
+                <button class="ui basic button" click.delegate="addAddress()">
+                    Add address
+                </button>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui primary ok button"
+                    click.trigger="dialog.ok(selected)">Done</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

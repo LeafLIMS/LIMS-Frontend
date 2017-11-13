@@ -1,0 +1,185 @@
+<template>
+    <require from="./ll-input-field"></require>
+    <require from="./ll-variable-field"></require>
+    <require from="./ll-calculation-field"></require>
+    <require from="./ll-step-field"></require>
+    <require from="./ll-output-field"></require>
+    <form class="ui form au-animate page" submit.delegate="save()" novalidate>
+        <h2><a class="dim" route-href="route: workflows">Workflow runs:</a> ${run.name}</h2>
+
+        <h3 class="ui inverted primary top attached task header">
+            <div class="ui circular white label">${taskPosition}</div>
+            Start Task:
+            ${task.name}
+        </h3>
+        <div click.delegate="toggleSection('setup')" class="ui attached clickable header">
+            <i class="${setup ? 'caret down' : 'caret right'} icon"></i>
+            Setup
+        </div>
+        <div show.bind="setup" class="ui attached ${isLoading ? 'loading' : ''} segment">
+            <h4 class="ui dividing header">Equipment</h4>
+            <div class="ui teal segment">
+                <div class="ui two column wide stackable grid">
+                    <div class="six wide column">
+                        <ui-field label="Equipment to use" required>
+                            <ui-dropdown value.bind="taskData.equipment_choice & validate"
+                                         placeholder="Equipment to use">
+                               <ui-item repeat.for="choice of task.capable_equipment"
+                                        value.bind="choice">
+                                   ${choice}
+                               </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                    <div class="ten wide column" if.bind="!task.labware_not_required">
+                        <div class="ui three column wide grid">
+                            <div class="four wide column">
+                                <ui-field label="Labware amount" required>
+                                    <input value.bind="taskData.labware_amount & validate">
+                                </ui-field>
+                            </div>
+                            <div class="six wide column">
+                                <ui-field label="Labware to use" required>
+                                    <ui-autocomplete from="inventory"
+                                            value.bind="taskData.labware_identifier & validate"
+                                            search-params.bind="{item_type__name: task.labware}"
+                                            placeholder="Lookup ${task.labware} from inventory">
+                                    </ui-autocomplete>
+                                </ui-field>
+                            </div>
+                            <div class="six wide column">
+                                <ui-field label="Labware barcode">
+                                    <input value.bind="taskData.labware_barcode">
+                                </ui-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="ui dividing header">Inputs</h4>
+            <div class="ui blue segment">
+                <h5 class="ui header required">Input from product</h5>
+                <div class="ui right labeled fluid input">
+                    <input type="number" value.bind="taskData.product_input_amount & validate">
+                    <div class="ui label">${task.product_input_measure} ${task.product_input}</div>
+                </div>
+            </div>
+            <div class="ui three column wide stackable grid">
+                <div class="column" repeat.for="field of task.input_fields">
+                    <ll-input-field field.bind="field"
+                                    output-to.bind="taskData.input_fields[$index] & validate">
+                    </ll-input-field>
+                </div>
+            </div>
+            <h4 class="ui dividing header">Steps</h4>
+            <ll-step-field repeat.for="field of task.step_fields"
+                           field.bind="field"
+                           output-to.bind="taskData.step_fields[$index]">
+            </ll-step-field>
+            <h4 class="ui dividing header">Outputs</h4>
+            <div class="ui three column wide stackable grid">
+                <div class="column" repeat.for="field of task.output_fields">
+                    <ll-output-field field.bind="field"
+                                     output-to.bind="taskData.output_fields[$index]">
+                    </ll-output-field>
+                </div>
+            </div>
+            <h4 class="ui dividing header">Variables</h4>
+            <div class="ui five column wide stackable grid">
+                <div class="column" repeat.for="field of task.variable_fields">
+                    <ll-variable-field field.bind="field"
+                                       output-to.bind="taskData.variable_fields[$index]">
+                    </ll-variable-field>
+                </div>
+            </div>
+            <h4 class="ui dividing header">Calculations</h4>
+            <div class="ui three column wide stackable grid">
+                <div class="column" repeat.for="field of task.calculation_fields">
+                    <ll-calculation-field field.bind="field"
+                                          output-to.bind="taskData.calculation_fields[$index]">
+                    </ll-calculation-field>
+                </div>
+            </div>
+        </div>
+        <div click.delegate="toggleSection('requirements')" class="ui attached clickable header">
+            <i class="${requirements ? 'caret down' : 'caret right'} icon"></i>
+            Status
+        </div>
+        <div show.bind="requirements" class="ui attached ${loadingRequirements ? 'loading' : '' }
+                                             segment">
+            <div class="ui three statistics">
+                <div class="${taskRequirements.errors.length > 0 ? 'red' : 'green'} statistic">
+                    <div class="value">
+                        <i class="${taskRequirements.errors.length > 0 ?
+                                  'warning sign' : 'check circle'} icon"></i>
+                    </div>
+                    <div class="label">Task requirements</div>
+                </div>
+                <div class="${taskRequirements.errors.length > 0 ? 'red' : ''} statistic">
+                    <div class="value">
+                        ${taskRequirements.errors.length}
+                    </div>
+                    <div class="label">Errors</div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <i class="${taskRequirements.equipment_status == 'idle' ? 'check circle' :
+                                  'remove circle'}
+                                  ${taskRequirements.equipment_status !== 'idle' ? 'red' : 'green'}
+                                  icon"></i>
+                    </div>
+                    <div class="label">Equipment ready</div>
+                </div>
+            </div>
+            <div class="ui visible warning message" if.bind="taskRequirements.errors.length > 0">
+                <div class="header">Issues</div>
+                <ul class="list">
+                    <li repeat.for="message of taskRequirements.errors">${message}</li>
+                </ul>
+            </div>
+            <ui-table-wrapper>
+                <table ui-table>
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Amount to take</th>
+                            <th>Amount available</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ui-table-row="route: inventoryDetail; params.bind: {id: row.id}"
+                            repeat.for="row of taskRequirements.requirements">
+                            <td><i class="warning sign icon" if.bind="!row.is_valid"></i>
+                            <td>${row.item.name}</td>
+                            <td>${row.item.item_type.name}</td>
+                            <td>${row.amount_to_take}${row.amount_measure.symbol}</td>
+                            <td>
+                                ${row.item.amount_available}${row.item.amount_measure.symbol}
+                                &nbsp;
+                                <i if.bind="row.item.concentration">
+                                    (${row.item.concentration}${row.item.concentration_measure})
+                                </i>
+                            </td>
+                            <td>${row.item.location_path}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ui-table-wrapper>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <a route-href="route: workflows" class="ui button">Cancel</a>
+            <button if.bind="!canStart" type="submit" class="ui primary button">Check task</button>
+            <button if.bind="canStart" click.delegate="complete = true"
+                    type="submit" class="ui primary button">
+                Start and complete task
+            </button>
+            <button if.bind="canStart" click.delegate="complete = false"
+                    type="submit" class="ui primary button">
+                Start and monitor task
+            </button>
+        </div>
+    </form>
+</template>

@@ -1,0 +1,153 @@
+<template>
+    <require from="./ll-add-item"></require>
+    <require from="./ll-add-multiple-items"></require>
+    <require from="./ll-dispense-multiple-items"></require>
+    <require from="../components/shared/show-row"></require>
+    <div class="au-animate page">
+        <h2>Inventory</h2>
+        <div class="ui inverted stackable primary menu">
+            <a class="item" click.delegate="addItem = true">
+                <i class="icons">
+                    <i class="icon cube"></i>
+                    <i class="corner plus icon"></i>
+                </i>
+                Add item
+            </a>
+            <a class="item" click.delegate="addMultipleItems = true">
+                <i class="icons">
+                    <i class="icon cubes"></i>
+                    <i class="corner plus icon"></i>
+                </i>
+                Add multiple items
+            </a>
+            <a class="item" click.delegate="dispenseMultipleItems = true">
+                <i class="icon grid layout"></i>
+                Dispense multiple items
+            </a>
+        </div>
+        <ll-add-item toggle.bind="addItem"></ll-add-item>
+        <ll-add-multiple-items toggle.bind="addMultipleItems"></ll-add-multiple-items>
+        <ll-dispense-multiple-items toggle.bind="dispenseMultipleItems">
+        </ll-dispense-multiple-items>
+        <ui-table-header search.bind="query.search" search-options.bind="searchOptions"
+                         search-query.bind="query">
+            <ui-dropdown-menu class="item"
+                              icon="filter">
+                <ui-dropdown-menu-item toggle="in_inventory" toggle-source.bind="query">
+                    Show only available items
+                </ui-dropdown-menu-item>
+            </ui-dropdown-menu>
+            <ui-dropdown-menu class="item"
+                         icon="ellipsis vertical">
+                <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
+                                       click.delegate="deleteItems()" icon="erase">
+                    Delete selected
+                </ui-dropdown-menu-item>
+            </ui-dropdown-menu>
+        </ui-table-header>
+        <div class="ui attached very padded loading segment" if.bind="isLoading"></div>
+        <ui-table-wrapper if.bind="!isLoading">
+            <table ui-table>
+                <thead>
+                    <tr as-element="ui-table-sort" query.bind="query">
+                        <th></th>
+                        <th sort-by="identifier">Identifier</th>
+                        <th sort-by="barcode">Barcode</th>
+                        <th sort-by="name">Name</th>
+                        <th sort-by="item_type__name">Type</th>
+                        <th sort-by="is_available">Availability</th>
+                        <th>Amount available</th>
+                        <th sort-by="location">Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ui-table-row="route: inventoryDetail; params.bind: {id: row.id}"
+                        repeat.for="row of inventory.results">
+                        <td as-element="ui-table-select" select-to.bind="selected"
+                            select-as.bind="row"></td>
+                        <td>${row.identifier}</td>
+                        <td>${row.barcode}</td>
+                        <td>${row.name}</td>
+                        <td>${row.item_type}</td>
+                        <td><ui-boolean source.bind="row.in_inventory"></ui-boolean></td>
+                        <td>
+                            ${row.amount_available}${row.amount_measure}
+                            &nbsp;
+                            <i if.bind="row.concentration">
+                                (${row.concentration}${row.concentration_measure})
+                            </i>
+                        </td>
+                        <td>${row.location_path}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ui-table-wrapper>
+        <ui-table-pagination page.bind="inventory.meta.current" limit.bind="query.limit"
+                             limitOptions.bind="[10,20,50,100]" total.bind="inventory.meta.count">
+        </ui-table-pagination>
+        <div class="ui top attached segment">
+            <h3>Transfers <a route-href="route: allTransfers"
+                             class="right floated dim">(All Transfers)</a></h3>
+        </div>
+        <div class="ui attached very padded loading segment" if.bind="isLoadingTransfers"></div>
+        <ui-table-wrapper if.bind="!isLoadingTransfers">
+            <table ui-table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Source barcode</th>
+                        <th>Number of items</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template repeat.for="[key, row] of transfers" containerless>
+                        <tr show-row.two-way="row.toggled"
+                            class="product-row ${row.toggled ? 'row-selected' : ''}">
+                            <td class="collapsing">
+                                <i class="icon toggle right" if.bind="!row.toggled"></i>
+                                <i class="icon toggle down" if.bind="row.toggled"></i>
+                            </td>
+                            <td>${key || 'Not barcoded'}</td>
+                            <td>${row.length}</td>
+                        </tr>
+                        <tr show.bind="row.toggled">
+                            <td colspan="3">
+                                <ui-table-wrapper class="transfer-table-wrapper">
+                                    <table ui-table>
+                                        <thead>
+                                            <tr>
+                                                <th>Coordinates</th>
+                                                <th>Name</th>
+                                                <th>Amount available</th>
+                                                <th>Amount taken</th>
+                                                <th>Date created</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr repeat.for="item of row"
+                                                ui-table-row="route: inventoryDetail;
+                                                              params.bind: {id: item.item}">
+                                                <td>${item.coordinates}</td>
+                                                <td>${item.item_name}</td>
+                                                <td>${item.amount_available}${item.amount_measure}</td>
+                                                <td>${item.amount_taken}${item.amount_measure}</td>
+                                                <td>${item.date_created|dateFormat}</td>
+                                                <td>
+                                                    <button class="ui basic icon button"
+                                                            click.delegate="completeTransfer(item)">
+                                                        <i class="check icon"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ui-table-wrapper>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </ui-table-wrapper>
+    </div>
+</template>

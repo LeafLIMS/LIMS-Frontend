@@ -1,0 +1,9 @@
+<template>
+    <require from="semantic-ui/semantic.min.css"></require>
+    <require from='./shared/styles.css'></require>
+    <require from='./shared/navigation'></require>
+    <navigation router.bind="router"></navigation>
+    <div class="navigation-pad">
+        <router-view swap-order="with"></router-view>
+    </div>
+</template>

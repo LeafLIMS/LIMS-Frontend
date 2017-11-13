@@ -1,0 +1,14 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <ux-dialog-body>
+            <ui-search search.bind="query.search" source.bind="crmItems" model.bind="['Name']">
+            </ui-search>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui red basic cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui green basic ok button"
+                    click.trigger="dialog.ok(result)">Ok</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

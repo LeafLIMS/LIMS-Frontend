@@ -1,0 +1,45 @@
+<template class="ui orange top attached segment custom">
+    <ui-field label="Field label" required>
+        <input value.bind="field.label & validate">
+    </ui-field>
+    <ui-field label="Use calculation for amount">
+        <ui-checkbox checked.bind="field.from_calculation"></ui-checkbox>
+    </ui-field>
+    <ui-field if.bind="field.from_calculation" label="Calculation"
+              required.bind="field.from_calculation">
+        <ui-dropdown value.bind="field.calculation_used & validate">
+            <ui-item repeat.for="calc of calculations" value.bind="calc.id">
+                ${ calc.label }
+            </ui-item>
+        </ui-dropdown>
+    </ui-field>
+    <div class="ui three column wide vertically padded grid">
+        <div class="column">
+            <ui-field label="Amount" required>
+                <input type="number" value.bind="field.amount & validate">
+            </ui-field>
+        </div>
+        <div class="column">
+            <ui-field label="Input measure" required>
+                <ui-autocomplete from="measures"
+                        value.bind="field.measure & validate"
+                        store-value="symbol"
+                        display-value="symbol"
+                        default-text.bind="field.measure"
+                        placeholder="Select measure">
+                </ui-autocomplete>
+            </ui-field>
+        </div>
+        <div class="column">
+            <ui-field label="Input type" required>
+                <ui-autocomplete from="itemtypes"
+                        value.bind="field.lookup_type & validate"
+                        store-value="symbol"
+                        display-value="display_name"
+                        default-text.bind="field.lookup_type"
+                        placeholder="Select input type">
+                </ui-autocomplete>
+            </ui-field>
+        </div>
+    </div>
+</template>

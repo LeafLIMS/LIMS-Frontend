@@ -1,0 +1,113 @@
+<template>
+    <div class="au-animate page-back">
+    <require from="./product"></require>
+    <require from="./ll-links"></require>
+    <require from="./ll-new-product"></require>
+    <require from="./ll-import-products"></require>
+    <require from="../crm/ll-crm"></require>
+    <require from="../components/shared/show-row"></require>
+    <require from="../shared/string-truncate"></require>
+    <h2><a class="dim" route-href="route: project">Project:</a> ${project.name}</h2>
+    <div class="ui inverted stackable primary menu">
+        <a class="item" click.delegate="newProduct = true">
+            <i class="icon add"></i>
+            New product
+        </a>
+        <a class="item" click.delegate="importProducts = true">
+            <i class="icon upload"></i>
+            Import products
+        </a>
+    </div>
+    <ll-new-product source.bind="project" toggle.bind="newProduct"></ll-new-product>
+    <ll-import-products source.bind="project" toggle.bind="importProducts"></ll-import-products>
+    <div class="ui two column stackable grid">
+        <div class="eleven wide column">
+            <ui-table-header search.bind="query.search">
+                <ui-dropdown-menu class="item"
+                             icon="ellipsis vertical">
+                    <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
+                                           click.delegate="deleteItems()" icon="erase">
+                        Delete selected
+                    </ui-dropdown-menu-item>
+                </ui-dropdown-menu>
+            </ui-table-header>
+            <div class="ui attached very padded loading segment" if.bind="isLoading"></div>
+            <ui-table-wrapper if.bind="!isLoading">
+                <table ui-table>
+                    <thead>
+                        <tr as-element="ui-table-sort" query.bind="query">
+                            <th></th>
+                            <th></th>
+                            <th>Identifier</th>
+                            <th sort-by="name">Name</th>
+                            <th sort-by="status__name">Status</th>
+                            <th sort-by="type__name">Type</th>
+                            <th sort-by="created_by__username">Created by</th>
+                            <th>On run</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template repeat.for="row of products.results" containerless>
+                            <tr show-row.two-way="row.toggled"
+                                class="product-row ${row.toggled ? 'row-selected' : ''}">
+                                <td as-element="ui-table-select" select-to.bind="selected"
+                                    select-as.bind="row"></td>
+                                <td class="collapsing">
+                                    <i class="icon toggle right" if.bind="!row.toggled"></i>
+                                    <i class="icon toggle down" if.bind="row.toggled"></i>
+                                </td>
+                                <td>${row.product_identifier}</td>
+                                <td>${row.name}</td>
+                                <td>${row.status}</td>
+                                <td>${row.product_type}</td>
+                                <td>${row.created_by}</td>
+                                <td><ui-boolean source.bind="row.on_run"></ui-boolean></td>
+                            </tr>
+                            <tr if.bind="row.toggled">
+                                <td colspan="8" as-element="product" product-id.bind="row.id"
+                                    toggle.bind="row.toggled">
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </ui-table-wrapper>
+            <ui-table-pagination page.bind="products.meta.current"
+                                 limit.bind="query.limit"
+                                 limitOptions.bind="[10,20,50,100]"
+                                 total.bind="products.meta.count">
+            </ui-table-pagination>
+        </div>
+        <div class="five wide column">
+            <div class="ui form segment">
+                <p><b>Date started:</b> ${project.date_started|dateFormat}</p>
+                <ui-field label="Project status">
+                    <ui-dropdown value.bind="project.status"
+                                 change.delegate="setStatus($event)">
+                        <ui-item repeat.for="status of statuses.results"
+                                 value.bind="status.name">${status.name}</ui-item>
+                    </ui-dropdown>
+                </ui-field>
+                <ui-field label="Description">
+                    <textarea value.bind="project.description" rows="10"></textarea>
+                </ui-field>
+                <button class="ui basic button" click.delegate="updateDescription()">
+                    Update description
+                </button>
+            </div>
+            <div class="ui segment">
+                <h3>CRM</h3>
+                <ll-crm source.bind="project"></ll-crm>
+            </div>
+            <div class="ui segment">
+                <h3>Links</h3>
+                <ll-links source.bind="project"></ll-links>
+            </div>
+            <div class="ui segment">
+                <h3>Permissions</h3>
+                <ll-permissions object="projects" object-for.bind="project"></ll-permissions>
+            </div>
+        </div>
+    </div>
+    </div>
+</template>

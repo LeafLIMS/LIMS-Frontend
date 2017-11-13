@@ -1,0 +1,8 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Common name">
+        <input value.bind="item.common_name & validate">
+    </ui-field>
+</template>

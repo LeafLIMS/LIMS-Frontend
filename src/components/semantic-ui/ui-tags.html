@@ -1,0 +1,8 @@
+<template>
+    <div class="ui labels">
+        <div class="ui label" repeat.for="tag of source">
+            ${tag}
+            <i class="delete icon" click.delegate="remove($index)"></i>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,8 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Description">
+        <textarea value.bind="item.description & validate" rows="3"></textarea>
+    </ui-field>
+</template>

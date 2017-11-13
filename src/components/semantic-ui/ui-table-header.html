@@ -1,0 +1,68 @@
+<template class="ui top attached form segment custom">
+    <div class="ui secondary stackable menu">
+        <div class="item">
+            <div class="ui ${searchOptions.useAdvanced ? 'right action' : ''} left icon input">
+                <input type="search" placeholder="Search..." value.bind="search"
+                       disabled.bind="showAdvanced">
+                <i class="search icon"></i>
+                <button click.delegate="toggleAdvanced()"
+                        class="ui icon basic toggle button ${ showAdvanced ? 'active' : '' }"
+                        if.bind="searchOptions.useAdvanced">
+                    <i class="find icon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="right large menu">
+            <slot></slot>
+        </div>
+    </div>
+    <div if.bind="showAdvanced">
+        <div class="ui four column wide stackable grid">
+            <div class="row" repeat.for="term of searchTerms">
+                <div class="column">
+                    <ui-dropdown value.bind="term.field & validate"
+                                 name="field_${$index}"
+                                 placeholder="Field"
+                                 change.delegate="setFields($event, term)">
+                        <ui-item repeat.for="field of searchOptions.fields"
+                                 value.bind="field.name">
+                            ${field.display}
+                        </ui-item>
+                    </ui-dropdown>
+                </div>
+                <div class="column">
+                    <ui-dropdown value.bind="term.action & validate" placeholder="Operator"
+                                 name="operator_${$index}">
+                        <ui-item repeat.for="[operator, display] of term.operators"
+                                 value.bind="operator">
+                            ${display}
+                        </ui-item>
+                    </ui-dropdown>
+                </div>
+                <div class="six wide column">
+                    <input class="ui flexible input" placeholder="Value"
+                           value.bind="term.value & validate"
+                           name="value_${$index}">
+                </div>
+                <div class="two wide right aligned column">
+                    <button click.delegate="removeTerm($index)"
+                            class="ui basic circular icon button"
+                            if.bind="$index !== 0">
+                        <i class="remove icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="ui secondary menu">
+            <div class="item">
+                <button class="ui basic button" click.delegate="addTerm()">
+                    <i class="add icon"></i>
+                    Add term</button>
+            </div>
+            <div class="right floated item">
+                <button class="ui primary button" click.delegate="doSearch()">Search</button>
+            </div>
+        </div>
+
+    </div>
+</template>

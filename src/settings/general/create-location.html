@@ -1,0 +1,17 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Code" required>
+        <input value.bind="item.code & validate">
+    </ui-field>
+    <ui-field label="Parent">
+        <ui-autocomplete from="locations"
+                         display-value="display_name"
+                         store-value="code"
+                         bind-value="parent"
+                         default-text.bind="item.parent_name"
+                         value.bind="item.parent & validate">
+        </ui-autocomplete>
+    </ui-field>
+</template>

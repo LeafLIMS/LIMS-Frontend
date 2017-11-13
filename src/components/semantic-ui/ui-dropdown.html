@@ -1,0 +1,10 @@
+<template>
+    <div class="ui fluid ${searchable ? 'search' : ''} selection dropdown">
+        <input type="hidden" value.two-way="value" required.bind="required">
+        <i class="dropdown icon"></i>
+        <div class="default text">${placeholder}</div>
+        <div class="menu">
+            <slot></slot>
+        </div>
+    </div>
+</template>

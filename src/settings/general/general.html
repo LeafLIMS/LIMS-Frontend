@@ -1,0 +1,3 @@
+<template>
+    General Settings
+</template>

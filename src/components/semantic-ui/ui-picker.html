@@ -1,0 +1,39 @@
+<template>
+    <div class="ui two column wide grid">
+        <div class="column">
+            <div class="ui left icon fluid input">
+                <i class="search icon"></i>
+                <input type="search" value.bind="searchTerm & debounce"
+                       placeholder="Filter...">
+            </div>
+            <div class="ui relaxed middle aligned list">
+                <div class="item" repeat.for="item of searchResults.results">
+                    <ui-checkbox class="left floated"
+                                 model.bind="item"
+                                 matcher.bind="matcherA"
+                                 checked.bind="selected"></ui-checkbox>
+                    <div class="header">${item[config.displayName]}</div>
+                    <div class="description">
+                        <span repeat.for="value of config.displayOther">
+                            ${item[value]}
+                            &nbsp;
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui top attached header">Selected</div>
+            <div class="ui bottom attached segment">
+                <div repeat.for="item of selected" class="ui relaxed list">
+                    <ui-checkbox class="left floated"
+                                 model.bind="item"
+                                 matcher.bind="matcherB"
+                                 checked.bind="selected"></ui-checkbox>
+                    ${config.selectedSingular ? item : item[config.displayName]}
+                </div>
+                <div if.bind="selected.length == 0">Nothing selected</div>
+            </div>
+        </div>
+    </div>
+</template>

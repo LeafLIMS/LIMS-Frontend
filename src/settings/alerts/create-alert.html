@@ -1,0 +1,81 @@
+<template>
+    <div class="ui two column wide grid">
+        <ui-field label="Name" required class="sixteen wide column">
+            <input value.bind="item.name & validate">
+        </ui-field>
+        <ui-field label="Severity" class="column" required>
+            <ui-dropdown value.bind="item.severity & validate">
+                <ui-item value="L">Low</ui-item>
+                <ui-item value="M">Medium</ui-item>
+                <ui-item value="H">High</ui-item>
+            </ui-dropdown>
+        </ui-field>
+        <ui-field label="Model" class="column" required>
+            <ui-dropdown value.bind="item.model & validate"
+                         change.delegate="setAvailableFields($event)">
+                <ui-item value.bind="m.model" repeat.for="m of models">${m.model}</ui-item>
+            </ui-dropdown>
+        </ui-field>
+    </div>
+    <h4>Email formatting</h4>
+    <ui-field label="Email title">
+        <input value.bind="item.email_title & validate">
+    </ui-field>
+    <ui-field label="Email template">
+        <textarea value.bind="item.email_template & validate"></textarea>
+    </ui-field>
+    <h4>Triggers</h4>
+    <div repeat.for="t of item.triggers" class="ui four column grid">
+        <div class="fifteen wide column">
+            <ui-field label="Trigger when object created">
+                <ui-checkbox checked.bind="t.fire_on_create & validate"></ui-checkbox>
+            </ui-field>
+        </div>
+        <ui-field label="Field" required class="five wide column" if.bind="!t.fire_on_create">
+            <ui-dropdown value.bind="t.field & validate">
+                <ui-item value.bind="name" repeat.for="[name, fieldData] of fields">
+                    ${fieldData.label}
+                </ui-item>
+            </ui-dropdown>
+        </ui-field>
+        <ui-field label="Operator" class="five wide column" required  if.bind="!t.fire_on_create">
+            <ui-dropdown value.bind="t.operator & validate">
+                <ui-item value.bind="op.value" repeat.for="op of operators">
+                    ${op.name}
+                </ui-item>
+            </ui-dropdown>
+        </ui-field>
+        <ui-field label="Value" class="five wide column" required  if.bind="!t.fire_on_create">
+            <input value.bind="t.value & validate">
+        </ui-field>
+        <div class="one wide middle aligned column">
+            <button class="ui circular icon button" click.delegate="removeTrigger($index, t)">
+                <i class="delete icon"></i>
+            </button>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addTrigger()"
+            if.bind="item.model">Add trigger</button>
+    <h4>Subscriptions</h4>
+    <div repeat.for="s of item.subscriptions" class="ui three column grid">
+        <ui-field label="User" required class="eight wide column">
+            <ui-autocomplete value.bind="s.user & validate"
+                             from="users"
+                             store-value="username"
+                             display-value="username"
+                             default-text.bind="s.user"
+                             placeholder="User to alert">
+            </ui-autocomplete>
+        </ui-field>
+        <ui-field label="Send email?" class="seven wide column">
+            <ui-checkbox checked.bind="s.send_email"></ui-checkbox>
+        </ui-field>
+        <div class="one wide middle aligned column">
+            <button class="ui circular icon button" click.delegate="removeSubscription($index, s)">
+                <i class="delete icon"></i>
+            </button>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addSubscription()"
+            if.bind="item.model">Add subscription</button>
+</template>

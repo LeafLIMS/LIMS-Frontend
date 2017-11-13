@@ -1,0 +1,27 @@
+<template>
+    <form class="ui form" if.bind="add" submit.delegate="save()">
+        <p>
+            <ui-field label="Label" required>
+                <input value.bind="link.display_name" required>
+            </ui-field>
+            <ui-field label="URL" required>
+                <input value.bind="link.url" required>
+            </ui-field>
+        </p>
+        <button class="ui primary button" type="submit">Save</button>
+        <button class="ui basic button" click.delegate="cancel()">Cancel</button>
+    </form>
+    <div class="ui selection list">
+        <a class="item" repeat.for="lnk of source.links" href.bind="lnk.url">
+            <button class="ui tiny right floated circular icon button"
+                    click.delegate="remove($index)">
+                <i class="minus icon"></i>
+            </button>
+            <i class="external icon"></i>
+            <span class="content">
+                <span class="header">${lnk.display_name}</span>
+            </span>
+        </a>
+    </div>
+    <button class="ui basic button" if.bind="!add" click.delegate="add = true">Add a link</button>
+</template>

@@ -1,0 +1,45 @@
+<template>
+    <div if.bind="add || change">
+        <ui-error-message error-source.bind="error"></ui-error-message>
+        <div class="ui fluid icon ${fetching ? 'loading' : ''} input">
+            <input placeholder="Search..."
+                   value.bind="query.search & throttle"
+                   keyUp.delegate="getItems()">
+            <i class="search icon"></i>
+        </div>
+        <div class="ui selection list">
+            <div class="item" repeat.for="item of items.results" click.delegate="choose(item)">
+                ${item.Name}
+            </div>
+        </div>
+    </div>
+    <div if.bind="source.crm_project">
+        <b><a href.bind="source.crm_project.project_url">${source.crm_project.name}</a></b>
+        <div>
+        ${source.crm_project.account.user.first_name}
+        ${source.crm_project.account.user.last_name}
+        </div>
+        <div>
+            <a href.bind="source.crm_project.account.account_url">
+                ${source.crm_project.account.account_name}
+            </a>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <button class="ui basic button" click.delegate="add = true"
+            if.bind="!add && !source.crm_project">
+        Associate with a CRM project
+    </button>
+    <button class="ui basic button" click.delegate="cancel()"
+            if.bind="add || change">
+        Cancel
+    </button>
+    <div class="ui basic buttons" if.bind="source.crm_project && !change">
+        <button class="ui button" click.delegate="remove()">
+            Disassociate
+        </button>
+        <button class="ui button" click.delegate="change = true">
+            Update
+        </button>
+    </div>
+</template>

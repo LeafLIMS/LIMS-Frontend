@@ -1,0 +1,25 @@
+<template>
+    <require from="/src/plugins/sbol-design/sbol-visual-standalone.css"></require>
+    <div class="padded top bottom">
+        <h3 class="ui top attached header">Design</h3>
+        <div class="ui bottom attached right aligned segment">
+             <div class="sbol-visual centered">
+                 <div class="sbol-visual component"
+                      repeat.for="comp of data.sbol_diagram">
+                     <div class="sbolv ${el.role}" repeat.for="el of comp">
+                         <a map-href="route: inventory/inventoryDetail; params.bind: {id: el.item}"
+                            class="sbol-inventory-link"
+                            if.bind="el.item">
+                             ${el.name}
+                         </a>
+                         <span class="sbol-inventory-name" if.bind="!el.item">${ el.name }</span>
+                     </div>
+                 </div>
+             </div>
+             <input type="file"
+                    accept=".gen,.gb,.genbank,.csv,.txt,.sbol"
+                    files.bind="designFile"
+                    change.delegate="updateDesign($event)">
+        </div>
+    </div>
+</template>

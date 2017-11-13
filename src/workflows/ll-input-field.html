@@ -1,0 +1,32 @@
+<template class="ui blue segment custom">
+    <h5 class="ui header required">${field.label}</h5>
+    <div class="ui two column wide grid">
+        <div class="column">
+            <div class="ui right labeled fluid input
+                        ${field.from_calculation ? 'disabled left icon' : ''}">
+                <i if.bind="field.from_calculation" class="icon calculator"></i>
+                <input type="number"
+                       value.bind="outputTo.amount & validate"
+                       placeholder="${field.from_calculation ? 'Calculated' : 'Amount'}">
+                <div class="ui label">${field.measure}</div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui fluid search selection dropdown">
+                <input value.bind="outputTo[field.store_value_in] & validate">
+                <i class="dropdown icon"></i>
+                <div class="default text">Lookup ${field.consumable_type} from inventory</div>
+                <div class="menu"></div>
+            </div>
+        </div>
+    </div>
+    <div class="ui two column wide grid">
+        <div class="column">
+            <input placeholder="Barcode (optional)" value.bind="outputTo.destination_barcode">
+        </div>
+        <div class="column">
+            <input placeholder="Coordinates (optional)"
+                   value.bind="outputTo.destination_coordinates">
+        </div>
+    </div>
+</template>

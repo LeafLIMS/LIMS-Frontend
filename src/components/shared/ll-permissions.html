@@ -1,0 +1,22 @@
+<template>
+    <ui-error-message error-source.bind="error"></ui-error-message>
+    <div class="ui list permissions">
+        <div class="item" repeat.for="group of groups.results">
+            <div class="right floated content">
+                <ui-dropdown value.bind="perms[group.name]"
+                             change.delegate="setPerm(group.name, $event.target.value)"
+                             if.bind="perms[group.name]">
+                    <div class="item" data-value="r">Read</div>
+                    <div class="item" data-value="rw">Read and write</div>
+                </ui-dropdown>
+            </div>
+            <div class="middle aligned content">
+                <ui-toggle checked.bind="selected"
+                           change.delegate="toggled(group.name)"
+                           value.bind="group.name"
+                           label.bind="group.name">
+                </ui-toggle>
+            </div>
+        </div>
+    </div>
+</template>

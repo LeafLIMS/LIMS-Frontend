@@ -1,0 +1,128 @@
+<template>
+    <require from="./exclude-type"></require>
+    <require from="./is-length"></require>
+    <require from="./is-excluded"></require>
+    <require from="./ll-new-run"></require>
+    <require from="./ll-add-products"></require>
+    <div class="au-animate page content">
+        <h2 if.bind="!limitTo">Workflow runs</h2>
+        <h2 if.bind="limitTo">
+            <a class="dim" route-href="route: workflows">Workflow runs:</a> ${runs.results[0].name}
+        </h2>
+        <div class="ui inverted stackable primary menu">
+            <a class="item" click.delegate="newRun = true">
+                <i class="add icon"></i>
+                New run
+            </a>
+        </div>
+        <ll-new-run toggle.bind="newRun"></ll-new-run>
+        <ui-error-message error-source.bind="error"></ui-error-message>
+        <div class="ui padded basic segment" if.bind="isLoading">
+            <div class="ui active indeterminate large centered inline text loader">Loading</div>
+        </div>
+        <div repeat.for="run of runs.results" class="run-container">
+            <div class="ui ordered mini attached inverted primary steps">
+                <div class="step ${run.current_task == $index ? 'active' : ''}
+                            ${run.task_in_progress ? 'in_progress' : ''}
+                            ${$index > run.current_task ? 'disabled' : ''}
+                            ${$index < run.current_task ? 'completed' : ''}"
+                     repeat.for="t of run.tasks_list">
+                    <div class="content">
+                        <div class="title">${t.name}</div>
+                    </div>
+                </div>
+            </div>
+            <ll-edit-run toggle.bind="run.edit" source.bind="run"></ll-edit-run>
+            <ll-add-products toggle.bind="run.addProducts" source.bind="run"></ll-add-products>
+            <div class="ui attached segment stackable grid run">
+                <div class="four wide column">
+                    <div class="ui dividing header">
+                        ${run.name}
+                        <div class="sub header">${run.products.length} Products</div>
+                    </div>
+                    <div>${run.started_by}</div>
+                    <div class="dim">${run.date_started|dateFormat}</div>
+                </div>
+                <ui-table-wrapper class="twelve wide column">
+                    <table ui-table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Available inputs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr repeat.for="row of run.products_list">
+                                <td as-element="ui-table-select" select-to.bind="run.selected"
+                                    select-as.bind="row"></td>
+                                <td>
+                                    <b>${row.product_identifier}: </b>
+                                    ${row.name}
+                                </td>
+                                <td class="label-list">
+                                    <a class="ui primary label ${run.exclude|isExcluded:item.id}"
+                                       click.delegate="exclude(run, item.id)"
+                                       repeat.for="item of row.linked_inventory|excludeType:run.tasks_list[run.current_task].valid_product_input_types">
+                                        <i class="hide icon" if.bind="run.exclude|isExcluded:item.id"></i>
+                                        ${item.name}
+                                        <span class="detail">${item.item_type}</span>
+                                    </a>
+                                    <div class="ui active mini warning icon message"
+                                         if.bind="row.linked_inventory|excludeType:run.tasks_list[run.current_task].valid_product_input_types|isLength:'0'">
+                                        <i class="warning icon"></i>
+                                        <div class="content">
+                                            <div class="header">No valid inputs available</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ui-table-wrapper>
+            </div>
+            <div class="ui bottom attached menu">
+                <a class="item" if.bind="!run.task_in_progress"
+                   route-href="route: startTask; params.bind: {id: run.id}">
+                    <i class="play icon"></i>
+                    Start task
+                </a>
+                <a class="highlighted blue item" if.bind="run.task_in_progress"
+                   route-href="route: performTask; params.bind: {id: run.id}">
+                    <i class="puzzle icon"></i>
+                    Perform task
+                </a>
+                <ui-dropdown-menu class="item"
+                                  text="Options"
+                                  icon="caret down">
+                    <ui-dropdown-menu-item click.delegate="workflowFromRun(run)">
+                        <i class="fork icon"></i>
+                        Create workflow from run
+                    </ui-dropdown-menu-item>
+                    <ui-dropdown-menu-item click.delegate="addProducts(run)">
+                        <i class="add icon"></i>
+                        Add products
+                    </ui-dropdown-menu-item>
+                    <ui-dropdown-menu-item
+                        class.bind="run.selected.length == 0 ? 'disabled' : ''"
+                        click.delegate="removeProducts(run)">
+                        <i class="minus icon"></i>
+                        Remove products
+                    </ui-dropdown-menu-item>
+                    <div class="ui divider"></div>
+                    <ui-dropdown-menu-item click.delegate="editRun(run)">
+                        <i class="edit icon"></i>
+                        Edit run
+                    </ui-dropdown-menu-item>
+                </ui-dropdown-menu>
+                <div class="right menu">
+                    <a class="item" if.bind="!run.task_in_progress"
+                       click.delegate="stopRun(run.id)">
+                        <i class="stop icon"></i>
+                        Stop run
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

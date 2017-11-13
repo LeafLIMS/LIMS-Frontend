@@ -1,0 +1,16 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <div class="header">${config.title}</div>
+        <ux-dialog-body>
+            <div class="content">
+                <ui-picker selected.bind="selected" config.bind="config"></ui-picker>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui red cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui green ok button"
+                    click.trigger="dialog.ok(selected)">Ok</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

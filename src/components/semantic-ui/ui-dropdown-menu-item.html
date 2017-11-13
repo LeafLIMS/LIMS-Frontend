@@ -1,0 +1,6 @@
+<template class="item">
+    <i if.bind="icon && !toggle" class="${icon} icon"></i>
+    <i if.bind="isToggled && toggle" class="toggle on icon"></i>
+    <i if.bind="!isToggled && toggle" class="toggle off icon"></i>
+    <slot></slot>
+</template>

@@ -1,0 +1,245 @@
+<template>
+    <require from="./ll-input-field"></require>
+    <require from="./ll-variable-field"></require>
+    <require from="./ll-calculation-field"></require>
+    <require from="./ll-step-field"></require>
+    <require from="./ll-output-field"></require>
+    <h4 class="ui dividing header">General</h4>
+    <div class="ui two column wide stackable grid">
+        <div class="column">
+            <ui-field label="Name" required>
+                <input value.bind="item.name & validate">
+            </ui-field>
+        </div>
+        <div class="column">
+            <ui-field label="Description">
+                <textarea rows="3" value.bind="item.description & validate"></textarea>
+            </ui-field>
+        </div>
+    </div>
+    <ll-permissions object="tasks" object-for.bind="item"></ll-permissions>
+    <h4 class="ui dividing header">Equipment and labware</h4>
+    <div class="ui teal segment">
+        <div class="ui two column wide grid">
+            <div class="column">
+                <ui-field label="Capable equipment">
+                    <ui-autocomplete value.bind="item.capable_equipment_source & validate"
+                                     from="equipment"
+                                     store-value="name"
+                                     multiple="true"
+                                     placeholder="Capable equipment">
+                    </ui-autocomplete>
+                </ui-field>
+                <ui-tags source.bind="item.capable_equipment"></ui-tags>
+                <p class="help text">Pick the piece(s) of equipment that this task can run on.</p>
+            </div>
+            <div class="column">
+                <ui-field label="Equipment files">
+                    <ui-autocomplete value.bind="item.equipment_files_source & validate"
+                                     from="filetemplates"
+                                     store-value="name"
+                                     multiple="true"
+                                     placeholder="Equipment files">
+                    </ui-autocomplete>
+                </ui-field>
+                <ui-tags source.bind="item.equipment_files"></ui-tags>
+                <p class="help text">Choose which (if any) files can be generated for use in the
+                                     above equipment. These files are defined in the file
+                                     templates section of these settings.</p>
+            </div>
+        </div>
+    </div>
+    <div class="ui teal segment">
+        <div class="ui three column wide grid">
+            <div class="four wide column">
+                <ui-field label="Labware not required">
+                    <ui-checkbox checked.bind="item.labware_not_required"></ui-checkbox>
+                </ui-field>
+            </div>
+            <div class="six wide column">
+                <ui-field label="Labware amount" required.bind="!item.labware_not_required">
+                    <input value.bind="item.labware_amount & validate"
+                           class="${item.labware_not_required ? 'disabled' : ''}">
+                </ui-field>
+            </div>
+            <div class="six wide column">
+                <ui-field label="Labware type to use" required.bind="!item.labware_not_required">
+                    <ui-autocomplete from="itemtypes"
+                            store-value="name"
+                            display-value="display_name"
+                            value.bind="item.labware & validate"
+                            default-text.bind="item.labware"
+                            placeholder="Lookup labware type">
+                    </ui-autocomplete>
+                </ui-field>
+            </div>
+        </div>
+        <p class="help text">Choose the amount and type of labware that will be required for the
+                             outputs of this task. Set to "Labware not required" if the task does
+                             not output a physical item.</p>
+    </div>
+    <h4 class="ui dividing header">Inputs</h4>
+    <div class="ui blue segment">
+        <div class="ui four column wide grid">
+            <div class="column">
+                <ui-field label="Input from product not required">
+                    <ui-checkbox checked.bind="item.input_not_required"></ui-checkbox>
+                </ui-field>
+            </div>
+            <div class="column">
+                <ui-field label="Amount of input from product" required.bind="!item.input_not_required">
+                    <input value.bind="item.product_input_amount & validate">
+                </ui-field>
+            </div>
+            <div class="column">
+                <ui-field label="Input measure" required.bind="!item.input_not_required">
+                    <ui-autocomplete from="measures"
+                            value.bind="item.product_input_measure & validate"
+                            store-value="symbol"
+                            display-value="symbol"
+                            default-text.bind="item.product_input_measure"
+                            placeholder="Select measure">
+                    </ui-autocomplete>
+                </ui-field>
+            </div>
+            <div class="column">
+                <ui-field label="Input type" required.bind="!item.input_not_required">
+                    <ui-autocomplete from="itemtypes"
+                            value.bind="item.product_input & validate"
+                            store-value="name"
+                            display-value="display_name"
+                            default-text.bind="item.product_input"
+                            placeholder="Select input type">
+                    </ui-autocomplete>
+                </ui-field>
+            </div>
+        </div>
+        <p class="help text">Set the default (if no input files are supplied) amount that is taken
+                             from items in the product. All items that are child types of the
+                             input type will be used.</p>
+    </div>
+    <div class="ui blue segment">
+        <ui-field label="Input files">
+            <ui-autocomplete value.bind="item.input_files_source & validate"
+                             from="filetemplates"
+                             store-value="name"
+                             multiple="true"
+                             placeholder="Input files">
+            </ui-autocomplete>
+        </ui-field>
+        <ui-tags source.bind="item.input_files"></ui-tags>
+        <p class="help text">Choose which (if any) files can be supplied for use in the
+                             setting values in a task. These files are defined in the file
+                             templates section of these settings with the values overriding
+                             any defaults set when configuring.</p>
+    </div>
+    <div class="ui two column wide stackable vertically padded grid">
+        <div class="column" repeat.for="field of item.input_fields">
+            <ll-input-field field.bind="field"
+                            calculations.bind="calculations"
+                            output-to.bind="item.input_fields[$index] & validate">
+            </ll-input-field>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeField($index, 'input', item)">
+                <i class="remove icon"></i>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addField('input')">
+        <i class="add icon"></i>
+        Add input field
+    </button>
+    <p class="help text">Input fields allow the use amounts of items from the inventory
+                         in the task. The amount can also come from a calculation field.</p>
+    <h4 class="ui dividing header">Steps</h4>
+    <div class="ui one column wide stackable vertically padded grid">
+        <div repeat.for="field of item.step_fields" class="column">
+            <ll-step-field field.bind="field"
+                           output-to.bind="item.step_fields[$index]">
+            </ll-step-field>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeField($index, 'step', item)">
+                <i class="remove icon"></i>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addField('step')">
+        <i class="add icon"></i>
+        Add step field
+    </button>
+    <p class="help text">Step fields allow for the display of text and parameters (up to four) that
+                         are required for a task. Each field is a seperate step and can allow for
+                         the creation of entire parts of a protocol in a task. Each of the
+                         properties can be given an amount and an optional measure and can be
+                         derived from a calculation field.</p>
+    <h4 class="ui dividing header">Outputs</h4>
+    <div class="ui orange segment">
+        <ui-field label="Output files">
+            <ui-autocomplete value.bind="item.output_files_source & validate"
+                             from="filetemplates"
+                             store-value="name"
+                             multiple="true"
+                             placeholder="Output files">
+            </ui-autocomplete>
+        </ui-field>
+        <ui-tags source.bind="item.input_files"></ui-tags>
+    </div>
+    <p class="help text">Output files are designed to output information from a task into a format
+                         that can be used in another system (e.g. an external inventory system).</p>
+    <div class="ui three column wide stackable vertically padded grid">
+        <div class="column" repeat.for="field of item.output_fields">
+            <ll-output-field field.bind="field"
+                             output-to.bind="item.output_fields[$index]">
+            </ll-output-field>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeField($index, 'output', item)">
+                <i class="remove icon"></i>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addField('output')">
+        <i class="add icon"></i>
+        Add output field
+    </button>
+    <p class="help text">Output fields allow the automatic creation of an inventory item on
+                         completion of a task. All information is auto-generated but can be
+                         altered later. A calculation field can be used to generate the amount.</p> 
+    <h4 class="ui dividing header">Variables</h4>
+    <div class="ui three column wide stackable vertically padded grid">
+        <div class="column" repeat.for="field of item.variable_fields">
+            <ll-variable-field field.bind="field"
+                               output-to.bind="item.variable_fields[$index]">
+            </ll-variable-field>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeField($index, 'variable', item)">
+                <i class="remove icon"></i>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addField('variable')">
+        <i class="add icon"></i>
+        Add variable field
+    </button>
+    <p class="help text">Variable fields are used to store key values that may be required in a
+                         calculation or that are required for use in output/equipment files.</p>
+    <h4 class="ui dividing header">Calculations</h4>
+    <div class="ui three column wide stackable vertically padded grid">
+        <div class="column" repeat.for="field of item.calculation_fields">
+            <ll-calculation-field field.bind="field"
+                                  output-to.bind="item.calculation_fields[$index]">
+            </ll-calculation-field>
+            <div class="ui basic bottom attached icon button"
+                 click.delegate="removeField($index, 'calculation', item)">
+                <i class="remove icon"></i>
+            </div>
+        </div>
+    </div>
+    <button class="ui basic button" click.delegate="addField('calculation')">
+        <i class="add icon"></i>
+        Add calculation field
+    </button>
+    <p class="help text">Calculation fields allow for basic calculations to be performed and the
+                         values used in different parts of a task. Fields are references by
+                         enclosing the label in curly braces ({}) e.g. {Field one}. The following
+                         mathematical operators are supported: (), /, *, +, pow()</p>
+</template>

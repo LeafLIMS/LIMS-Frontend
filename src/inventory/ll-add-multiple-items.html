@@ -1,0 +1,52 @@
+<template>
+    <require from="../shared/key-value-converter"></require>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">Add multiple items from file</h3>
+        <div class="ui attached ${isLoading ? 'loading' : ''} segment">
+            <div class="ui two column wide stackable grid">
+                <div class="column ten wide">
+                    <ui-field class="column" label="File Template" required>
+                        <ui-dropdown value.bind="options.file_template & validate"
+                                     change.delegate="setFields($event)">
+                            <ui-item repeat.for="template of fileTemplates.results"
+                                     value.bind="template.id">
+                                ${template.name}
+                            </ui-item>
+                        </ui-dropdown>
+                    </ui-field>
+                    <div class="ui top attached header">Available fields</div>
+                    <div class="ui bottom attached segment">
+                        ${fields}
+                    </div>
+                    <ui-field class="column" label="File to use" required>
+                        <input type="file" name="items_file" files.bind="options.items_file" required>
+                    </ui-field>
+                </div>
+                <div class="column six wide">
+                    <ll-permissions object="inventory" object-for.bind="options"></ll-permissions>
+                </div>
+            </div>
+        </div>
+        <div class="ui visible attached scrolling warning message" if.bind="hasRejected">
+            <div class="header">
+                The following ${rejected.length} items failed to import:
+            </div>
+            <div repeat.for="reject of rejected">
+                ${reject.name} failed to import due to:&nbsp;
+                <ul class="list">
+                    <li repeat.for="field of reject.errors | keys">
+                        <b>${field}:</b> ${reject.errors[field][0]}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

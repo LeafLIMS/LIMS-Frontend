@@ -1,0 +1,87 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">New Reservation</h3>
+        <div class="ui attached segment">
+            <div class="ui two column wide grid">
+                <ui-field label="Equipment to reserve" required class="sixteen wide column">
+                    <ui-dropdown value.bind="source.equipment_reserved & validate">
+                        <ui-item repeat.for="item of equipment.results" value.bind="item.name">
+                            ${item.name}
+                        </ui-item>
+                    </ui-dropdown>
+                </ui-field>
+                <div class="column">
+                    <h4 class="section-header">Book from</h4>
+                    <div class="ui three column wide grid">
+                        <ui-field label="Date" required class="column">
+                            <ui-datetime value.bind="source.from_date & validate"
+                                         name="from_date"
+                                         config.bind="config"
+                                         change.trigger="dateChanged($event)"></ui-datetime>
+                        </ui-field>
+                        <ui-field label="Hour" class="column" required>
+                            <ui-dropdown value.bind="source.from_hour & validate"
+                                         name="from_hour"
+                                         change.delegate="dateChanged($event)">
+                                <ui-item repeat.for="hour of hours" value.bind="hour">
+                                    ${ hour }
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                        <ui-field label="Minute" class="column" required>
+                            <ui-dropdown value.bind="source.from_minute & validate"
+                                         name="from_minute"
+                                         change.delegate="dateChanged($event)">
+                                <ui-item repeat.for="min of minutes" value.bind="min">
+                                    ${ min }
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                </div>
+                <div class="column">
+                    <h4 class="section-header">Book to</h4>
+                    <div class="ui three column wide grid">
+                        <ui-field label="Date" required class="column">
+                            <ui-datetime value.bind="source.to_date & validate"
+                                         name="to_date"
+                                         config.bind="config"
+                                         change.delegate="dateChanged($event)"></ui-datetime>
+                        </ui-field>
+                        <ui-field label="Hour" class="column" required>
+                            <ui-dropdown value.bind="source.to_hour & validate"
+                                         name="to_hour"
+                                         change.delegate="dateChanged($event)">
+                                <ui-item repeat.for="hour of hours" value.bind="hour">
+                                    ${ hour }
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                        <ui-field label="Minute" class="column" required>
+                            <ui-dropdown value.bind="source.to_minute & validate"
+                                         name="to_minute"
+                                         change.delegate="dateChanged($event)">
+                                <ui-item repeat.for="min of minutes" value.bind="min">
+                                    ${ min }
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                </div>
+            </div>
+            <ui-field label="Further details">
+                <textarea value.bind="source.reservation_details"></textarea>
+            </ui-field>
+            <ll-template-hook name="create-reservation" source.bind="source">
+            </ll-template-hook>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

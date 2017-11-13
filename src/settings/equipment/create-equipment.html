@@ -1,0 +1,17 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Location" required>
+        <ui-autocomplete from="locations"
+                store-value="code"
+                display-value="display_name"
+                value.bind="item.location & validate"
+                default-text.bind="item.location"
+                placeholder="Lookup location">
+        </ui-autocomplete>
+    </ui-field>
+    <ui-field label="Allow reservations?">
+        <ui-checkbox checked.bind="item.can_reserve"></ui-checkbox>
+    </ui-field>
+</template>

@@ -1,0 +1,30 @@
+<template>
+    <div class="ui two column wide grid">
+        <div class="sixteen wide column">
+            <ui-field label="Name" required>
+                <input value.bind="item.name & validate">
+            </ui-field>
+        </div>
+        <div class="column">
+            <div class="ui fluid action input">
+                <ui-dropdown value.bind="taskToAdd" placeholder="Choose task to add">
+                    <ui-item repeat.for="t of availableTasks.results"
+                             value.bind="t.id">${t.name}</ui-item>
+                </ui-dropdown>
+                <button class="ui primary button" click.delegate="addTask()">Add</button>
+            </div>
+            <div class="ui segments" sortable.bind="{draggable: '.segment'}">
+                <div class="ui clearing segment" repeat.for="task of taskList">
+                    <div class="ui circular label">${$index + 1}</div> ${task.name}
+                    <button class="ui right floated circular small icon button"
+                            click.delegate="removeTask($index)">
+                        <i class="remove icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <ll-permissions object="workflows" object-for.bind="item"></ll-permissions>
+        </div>
+    </div>
+</template>

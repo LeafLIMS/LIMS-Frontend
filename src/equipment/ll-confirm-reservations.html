@@ -1,0 +1,43 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">Confirm reservations</h3>
+        <div class="ui attached segment">
+            <div class="ui visible message" if.bind="reservations.results.length == 0">
+                <p>No reservations are currently available to confirm.</p>
+            </div>
+            <ui-table-wrapper if.bind="reservations.results.length > 0">
+                <table ui-table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Equipment</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Other details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr repeat.for="c of reservations.results">
+                            <td>
+                                <ui-checkbox checked.bind="c.is_confirmed"></ui-checkbox>
+                            </td>
+                            <td>${ c.full_user_name }</td>
+                            <td>${ c.equipment_reserved }</td>
+                            <td>${ c.start|dateFormat }</td>
+                            <td>${ c.end|dateFormat }</td>
+                            <td>${ c.reservation_details }</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ui-table-wrapper>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Confirm reservations</button>
+        </div>
+    </form>
+</template>

@@ -1,0 +1,25 @@
+<template>
+    <div class="au-animate page content">
+        <h2>Settings</h2>
+        <div class="ui inverted stackable pointing primary menu">
+            <a repeat.for="route of router.routes"
+               if.bind="route.name"
+               class="item ${route.navModel.isActive ? 'active' : ''}"
+               route-href="route.bind: route.name">
+                ${route.title}
+            </a>
+        </div>
+        <div class="ui stackable secondary pointing menu">
+            <a repeat.for="cr of router.currentInstruction.config.settings.childRoutes"
+               if.bind="cr.name"
+               click.delegate="activateSection(cr)"
+               class="item ${activeSection == cr.name ? 'active' : ''}">
+                ${cr.title}
+            </a>
+        </div>
+        <compose if.bind="activeSection"
+                 view-model.bind="activeModule"
+                 view="./table.html"
+                 model.bind="sectionData"></compose>
+    </div>
+</template>

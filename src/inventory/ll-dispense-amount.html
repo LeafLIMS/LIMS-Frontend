@@ -1,0 +1,30 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">Dispense</h3>
+        <div class="ui attached segment">
+            <div class="ui three column wide grid">
+                <div class="column">
+                    <div class="ui right labeled fluid input">
+                        <input value.bind="transfer.amount & validate"
+                               placeholder="Amount to dispense">
+                        <div class="ui basic label">${transfer.measure}</div>
+                    </div>
+                </div>
+                <ui-field class="column">
+                    <input value.bind="transfer.barcode" placeholder="Destination barcode">
+                </ui-field>
+                <ui-field class="column">
+                    <input value.bind="transfer.coordinates" placeholder="Destination coordinates">
+                </ui-field>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Dispense</button>
+        </div>
+    </form>
+</template>

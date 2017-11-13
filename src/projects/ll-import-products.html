@@ -1,0 +1,44 @@
+<template>
+    <require from="../shared/key-value-converter"></require>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">Import New Products</h3>
+        <div class="ui attached ${isLoading ? 'loading' : ''} segment ">
+            <p>To import a list of products two files are needed: a TSV (tab seperated) text
+                file that contains information on the products to be imported and (optionaly) a
+                zip file containing the design files.
+			</p>
+			<p>The following headers are valid for use in the product information file. Those
+                marked with an asterix (*) are required: name*, status*, product_type*,
+                optimised_for.</p>
+			<p>All information supplied must match a valid input for the corrosponding field or
+                it will be rejected. Some values are case sensitive, using the incorrect case
+                will cause the entry to be rejected.</p>
+            <ui-field label="Products TSV file" required>
+                <input type="file" files.bind="products.products" required>
+            </ui-field>
+            <ll-template-hook name="import-products" source.bind="products.items">
+            </ll-template-hook>
+        </div>
+        <div class="ui visible attached scrolling warning message" if.bind="hasRejected">
+            <div class="header">
+                The following ${rejected.length} items failed to import:
+            </div>
+            <div repeat.for="reject of rejected">
+                ${reject.name} failed to import due to:&nbsp;
+                <ul class="list">
+                    <li repeat.for="field of reject.reason | keys">
+                        <b>${field}:</b> ${reject.reason[field]}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ui attached segment" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Import</button>
+        </div>
+    </form>
+</template>

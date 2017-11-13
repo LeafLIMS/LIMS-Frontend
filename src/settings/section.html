@@ -1,0 +1,9 @@
+<template>
+    <div class="ui secondary pointing menu">
+        <a repeat.for="[path, details] of subsections"
+           class="item ${data.subsection == path ? 'active' : ''}"
+           route-href="route: section; params.bind: {section: data.section,
+                                                     subsection: path}">${details.name}</div>
+    </div>
+    <compose view.bind="template" view-model.bind="subsection" model.bind="data"></compose>
+</template>

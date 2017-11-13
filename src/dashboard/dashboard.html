@@ -1,0 +1,81 @@
+<template>
+    <require from="../components/shared/chart"></require>
+    <h1>Dashboard</h1>
+    <div class="ui inverted primary segment">
+        <div class="ui four huge inverted statistics">
+            <div class="statistic">
+                <div class="value">${project_count}</div>
+                <div class="label">Active projects</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${run_count}</div>
+                <div class="label">Active runs</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${inventory_count}</div>
+                <div class="label">Items available</div>
+            </div>
+            <div class="statistic">
+                <div class="value">${equipment_count}</div>
+                <div class="label">Equipment errors</div>
+            </div>
+        </div>
+    </div>
+    <div class="ui horizontal equal segments">
+        <div class="ui segment">
+            <h3 class="ui primary header">Latest projects</h3>
+            <div class="ui relaxed selection list">
+                <a repeat.for="item of projects.results"
+                   map-href="route: project/projectDetail; params.bind: {id: item.id}"
+                   class="item">
+                    <span class="content">
+                        <span class="header">${item.project_identifier}: ${item.name}</span>
+                    </span>
+                </a>
+            </div>
+            <a class="ui bottom right floated basic button" map-href="route: project">
+                View all projects
+            </a>
+        </div>
+        <div class="ui segment">
+            <h3 class="ui primary header">Active runs</h3>
+            <div class="ui relaxed selection list">
+                <a repeat.for="item of runs.results"
+                   map-href="route: workflows"
+                   class="item">
+                    <span class="content">
+                        <span class="header">${item.name}</span>
+                    </span>
+                </a>
+            </div>
+            <a class="ui right floated basic button" map-href="route: workflows">
+                View all runs
+            </a>
+        </div>
+        <div class="ui segment">
+            <h3 class="ui primary header">Last added items</h3>
+            <div class="ui relaxed selection list">
+                <a repeat.for="item of inventory.results"
+                   map-href="route: inventory/inventoryDetail; params.bind: {id: item.id}"
+                   class="item">
+                    <span class="content">
+                        <span class="header">${item.name}</span>
+                    </span>
+                </a>
+            </div>
+            <a class="ui right floated basic button" map-href="route: inventory">
+                View full inventory
+            </a>
+        </div>
+    </div>
+    <div class="ui horizontal equal segments">
+        <div class="ui segment">
+            <h3>Project statuses</h3>
+            <chart data.bind="project_statuses"></chart>
+        </div>
+        <div class="ui segment">
+            <h3>Product statuses</h3>
+            <chart data.bind="product_statuses"></chart>
+        </div>
+    </div>
+</template>

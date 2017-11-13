@@ -1,0 +1,102 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">New Item</h3>
+        <div class="ui attached segment">
+            <div class="ui two column wide stackable grid">
+                <div class="column ten wide">
+                    <div class="ui grid two column wide no gutter">
+                        <ui-field class="column" label="Name" required>
+                            <input value.bind="item.name & validate" required>
+                        </ui-field>
+                        <ui-field class="column" label="Type" required>
+                            <ui-dropdown value.bind="item.item_type & validate">
+                                <ui-item repeat.for="type of types.results" value.bind="type.name">
+                                    ${type.display_name}
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                    <div class="ui grid two column wide no gutter">
+                        <ui-field class="column" label="Identifier">
+                            <input value.bind="item.identifier">
+                        </ui-field>
+                        <ui-field class="column" label="Barcode">
+                            <input value.bind="item.barcode">
+                        </ui-field>
+                    </div>
+                    <div class="ui grid no gutter">
+                        <ui-field class="column" label="Location" required>
+                            <ui-dropdown value.bind="item.location & validate">
+                                <ui-item repeat.for="loc of locations.results"
+                                         value.bind="loc.code">
+                                    ${loc.display_name}
+                                </ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                    <div class="ui grid four column wide no gutter">
+                        <ui-field class="column" label="Amount" required>
+                            <input name="amount_available"
+                                   value.bind="item.amount_available & validate"
+                                   placeholder="Amount">
+                        </ui-field>
+                        <ui-field class="column" label="Amount measure" required>
+                            <ui-dropdown value.bind="item.amount_measure & validate" required>
+                                <ui-item repeat.for="m of measures.results"
+                                         value.bind="m.symbol">${m.symbol}</ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                        <ui-field class="column" label="Concentration">
+                            <input name="concentration" value.bind="item.concentration & validate"
+                                   placeholder="Concentration">
+                        </ui-field>
+                        <ui-field class="column" label="Concentration measure">
+                            <ui-dropdown value.bind="item.concentration_measure & validate">
+                                <ui-item repeat.for="m of measures.results"
+                                         value.bind="m.symbol">${m.symbol}</ui-item>
+                            </ui-dropdown>
+                        </ui-field>
+                    </div>
+                    <div class="ui grid no gutter">
+                        <ui-field class="column" label="Description">
+                            <textarea value.bind="item.description"></textarea>
+                        </ui-field>
+                    </div>
+                    <ll-template-hook name="create-inventory-item" source.bind="item">
+                    </ll-template-hook>
+                    <div class="ui horizontal divider header">Properties</div>
+                    <div class="ui two column wide grid" repeat.for="p of item.properties">
+                        <ui-field class="column" label="Name">
+                            <input name="prop_${index}" value.bind="p.name & validate">
+                        </ui-field>
+                        <div class="ui two column wide grid">
+                            <ui-field class="fourteen wide column" label="Value">
+                                <textarea name="val_${index}"
+                                          value.bind="p.value & validate"></textarea>
+                            </ui-field>
+                            <div class="middle aligned two wide column">
+                            <button class="ui circular icon button"
+                                    click.delegate="removeProperty($index)">
+                                <i class="remove icon"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="ui button" click.delegate="addProperty()">
+                        <i class="icon add"></i> Add
+                    </button>
+                </div>
+                <div class="column six wide">
+                    <ll-permissions object="inventory" object-for.bind="item"></ll-permissions>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

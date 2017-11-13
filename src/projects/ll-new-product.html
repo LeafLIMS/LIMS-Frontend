@@ -1,0 +1,33 @@
+<template>
+    <form class="ui form new item slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui top attached inverted primary header">New Product</h3>
+        <div class="ui attached segment">
+            <ui-field label="Name" required>
+                <input value.bind="product.name & validate" required>
+            </ui-field>
+            <ui-field label="Product status" required>
+                <ui-dropdown value.bind="product.status & validate">
+                    <ui-item repeat.for="status of statuses.results" value.bind="status.name">
+                        ${status.name}
+                    </ui-item>
+                </ui-dropdown>
+            </ui-field>
+            <ui-field label="Product type" required>
+                <ui-dropdown value.bind="product.product_type & validate">
+                    <ui-item repeat.for="item of productTypes.results" value.bind="item.name">
+                        ${item.display_name}
+                    </ui-item>
+                </ui-dropdown>
+            </ui-field>
+            <ll-template-hook name="create-product" source.bind="product"></ll-template-hook>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

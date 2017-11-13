@@ -1,0 +1,23 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <h4>Permissions (${item.permissions.length || 0})</h4>
+    <div class="ui fluid action input">
+        <ui-autocomplete value.bind="permission"
+                         from="permissions"
+                         store-value="name"
+                         placeholder="Choose permissions">
+        </ui-autocomplete>
+        <button class="ui button" click.delegate="addPermission()">Add</button>
+    </div>
+    <div class="ui scrollable list">
+        <div class="item" repeat.for="p of item.permissions">
+            ${p}
+            <button class="ui right floated circular icon button"
+                    click.delegate="removePermission($index)">
+                <i class="delete icon"></i>
+            </button>
+        </div>
+    </div>
+</template>

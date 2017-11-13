@@ -1,0 +1,594 @@
+// Colours
+@primary50: #F1F8E9;
+@primary100: #DCEDC8;
+@primary200: #C5E1A5;
+@primary300: #AED581;
+@primary400: #9CCC65;
+@primary500: #8BC34A;
+@primary600: #7CB342;
+@primary700: #689F38;
+@primary800: #558B2F;
+@primary900: #33691E;
+
+@primary: @primary500;
+@primary-dark: darken(@primary, 5%);
+
+@blue: #2185d0;
+
+@padding: 0.5em;
+@background: #eceff1;
+
+body {
+    background: @background;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+// For custom elements
+.custom {
+    display: block;
+}
+
+ui-table-header > .ui.secondary.menu > .item:first-child {
+    padding-left: 0;
+}
+
+[ui-table-row] {
+    cursor: pointer;
+}
+
+ui-dropdown {
+    width: 100%;
+}
+
+// Semantic UI additions
+.ui.inverted.menu.left.fixed {
+    background: @primary;
+}
+
+.inverted.primary {
+    background: @primary !important;
+}
+
+.ui.label.primary {
+    background: @primary;
+    color: white;
+}
+
+.ui.label.primary:hover {
+    color: white;
+    background: darken(@primary, 5%) !important;
+}
+
+.ui.inverted.menu.primary {
+    background: @primary;
+    i.icons .corner.icon {
+        text-shadow: -1px -1px 0 @primary,1px -1px 0 @primary,-1px 1px 0 @primary,1px 1px 0 @primary;
+    }
+}
+
+.ui.pointing.menu.primary .active.item:after {
+    background: @primary !important;
+}
+
+.ui.pointing.menu.primary .active.item:hover:after {
+    background: @primary !important;
+}
+
+.ui.inverted.menu .item.darker {
+    background: darken(@primary, 5%);
+}
+
+.ui.basic.borderless.button {
+    border: 0;
+    box-shadow: none;
+}
+
+.full.height {
+    min-height: 100%;
+}
+
+.ui.scrolling.message {
+    max-height: 30em;
+    overflow-y: scroll;
+}
+
+.ui.segment.table-wrapper {
+    display: block;
+    padding: 0;
+    max-width: 100% + 3px;
+    overflow-x: scroll;
+    .table.attached {
+        border-top: 0;
+        border-bottom: 0;
+    }
+}
+
+.ui.grid.no.gutter {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ux-dialog-overlay.active {
+    background-color: black;
+    opacity: .8;
+}
+
+.ui.modal {
+    top: 2em !important;
+    max-height: 90%;
+    overflow-y: scroll;
+}
+
+.ui.basic.modal {
+    top: 35% !important;
+}
+
+h1.ui.header, h2.ui-header, h3.ui.header, h4.ui.header {
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.ui.header.primary {
+    color: @primary;
+}
+
+.ui.inverted.primary.header {
+    color: white;
+}
+
+ui-field[required] label:after, ui-field.required label:after, .required:not(ui-field):after {
+    content: ' *';
+    font-size: 1.25em;
+    color: @primary !important;
+}
+
+.ui.statistics.primary .statistic > .value, .ui.statistic.primary.primary > .value {
+    color: @primary;
+}
+
+.ui.inverted.primary.steps {
+    border: 0;
+    // This works around an issues with <!-- anchor --> comments required by aurelia.
+    // :only will not be applied as there are two elements.
+    div:only-of-type {
+        border-radius: .28571429rem;
+    }
+    .step {
+        background: @primary;
+        color: white;
+    }
+    .step.active {
+        color: white;
+        .title {
+            color: white;
+        }
+        background: darken(@primary-dark, 5%);
+    }
+    .step.active::before {
+        color: white;
+    }
+    .step.active::after {
+        background: darken(@primary-dark, 5%);
+    }
+    .step.active.in_progress {
+        background: @blue;
+    }
+    .step.active.in_progress::after {
+        background: @blue;
+    }
+    .step.completed::after {
+        background: @primary;
+    }
+    .step.completed::before {
+        color: white;
+    }
+    .disabled.step .description, .disabled.step .title {
+        color: rgba(255,255,255, 0.4);
+    }
+    .disabled.step::after {
+        background: @primary;
+    }
+}
+
+.label-list .ui.label {
+    margin-bottom: 0.25em;
+}
+
+.ui.page.centered.segment {
+    //position: fixed;
+    top: 45%;
+}
+
+.ui.action.input .ui.dropdown {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ui.action.input ui-autocomplete {
+    display: block;
+    width: 100%;
+}
+
+.ui.button.remove-field {
+    margin-bottom: -2rem;
+}
+
+.ui.scrollable.list {
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.maintain-breaks {
+    white-space: pre-line;
+    //margin-bottom: @padding * 2;
+}
+
+.ui.horizontal.equal.segments > .segment {
+    flex-basis: 0;
+}
+
+// Charts
+.chart {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: 5em;
+}
+
+// Page animations
+@keyframes slideLeftIn {
+  0% {
+    transform: translate(100%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes slideLeftOut {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0);
+    opacity: 0;
+  }
+}
+//.page.au-enter, .page.au-enter-active, .page.au-leave-active {
+//    background: @background;
+//    position: absolute;
+//    left: 90px;
+//    right: 0;
+//    bottom: 0;
+//    top: 8px;
+//}
+//.page.au-enter {
+//  transform: translate(100%, 0);
+//}
+//.page.au-enter-active {
+//  animation: slideLeftIn 0.6s;
+//}
+//.page.au-leave-active {
+//  animation: slideLeftOut 0.6s;
+//}
+
+// Element animations
+@keyframes slideDown {
+  0% {
+    transform: translate(0, -100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -100%);
+    opacity: 0;
+  }
+}
+.slide-down.au-enter {
+  transform: translate(0, -100%);
+}
+.slide-down.au-enter-active {
+  animation: slideDown 0.6s;
+}
+.slide-down.au-leave-active {
+  animation: slideUp 0.6s;
+}
+
+.slide-out.au-enter {
+  transform: translate(0, -100%);
+}
+.slide-out.au-enter-active {
+  animation: slideLeft 0.6s;
+}
+.slide-out.au-leave-active {
+  animation: slideRight 0.6s;
+}
+
+// Textual elements
+.dim {
+    color: rgba(0,0,0,0.3);
+}
+
+// General classes
+.new.item {
+    margin-bottom: @padding * 2;
+}
+
+.padded.top {
+    padding-top: @padding * 2;
+}
+
+.padded.bottom {
+    padding-bottom: @padding * 2;
+}
+
+.responsive.width {
+    width: 100%;
+}
+
+// Navigation elements
+.navigation-pad {
+    padding: @padding;
+    margin-left: 5em;
+    margin-right: 0.5em;
+    min-height: 100%;
+}
+
+.pagination .ui.selection.dropdown {
+    border: 0;
+}
+
+.user-details.item {
+    background: @primary-dark !important;
+}
+
+.user-details.item:hover {
+    background: @primary700 !important;
+}
+
+.user-details .menu {
+    background: @primary700 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    .header {
+        display: block;
+    }
+}
+
+.ui.menu .ui.dropdown.user-details .menu .item, ui-menu-item {
+    color: white !important;
+}
+
+.account-pane {
+    overflow: hidden;
+    height: 100%;
+    max-height: 100%;
+    width: 17em;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 4.5em;
+    background: @background;
+    z-index: 50;
+    box-shadow: 0 1px 2px 0 rgba(34,36,38,.5);
+}
+
+.account-pane-header {
+    padding: 1em;
+    background: @primary700;
+    color: white;
+    img {
+        width: 100%;
+    }
+}
+
+.item.pane-active {
+    background: @primary700 !important;
+}
+
+.alerts-container {
+    padding: 0.5em;
+    height: 70%;
+}
+
+.ui.list.alerts-list {
+    overflow-y: scroll;
+    height: 100%;
+    .item {
+        position: relative;
+    }
+    .alert-options {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+.alerts-list .alarm.icon.L {
+    color: #2196f3;
+}
+
+.alerts-list .alarm.icon.M {
+    color: #ff9800;
+}
+
+.alerts-list .alarm.icon.H {
+    color: #f44336;
+}
+
+p.help.text {
+    padding-top: 0.25em;
+    margin-bottom: 0.3em;
+    font-size: 0.9em;
+    color: grey;
+}
+
+// Permissions element
+.permissions {
+    max-height: 20em;
+    overflow-y: scroll;
+    .ui.selection.dropdown {
+        min-width: 10em;
+    }
+}
+
+// Product element tweaks
+.product {
+    background: white;
+    border-top: 0 !important;
+    border-bottom: 3px solid @primary;
+}
+
+.product-row.row-selected td {
+    border-bottom: 0;
+}
+
+// Inventory
+.transfer .header {
+     font-weight: bold;
+}
+
+.transfer-table-wrapper.segment {
+    padding: 0 !important;
+}
+
+.transfer-table-wrapper {
+    max-height: 20em;
+    overflow: hidden;
+    overflow-y: scroll;
+    .ui.table {
+        border-bottom: 0;
+        border-top: 0;
+    }
+}
+
+// Run
+.run-container {
+    margin-bottom: @padding * 2;
+}
+
+.run ui-table-wrapper {
+    max-height: 40em;
+    overflow-y: scroll;
+}
+
+.run > div.ui.segment.column {
+    padding-top: @padding * 2 !important;
+    padding-bottom: @padding * 2 !important;
+}
+
+.run.ui.grid > ui-table-wrapper.column {
+    padding: 0 !important;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0;
+}
+
+.run .ui.label {
+    margin-bottom: 0.25em;
+}
+
+.run .ui.label.excluded {
+    color: rgba(255,255,255,0.4);
+}
+
+ll-add-products .ui.form {
+    margin-bottom: 0;
+    > .ui.segment:last-child {
+        border-bottom: 0;
+    }
+}
+
+// Tasks
+.task.header .circular.white.label {
+    margin-left: 0;
+    margin-right: .5rem;
+    background: white;
+}
+
+.task.header.primary.in_progress {
+    background: @blue !important;
+}
+
+.step.field.ui.segment .ui.grid {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.attached.menu .highlighted.blue.item {
+    color: white;
+    background: #2185D0 !important
+}
+
+// Reservations
+.reservation {
+    cursor: pointer;
+}
+
+.confirmed, .missed, .checked_in {
+    overflow: visible;
+}
+
+.confirmed:before, .missed:before, .checked_in:before {
+    position: absolute;
+    top: -0.75em;
+    right: 0;
+    z-index: 5;
+    display: block;
+    padding: 0 0.1em;
+    font-family: 'Icons';
+}
+
+.confirmed:before {
+    content: '\f164';
+    padding: 0.15em 0.3em;
+    color: white;
+    background: @blue;
+    border-radius: 30em;
+    top: -1em;
+}
+
+.checked_in:before {
+    content: '\f164';
+    padding: 0.15em 0.3em;
+    color: white;
+    background: @primary-dark;
+    border-radius: 30em;
+    top: -1em;
+}
+
+.past {
+    opacity: 0.5;
+}
+
+.missed:before {
+    content: '\f06a';
+    color: #212121;
+}
+
+.pending-text {
+    color: #388e3c;
+    md-icon {
+        color: #388e3c;
+    }
+}

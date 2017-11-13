@@ -1,0 +1,76 @@
+<template>
+    <require from="./ll-create-reservation"></require>
+    <require from="./ll-check-in"></require>
+    <require from="./ll-confirm-reservations"></require>
+    <div class="au-animate page content">
+        <h2>Equipment</h2>
+        <div class="ui inverted stackable primary menu">
+            <a class="item" click.delegate="newReservation = true">
+                <i class="icon add"></i>
+                New reservation
+            </a>
+            <a class="item" click.delegate="checkIn = true">
+                <i class="icon checked calendar"></i>
+                Check in
+            </a>
+            <a class="item" click.delegate="confirmReservations = true" if.bind="isStaff">
+                <i class="icon calendar"></i>
+                Confirm reservations
+            </a>
+        </div>
+        <ll-create-reservation source.bind="reservation" toggle.bind="newReservation">
+        </ll-create-reservation>
+        <ll-check-in toggle.bind="checkIn"></ll-check-in>
+        <ll-confirm-reservations toggle.bind="confirmReservations"></ll-confirm-reservations>
+        <div class="ui padded basic segment" if.bind="isLoading">
+            <div class="ui active indeterminate large centered inline text loader">Loading</div>
+        </div>
+        <div class="ui four column wide stackable grid">
+            <div repeat.for="e of equipment.results" class="column">
+                <h3 class="ui top attached ${statuses.get(e.status).colour} header">
+                    <i class="${statuses.get(e.status).icon} icon"></i>
+                    <div class="content">
+                        ${e.name}
+                        <div class="sub header">${e.location_display}</div>
+                    </div>
+                </h3>
+                <div class="ui attached segment" if.bind="e.can_reserve">
+                    <div class="ui list">
+                        <div class="item" repeat.for="r of e.reservations">
+                            <i if.bind="!r.is_confirmed && !r.checked_in"
+                               class="icon calendar"></i>
+                            <i if.bind="r.is_confirmed && !r.checked_in"
+                               class="icon thumbs outline up"></i>
+                            <i if.bind="r.is_confirmed && r.checked_in"
+                               class="icon thumbs up"></i>
+                            <div class="content">
+                                <b>${r.title}</b>:
+                                ${r.start|dateFormat:'DD/MM/YY h:mm a'} -
+                                ${r.end|dateFormat:'h:mm a'}
+                            </div>
+                        </div>
+                        <div class="item" if.bind="e.reservations.length == 0">
+                            No reservations
+                        </div>
+                    </div>
+                </div>
+                <div class="ui bottom attached segment">
+                    <ui-dropdown value.bind="e.status"
+                                 change.delegate="setStatus(e.id, $event)">
+                        <ui-item repeat.for="[value, details] of statuses"
+                                 value.bind="value">${details.display}</ui-item>
+                    </ui-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment">
+            <div class="ui six column wide padded grid">
+                <div class="column" repeat.for="e of events">
+                    <span class="ui empty circular label" style="background: ${e.color}"></span>
+                    ${ e.equipmentName }
+                </div>
+            </div>
+            <calendar options.bind="config" events.bind="events"></calendar>
+        </div>
+    </div>
+</template>

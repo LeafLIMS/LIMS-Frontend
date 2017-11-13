@@ -1,0 +1,12 @@
+<template class="ui yellow segment custom">
+    <h5 class="ui header required">${field.label}</h5>
+    <div class="ui fluid input
+                ${field.measure_not_required ? '' : 'right labeled'}
+                ${field.from_calculation ? 'disabled left icon' : ''}">
+        <i if.bind="field.from_calculation" class="icon calculator"></i>
+        <input type="number"
+               value.bind="outputTo.amount"
+               placeholder="${field.from_calculation ? 'Calculated' : 'Amount'}">
+        <div if.bind="!field.measure_not_required" class="ui label">${field.measure}</div>
+    </div>
+</template>

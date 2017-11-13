@@ -1,0 +1,116 @@
+<template>
+    <form class="ui form au-animate page" submit.delegate="save()" novalidate>
+        <h2><a class="dim" route-href="route: workflows">Workflow runs:</a> ${run.name}</h2>
+
+        <h3 class="ui inverted primary top attached in_progress task header">
+            <div class="ui circular white label">${taskPosition}</div>
+            Perform Task:
+            ${task_name}
+        </h3>
+        <div click.delegate="toggleSection('setup')" class="ui attached clickable header">
+            <i class="${setup ? 'caret down' : 'caret right'} icon"></i>
+            Setup
+        </div>
+        <div show.bind="setup" class="ui attached ${isLoading ? 'loading' : ''} segment">
+            <ui-field label="Select product to see information for">
+                <ui-dropdown value.bind="selectedData" change.delegate="setSelected($event)">
+                    <ui-item repeat.for="p of monitorData.data"
+                             value.bind="p.id">${p.product_name}</ui-item>
+                </ui-dropdown>
+            </ui-field>
+            <p></p>
+            <div class="ui grid">
+                <div class="four wide column">
+                    <h4 class="ui dividing header">Inputs</h4>
+                    <div class="ui blue labels">
+                        <div class="ui label"
+                             repeat.for="input of currentData.product_input_amounts">
+                            ${input.name}
+                            <div class="detail">
+                                ${input.amount}${input.measure}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="eight wide column">
+                    <h4 class="ui dividing header">Steps</h4>
+                    <div class="ui violet segment custom step field"
+                         repeat.for="step of currentData.step_fields">
+                        <h5 class="ui header">${step.label}</h5>
+                        <p class="maintain-breaks">${step.description}</p>
+                        <div class="ui four column wide grid"
+                             if.bind="step.properties.length > 0">
+                            <div class="column" repeat.for="prop of step.properties">
+                                <p>${prop.label}</p>
+                                <div class="ui fluid right labeled input">
+                                    <input value.bind="prop.amount">
+                                    <div class="ui label">${prop.measure}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <h4 class="ui dividing header">Outputs</h4>
+                    <div class="ui orange labels">
+                        <div class="ui label"
+                             repeat.for="output of currentData.output_fields">
+                            ${output.label}
+                            <div class="detail">
+                                ${output.amount}${output.measure}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div click.delegate="toggleSection('requirements')" class="ui attached clickable header">
+            <i class="${requirements ? 'caret down' : 'caret right'} icon"></i>
+            Requirements
+        </div>
+        <div show.bind="requirements" class="ui attached ${isLoading ? 'loading' : '' }
+                                             segment">
+            <div class="ui visible warning message" if.bind="taskRequirements.errors.length > 0">
+                <div class="header">Issues</div>
+                <ul class="list">
+                    <li repeat.for="message of taskRequirements.errors">${message}</li>
+                </ul>
+            </div>
+            <ui-table-wrapper>
+                <table ui-table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Amount to take</th>
+                            <th>Amount available</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ui-table-row="route: inventoryDetail; params.bind: {id: row.id}"
+                            repeat.for="row of monitorData.transfers">
+                            <td>${row.item.name}</td>
+                            <td>${row.item.item_type.name}</td>
+                            <td>${row.amount_to_take}${row.amount_measure.symbol}</td>
+                            <td>
+                                ${row.item.amount_available}${row.item.amount_measure.symbol}
+                                &nbsp;
+                                <i if.bind="row.item.concentration">
+                                    (${row.item.concentration}${row.item.concentration_measure})
+                                </i>
+                            </td>
+                            <td>${row.item.location_path}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ui-table-wrapper>
+        </div>
+        <div class="ui bottom attached right aligned segment">
+            <a route-href="route: workflows" class="ui button">Cancel</a>
+            <a route-href="route: finishTask; params.bind: {id: run.id}"
+               if.bind="run.id"
+               class="ui primary button">Finish task</a>
+        </div>
+    </form>
+</template>

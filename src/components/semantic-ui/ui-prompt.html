@@ -1,0 +1,14 @@
+<template>
+    <ux-dialog class="ui basic modal active">
+        <ux-dialog-body class="ui icon header">
+            <i class="icon warning circle"></i>
+            ${message}
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui red cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui green ok button"
+                    click.trigger="dialog.ok(message)">Ok</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>
