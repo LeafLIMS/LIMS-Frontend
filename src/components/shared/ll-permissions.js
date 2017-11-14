@@ -13,10 +13,14 @@ export class LlPermissions {
         this.selected = [];
         this.perms = {};
         this.error = null;
+
+        this.fromServer = false;
     }
 
     buildPerms() {
         var assigned_permissions = {};
+        this.selected = [];
+        this.perms = {};
         this.api.groups().then(data => {
             this.groups = data;
             if ('permissions' in this.objectFor) {
@@ -47,13 +51,16 @@ export class LlPermissions {
     }
 
     objectForChanged() {
-        if (this.objectFor && Object.keys(this.perms).length == 0) {
+        if ('permissions' in this.objectFor && !this.fromServer) {
+            this.buildPerms();
+            this.fromServer = true;
+        } else if (this.objectFor && Object.keys(this.perms).length == 0) {
             this.buildPerms();
         }
     }
 
     toggled(group) {
-        console.log(this.objectFor);
+        console.log(this.objectFor.assign_groups);
         if (group in this.objectFor.assign_groups) {
             delete this.objectFor.assign_groups[group];
             this.perms[group] = false;
