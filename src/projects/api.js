@@ -46,6 +46,10 @@ export class ProjectApi {
         return this.endpoint.patchOne('products/', id, null, data);
     }
 
+    deleteProduct(id) {
+        return this.endpoint.destroyOne('products/', id);
+    }
+
     addAttachment(productId, data) {
         let path = `products/${productId}/add_attachment/`;
         return this.endpoint.client.fetch(path, {
