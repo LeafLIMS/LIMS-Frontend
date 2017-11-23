@@ -51,7 +51,7 @@ export class LlPermissions {
     }
 
     objectForChanged() {
-        if ('permissions' in this.objectFor && !this.fromServer) {
+        if (this.objectFor && 'permissions' in this.objectFor && !this.fromServer) {
             this.buildPerms();
             this.fromServer = true;
         } else if (this.objectFor && Object.keys(this.perms).length == 0) {
