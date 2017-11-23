@@ -6,6 +6,7 @@
         <ui-autocomplete from="itemtypes"
                          display-value="display_name"
                          store-value="name"
+                         default-text="${item.parent}"
                          value.bind="item.parent & validate">
         </ui-autocomplete>
     </ui-field>
