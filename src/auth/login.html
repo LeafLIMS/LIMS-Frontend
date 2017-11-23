@@ -3,6 +3,10 @@
         <form class="ui form column" submit.delegate="login()">
             <img src="img/leaflims-logo.svg" class="responsive width">
             <div class="ui top attached inverted primary header">Login</div>
+            <div class="ui attached visible error message" if.bind="error">
+                Could not log in with the supplied details. Please check your username/password
+                and try again.
+            </div>
             <div class="ui attached clearing segment">
                 <div class="field">
                     <label>Username</label>

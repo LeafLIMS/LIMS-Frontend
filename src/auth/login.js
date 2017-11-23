@@ -22,7 +22,7 @@ export class Login {
         }
         return this.auth.login(loginDetails)
         .catch(error => {
-            this.loginError = error.response;
+            this.error = error;
         });
     };
 }
