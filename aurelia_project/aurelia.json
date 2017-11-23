@@ -90,6 +90,15 @@
         ]
       },
       {
+        "name": "plugin-bundle.js",
+        "source": {
+            "include": [
+                "[plugins/**/*.js]",
+                "plugins/**/*.{css,html}"
+            ]
+        }
+      },
+      {
         "name": "vendor-bundle.js",
         "prepend": [
           "node_modules/bluebird/js/browser/bluebird.core.js",
@@ -128,7 +137,6 @@
             "path": "../node_modules/aurelia-templating-resources/dist/amd",
             "main": "aurelia-templating-resources"
           },
-
           {
             "name": "aurelia-validation",
             "path": "../node_modules/aurelia-validation/dist/amd",
@@ -177,8 +185,27 @@
           },
           {
               "name": "aurelia-route-mapper",
+              "packageRoot": "../third_party",
               "path": "../third_party/aurelia-route-mapper/dist",
               "main": "index"
+          },
+          {
+              "name": "chartjs",
+              "path": "../node_modules/chart.js/dist",
+              "main": "Chart.bundle.js"
+          },
+          {
+              "name": "sortablejs",
+              "path": "../node_modules/sortablejs",
+              "main": "Sortable"
+          },
+          {
+              "name": "aurelia-sortablejs",
+              "path": "../node_modules/aurelia-sortablejs/dist/amd",
+              "main": "index",
+              "resources": [
+                  "sortable.js"
+              ]
           },
           {
               "name": "moment",
@@ -191,27 +218,6 @@
               "path": "../third_party/moment-timezone",
               "main": "moment-timezone-with-data-2012-2022.min",
               "deps": ["moment"]
-          },
-          {
-              "name": "moment-round",
-              "path": "../node_modules/moment-round",
-              "main": "moment-round",
-              "deps": ["moment"]
-          },
-          {
-              "name": "chartjs",
-              "path": "../node_modules/chart.js/dist",
-              "main": "Chart.bundle.js"
-          },
-          {
-              "name": "sortablejs",
-              "path": "../node_modules/sortablejs",
-              "main": "Sortable.min"
-          },
-          {
-              "name": "aurelia-sortablejs",
-              "path": "../node_modules/aurelia-sortablejs/dist/amd",
-              "main": "index"
           },
           {
               "name": "fullcalendar",

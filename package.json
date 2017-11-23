@@ -21,8 +21,6 @@
     "fullcalendar": "^3.5.1",
     "jquery": "^3.2.1",
     "moment": "^2.18.1",
-    "moment-timezone": "^0.5.13",
-    "moment-timezone-all": "^0.5.5",
     "requirejs": "^2.3.2",
     "semantic-ui-calendar": "0.0.8",
     "sortablejs": "^1.6.1",
@@ -64,7 +62,6 @@
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "minimatch": "^3.0.2",
-    "moment-round": "^1.0.1",
     "through2": "^2.0.1",
     "uglify-js": "^2.6.3",
     "vinyl-fs": "^2.4.3"
