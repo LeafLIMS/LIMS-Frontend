@@ -76,10 +76,10 @@ export class StartTask {
         let field_types = ['input_fields', 'variable_fields', 'output_fields',
                            'calculation_fields', 'step_fields'];
         for (let ft of field_types) {
+            if (!this.taskData[ft]) {
+                this.taskData[ft] = [];
+            }
             for (let field of this.task[ft]) {
-                if (!this.taskData[ft]) {
-                    this.taskData[ft] = [];
-                }
                 let fieldObj = {};
                 this.taskData[ft].push(fieldObj);
                 // Validation rUUUUUULES!
