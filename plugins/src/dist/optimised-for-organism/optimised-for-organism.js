@@ -1,5 +1,5 @@
 import { inject, bindable, bindingMode } from 'aurelia-framework';
-import { SharedApi } from '../shared/api';
+import { SharedApi } from '../../../shared/api';
 
 @inject(SharedApi)
 export class OptimisedForOrganism {

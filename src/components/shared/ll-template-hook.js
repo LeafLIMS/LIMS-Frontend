@@ -16,10 +16,9 @@ export class LlTemplateHookCustomElement {
         let plugins = [];
         if (this.name in this.availablePlugins) {
             for (let plugin of this.availablePlugins[this.name]) {
-                plugins.push('../../' + plugin);
+                plugins.push('/plugins/' + plugin + '.js');
             }
         }
         this.plugins = plugins;
-        console.log(this.plugins);
     }
 }

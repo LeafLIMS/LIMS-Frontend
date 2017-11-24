@@ -19,6 +19,10 @@
     },
     "source": "src/**/*.js"
   },
+  "customPlugins": {
+      "source": "plugins/src/**/*.js",
+      "resources": ["plugins/src/**/*.html", "plugins/src/**/*.css", "plugins/src/**/*.[png,jpg]"]
+  },
   "markupProcessor": {
     "id": "minimum",
     "displayName": "Minimal Minification",
@@ -87,16 +91,10 @@
         "source": [
           "[**/*.js]",
           "**/*.{css,html}"
+        ],
+        "exclude": [
+            "plugins/**/*"
         ]
-      },
-      {
-        "name": "plugin-bundle.js",
-        "source": {
-            "include": [
-                "[plugins/**/*.js]",
-                "plugins/**/*.{css,html}"
-            ]
-        }
       },
       {
         "name": "vendor-bundle.js",
