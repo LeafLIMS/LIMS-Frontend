@@ -8,7 +8,8 @@ export class UiErrorMessageCustomElement {
             this.error = {};
             this.error.status = this.errorSource.status;
             this.error.statusText = this.errorSource.statusText;
-            if (this.errorSource.bodyUsed && this.errorSource.bodyUsed === false) {
+
+            if ('bodyUsed' in this.errorSource && this.errorSource.bodyUsed === false) {
                 this.errorSource.json().then(response => {
                     if (response.message) {
                         this.error.message = response.message;
