@@ -30,7 +30,9 @@ export class Account {
     }
 
     addAddress() {
-        let address = {};
+        let address = {
+            user: this.user.username,
+        };
         this.validator.addObject(address, this.rules);
         this.user.addresses.push(address);
     }
@@ -45,12 +47,15 @@ export class Account {
 
     save(data) {
         this.validator.validate().then(results => {
-            console.log(results);
             if (results.valid) {
                 if (data.id) {
-                    this.api.updateAddress(data.id, data).catch(err => this.error = err);
+                    this.api.updateAddress(data.id, data).then(data => {
+                        this.addressSaved = true;
+                    }).catch(err => this.error = err);
                 } else {
-                    this.api.saveAddress(data).catch(err => this.error = err);
+                    this.api.saveAddress(data).then(data => {
+                        this.addressSaved = true;
+                    }).catch(err => this.error = err);
                 }
             }
         });

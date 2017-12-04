@@ -15,7 +15,7 @@
                 <form class="ui clearing segment form" submit.delegate="save(address)"
                       repeat.for="address of user.addresses">
                     <ui-field label="Institute name" required>
-                        <input value.bind="address.institute_name & validate">
+                        <input value.bind="address.institution_name & validate">
                     </ui-field>
                     <ui-field label="Address" required>
                         <input value.bind="address.address_1 & validate">
@@ -39,6 +39,9 @@
                     <button class="ui right floated primary button" type="submit">
                         Save</button>
                 </form>
+                <div class="ui segment" if.bind="addressSaved">
+                    Address saved.
+                </div>
                 <button class="ui basic button" click.delegate="addAddress()">
                     Add address
                 </button>
