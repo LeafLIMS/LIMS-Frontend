@@ -24,6 +24,9 @@ export class UiDropdownCustomElement {
     valueChanged(n) {
         if (this.dropdown) {
             this.value = n;
+            if (this.value == "") {
+                this.dropdown.dropdown('clear');
+            }
             // Clear cache since that seems to stop it from actually selecting anything
             this.dropdown.dropdown('refresh');
             // Set the value as selected to make sure updates happen properly when values
