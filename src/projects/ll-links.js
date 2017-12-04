@@ -10,7 +10,7 @@ export class LlLinks {
         this.link = {};
     }
 
-    attached() {
+    sourceChanged() {
         if (this.source && !this.source.links) {
             this.source.links = [];
         }
