@@ -1,8 +1,9 @@
 <template>
     <ui-field label="Optimised for organism">
-        <ui-dropdown value.bind="source.properties.optimised_for">
-            <ui-item repeat.for="organism of organisms.results"
-                     value.bind="organism.name">${organism.name}</ui-item>
-        </ui-dropdown>
+        <ui-autocomplete from="organisms"
+                value.bind="model.properties[properties_src]"
+                store-value="name"
+                default-text.bind="model.properties[properties_src]">
+        </ui-autocomplete>
     </ui-field>
 </template>

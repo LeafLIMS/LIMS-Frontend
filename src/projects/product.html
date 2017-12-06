@@ -20,7 +20,8 @@
             </ui-dropdown>
         </ui-field>
         <p></p>
-        <ll-template-hook name="product-detail-top" source.bind="product"></ll-template-hook>
+        <ll-template-hook name="product-detail-top" if.bind="product.id"
+                          source.bind="product"></ll-template-hook>
         <div class="ui grid two column wide">
             <div class="column">
                 <ll-inventory-items source.bind="product.linked_inventory"
@@ -31,7 +32,8 @@
                                         source-id.bind="product.id"></ll-product-attachments>
             </div>
         </div>
-        <ll-template-hook name="product-detail-bottom" source.bind="product"></ll-template-hook>
+        <ll-template-hook name="product-detail-bottom"
+                          if.bind="product.id" source.bind="product"></ll-template-hook>
         <div class="ui grid two column wide segment">
             <span class="column">
                 <b>Created on:</b> ${product.created_on|dateFormat}

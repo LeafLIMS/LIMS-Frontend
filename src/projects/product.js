@@ -41,12 +41,18 @@ export class ProductCustomElement {
     attached() {
         this.api.productDetail(this.productId).then(data => {
             this.product = data;
+            console.log('INIT PRODUCT PROPERTIES', this.product.properties);
+            if (!this.product.properties) {
+                this.product.properties = {};
+            }
+            console.log('POST PRODUCT PROPERTIES', this.product.properties);
         });
     }
 
     save() {
         this.validator.validate().then(results => {
             if (results.valid) {
+                console.log('PRODUCT PROPERTIES', this.product);
                 this.isSaving = true;
                 // Pre-process some of the data to ensure it is correct
                 let productUpdate = {};
@@ -66,6 +72,8 @@ export class ProductCustomElement {
                     attachments.push(item.id);
                 }
                 productUpdate.attachments = attachments;
+
+                productUpdate.properties = this.product.properties;
 
                 // Then update using local version
                 this.api.updateProduct(this.product.id, productUpdate).then(data => {

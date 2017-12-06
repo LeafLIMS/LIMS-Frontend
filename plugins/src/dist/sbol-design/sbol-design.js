@@ -1,12 +1,16 @@
-import { inject, bindable, bindingMode } from 'aurelia-framework';
+import { inject, bindable, bindingMode, BindingEngine } from 'aurelia-framework';
 
+@inject(BindingEngine)
 export class SbolDesign {
     properties_src = 'll_sbol';
 
+    constructor(bindingEngine) {
+        this.be = bindingEngine;
+    }
+
     activate(model) {
         this.model = model;
-        if (!this.model.properties) {
-            this.model.properties = {};
+        if (!this.model.properties[this.properties_src]) {
             this.model.properties[this.properties_src] = {};
         }
         this.data = this.model.properties[this.properties_src];
