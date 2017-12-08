@@ -1,21 +1,28 @@
-import { inject, bindable, bindingMode, NewInstance } from 'aurelia-framework';
+import { inject, bindable, bindingMode, BindingEngine, NewInstance } from 'aurelia-framework';
 import { ProjectApi } from './api';
 import { UserApi } from '../auth/api';
+import { CrmApi } from '../crm/api';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 import { ValidationRules, ValidationController, validateTrigger } from 'aurelia-validation';
 import { UiValidationRenderer } from '../components/semantic-ui/ui-validation-renderer';
+import { AureliaConfiguration } from 'aurelia-configuration';
 
-@inject(ProjectApi, UserApi, EventAggregator, NewInstance.of(ValidationController), Router)
+@inject(ProjectApi, UserApi, EventAggregator, NewInstance.of(ValidationController), Router,
+        AureliaConfiguration, CrmApi, BindingEngine)
 export class LlNewProject {
     @bindable source;
     @bindable({ defaultBindingMode: bindingMode.twoWay }) toggle;
 
-    constructor(projectApi, userApi, eventAggregator, validationController, router) {
+    constructor(projectApi, userApi, eventAggregator, validationController, router,
+                aureliaConfiguration, crmApi, bindingEngine) {
         this.api = projectApi;
         this.userApi = userApi;
+        this.crmApi = crmApi;
         this.ea = eventAggregator;
+        this.be = bindingEngine;
         this.router = router;
+        this.config = aureliaConfiguration;
 
         this.validator = validationController;
         this.validator.validateTrigger = validateTrigger.changeOrBlur;
@@ -36,12 +43,26 @@ export class LlNewProject {
         this.userApi.users().then(data => {
             this.labContacts = data.results;
         });
+
+        this.be.propertyObserver(this, 'crm_project').subscribe((n, o) => {
+            let selected = n;
+            this.crmApi.crmProjects({id: selected}).then(data => {
+                let p = data.results[0];
+                this.project.name = p.Name;
+                this.project.description = p.Description;
+                this.project.crmId = p.Id;
+            });
+        });
     }
 
     save() {
         this.validator.validate().then(results => {
             if (results.valid) {
+                console.log(this.project.crmId);
                 this.api.createProject(this.project).then(data => {
+                    if (this.project.crmId) {
+                        this.crmApi.associateCRMProject(data.id, this.project.crmId);
+                    }
                     this.router.navigateToRoute('projectDetail', {id: data.id});
                 }).catch(err => {
                     this.errors = err;

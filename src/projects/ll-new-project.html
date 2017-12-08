@@ -6,7 +6,11 @@
             <div class="ui two column wide stackable grid">
                 <div class="column ten wide">
                     <div if.bind="config.get('crm_enabled')">
-                        <input type="search" placeholder="Get details from existing CRM project">
+                        <ui-autocomplete from="crm/project"
+                                value.bind="crm_project"
+                                display-value="Name"
+                                store-value="Id">
+                        </ui-autocomplete>
                         <div class="ui horizontal divider">Or</div>
                     </div>
                     <ui-field label="Name" required>
