@@ -43,8 +43,11 @@ export class Users extends SettingsTable {
 
         ValidationRules
             .ensure('username')
-            .matches(/[A-Za-z0-9@-_\.\+]+/g).required()
+            .satisfies((v, o) => {
+                return v.match(/^[A-Za-z0-9@\-_\.\+]+$/g) ? true : false;
+            })
             .satisfies((v, o) => v.includes(' ') ? false : true)
+            .required()
             .ensure('password').required()
             .ensure('email').email().required()
             .on(this.item);
