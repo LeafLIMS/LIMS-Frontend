@@ -6,6 +6,7 @@
             <div class="ui two column wide grid">
                 <ui-field label="Equipment to reserve" required class="sixteen wide column">
                     <ui-dropdown value.bind="source.equipment_reserved & validate">
+                        <ui-item value=""></ui-item>
                         <ui-item repeat.for="item of equipment.results" value.bind="item.name">
                             ${item.name}
                         </ui-item>

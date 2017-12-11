@@ -84,6 +84,22 @@ export class Equipment {
                     $(element).hide();
                 }
                 */
+            },
+            eventMouseover: (event, jsEvent, view) => {
+                let template = `
+<span class="header">${event.title}</span>
+<span class="equipment">${event.equipment_reserved}</span>`;
+                if (event.reservation_details) {
+                    template += `<p>${event.reservation_details}</p>`;
+                }
+                let pos = jsEvent.currentTarget.getBoundingClientRect()
+                let element = document.getElementById('calendarPopover');
+                element.style = `top: ${pos.top + 10}px; left: ${pos.left}px; display: block;`;
+                element.innerHTML = template;
+            },
+            eventMouseout: (event, jsEvent, view) => {
+                let element = document.getElementById('calendarPopover');
+                element.style = "";
             }
         }
 
@@ -98,6 +114,15 @@ export class Equipment {
             ['broken', {display: 'Out of order', icon: 'remove', colour: 'grey'}],
         ]);
 
+    }
+
+    getCoords(elem) {
+        let box = elem.getBoundingClientRect();
+
+        return {
+            top: box.top + pageYOffset,
+            left: box.left + pageXOffset
+        };
     }
 
     attached() {

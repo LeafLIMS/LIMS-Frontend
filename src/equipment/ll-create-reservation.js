@@ -175,5 +175,6 @@ export class LlCreateReservation {
     cancel() {
         this.toggle = false;
         this.source = {};
+        this.error = undefined;
     }
 }

@@ -578,7 +578,11 @@ ll-add-products .ui.form {
 }
 
 .past {
-    opacity: 0.5;
+    border: 0;
+}
+
+.past .fc-content, .past .fc-bg {
+    opacity: 0.6;
 }
 
 .missed:before {
@@ -591,4 +595,26 @@ ll-add-products .ui.form {
     md-icon {
         color: #388e3c;
     }
+}
+
+.event-details {
+    max-width: 20em;
+    display: none;
+    padding: 0.5em !important;
+    position: fixed !important;
+    z-index: 500;
+    font-size: 0.7em;
+}
+
+.event-details .header {
+    font-weight: bold;
+    display: block;
+}
+
+.event-details .equipment {
+    font-size: 0.8em;
+}
+
+.event-details p {
+    font-size: 0.8em;
 }
