@@ -24,6 +24,12 @@
             <i class="plus icon"></i>
             Create new
         </button>
+        <button if.bind="extraToolbarButtons" repeat.for="b of extraToolbarButtons"
+                class="ui basic grey button"
+                click.delegate="b['action']()">
+            <i class="${b.icon} icon"></i>
+            ${b.text}
+        </button>
         <ui-dropdown-menu class="item"
                      icon="ellipsis vertical">
             <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
