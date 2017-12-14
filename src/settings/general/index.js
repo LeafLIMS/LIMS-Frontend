@@ -12,4 +12,6 @@ export let routes = [
     { route: 'projectstatuses', name: 'project-status-settings',
       moduleId: './general/projectstatuses',
       nav: false, title: 'Project statuses', layoutView: './table.html' },
+    { route: 'filetemplates', name: 'filetemplate-settings', moduleId: './general/filetemplates',
+      nav: false, title: 'File templates', layoutView: './table.html' },
 ];

@@ -1,0 +1,90 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <div class="header"><i class="ui wizard icon"></i> File template wizard</div>
+        <ux-dialog-body>
+            <div class="ui form content">
+                <ui-field label="Name" required>
+                    <input value.bind="item.name">
+                </ui-field>
+                <div class="ui segment">
+                    <ui-field label="Template purpose" required>
+                        <ui-dropdown value.bind="item.file_for">
+                            <ui-item value="input">Input</ui-item>
+                            <ui-item value="output">Output</ui-item>
+                            <ui-item value="equipment" if.bind="used_for == 'task'">
+                                Equipment</ui-item>
+                        </ui-dropdown>
+                    </ui-field>
+                    <ui-field label="Template to be used in" required if.bind="item.file_for">
+                        <ui-dropdown value.bind="used_for">
+                            <ui-item value="task">Task</ui-item>
+                            <ui-item value="inventory">Inventory</ui-item>
+                        </ui-dropdown>
+                    </ui-field>
+                    <ui-field label="Available tasks" required if.bind="used_for == 'task'">
+                        <ui-autocomplete value.bind="task"
+                                         from="tasks"
+                                         store-value="id">
+                        </ui-autocomplete>
+                    </ui-field>
+                </div>
+                <div class="ui horizontal divider">Fields</div>
+                <ui-table-wrapper>
+                    <table ui-table>
+                        <thead>
+                            <tr as-element="ui-table-sort" query.bind="query">
+                                <th>Name</th>
+                                <th>Map to</th>
+                                <th>Required?</th>
+                                <th>Use as an identifier</th>
+                                <th>Use as a property</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr repeat.for="row of item.fields">
+                                <td>
+                                    <ui-field required>
+                                        <input value.bind="row.name">
+                                    </ui-field>
+                                </td>
+                                <td>
+                                    <ui-field required>
+                                        <ui-dropdown value.bind="row.map_to">
+                                            <ui-item repeat.for="f of mapFields"
+                                                     value.bind="f">${ f }</ui-item>
+                                        </ui-dropdown>
+                                    </ui-field>
+                                </td>
+                                <td>
+                                    <ui-checkbox checked.bind="row.required"></ui-checkbox>
+                                </td>
+                                <td>
+                                    <ui-checkbox checked.bind="row.is_identifier"></ui-checkbox>
+                                </td>
+                                <td>
+                                    <ui-checkbox checked.bind="row.is_property"></ui-checkbox>
+                                </td>
+                                <td class="right aligned">
+                                    <div class="ui icon buttons">
+                                        <button class="ui red basic button"
+                                                click.delegate="removeField($index)">
+                                            <i class="delete icon"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ui-table-wrapper>
+                <button class="ui basic button" click.delegate="addField()">Add Field</button>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui basic cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui primary ok button"
+                    click.trigger="dialog.ok(selected)">Save</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

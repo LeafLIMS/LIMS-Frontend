@@ -11,4 +11,16 @@ export class FiletemplateApi {
     filetemplates(params) {
         return this.endpoint.find('filetemplates/', params);
     }
+
+    createFiletemplate(data) {
+        return this.endpoint.create('filetemplates/', data);
+    }
+
+    updateFiletemplate(id, data) {
+        return this.endpoint.patchOne('filetemplates/', id, null, data);
+    }
+
+    deleteFiletemplate(id) {
+        return this.endpoint.destroyOne('filetemplates/', id);
+    }
 }

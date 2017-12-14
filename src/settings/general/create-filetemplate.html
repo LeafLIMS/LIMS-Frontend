@@ -1,0 +1,59 @@
+<template>
+    <ui-field label="Name" required>
+        <input value.bind="item.name & validate">
+    </ui-field>
+    <ui-field label="Template purpose" required>
+        <ui-dropdown value.bind="item.file_for & validate">
+            <ui-item value="input">Input</ui-item>
+            <ui-item value="output">Output</ui-item>
+            <ui-item value="equipment">Equipment</ui-item>
+        </ui-dropdown>
+    </ui-field>
+    <div class="ui horizontal divider">Fields</div>
+    <ui-table-wrapper>
+        <table ui-table>
+            <thead>
+                <tr as-element="ui-table-sort" query.bind="query">
+                    <th>Name</th>
+                    <th>Map to</th>
+                    <th>Required?</th>
+                    <th>Use as an identifier</th>
+                    <th>Use as a property</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="row of item.fields">
+                    <td>
+                        <ui-field required>
+                            <input value.bind="row.name & validate">
+                        </ui-field>
+                    </td>
+                    <td>
+                        <ui-field required>
+                            <input value.bind="row.map_to & validate">
+                        </ui-field>
+                    </td>
+                    <td>
+                        <ui-checkbox checked.bind="row.required"></ui-checkbox>
+                    </td>
+                    <td>
+                        <ui-checkbox checked.bind="row.is_identifier"></ui-checkbox>
+                    </td>
+                    <td>
+                        <ui-checkbox checked.bind="row.is_property"></ui-checkbox>
+                    </td>
+                    <td class="right aligned">
+                        <div class="ui icon buttons">
+                            <button class="ui red basic button"
+                                    click.delegate="removeField($index)">
+                                <i class="delete icon"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ui-table-wrapper>
+    <button class="ui basic button" click.delegate="addField()">Add Field</button>
+</template>
