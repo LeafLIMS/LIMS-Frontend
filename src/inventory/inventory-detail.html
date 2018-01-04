@@ -58,20 +58,24 @@
                     <div class="ui grid four column wide">
                         <div class="middle aligned column">${item.amount_available}</div>
                         <ui-field class="column" label="Amount measure">
-                            <ui-dropdown value.bind="item.amount_measure" required>
-                                <ui-item repeat.for="m of measures.results"
-                                         value.bind="m.symbol">${m.symbol}</ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="measures"
+                                    value.bind="item.amount_measure & validate"
+                                    store-value="symbol"
+                                    display-value="symbol"
+                                    default-text.bind="item.amount_measure">
+                            </ui-autocomplete>
                         </ui-field>
                         <ui-field class="column" label="Concentration">
                             <input name="identifier" value.bind="item.concentration & debounce:1000"
                                    placeholder="Concentration">
                         </ui-field>
                         <ui-field class="column" label="Concentration measure">
-                            <ui-dropdown value.bind="item.concentration_measure">
-                                <ui-item repeat.for="m of measures.results"
-                                         value.bind="m.symbol">${m.symbol}</ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="measures"
+                                    value.bind="item.concentration_measure & validate"
+                                    store-value="symbol"
+                                    display-value="symbol"
+                                    default-text.bind="item.concentration_measure">
+                            </ui-autocomplete>
                         </ui-field>
                     </div>
                 </div>
@@ -93,7 +97,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="ui button" click.delegate="addProperty()">
+                    <button class="ui basic button" click.delegate="addProperty()">
                         <i class="icon add"></i> Add
                     </button>
                 </div>

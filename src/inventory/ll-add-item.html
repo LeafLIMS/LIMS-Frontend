@@ -10,11 +10,13 @@
                             <input value.bind="item.name & validate" required>
                         </ui-field>
                         <ui-field class="column" label="Type" required>
-                            <ui-dropdown value.bind="item.item_type & validate">
-                                <ui-item repeat.for="type of types.results" value.bind="type.name">
-                                    ${type.display_name}
-                                </ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="itemtypes"
+                                    value.bind="item.item_type & validate"
+                                    store-value="name"
+                                    display-value="display_name"
+                                    default-text.bind="item.item_type"
+                                    placeholder="Select input type">
+                            </ui-autocomplete>
                         </ui-field>
                     </div>
                     <div class="ui grid two column wide no gutter">
@@ -42,20 +44,26 @@
                                    placeholder="Amount">
                         </ui-field>
                         <ui-field class="column" label="Amount measure" required>
-                            <ui-dropdown value.bind="item.amount_measure & validate" required>
-                                <ui-item repeat.for="m of measures.results"
-                                         value.bind="m.symbol">${m.symbol}</ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="measures"
+                                    value.bind="item.amount_measure & validate"
+                                    store-value="symbol"
+                                    display-value="symbol"
+                                    default-text.bind="item.amount_measure"
+                                    placeholder="Select measure">
+                            </ui-autocomplete>
                         </ui-field>
                         <ui-field class="column" label="Concentration">
                             <input name="concentration" value.bind="item.concentration & validate"
                                    placeholder="Concentration">
                         </ui-field>
                         <ui-field class="column" label="Concentration measure">
-                            <ui-dropdown value.bind="item.concentration_measure & validate">
-                                <ui-item repeat.for="m of measures.results"
-                                         value.bind="m.symbol">${m.symbol}</ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="measures"
+                                    value.bind="item.concentration_measure & validate"
+                                    store-value="symbol"
+                                    display-value="symbol"
+                                    default-text.bind="item.concentration_measure"
+                                    placeholder="Select measure">
+                            </ui-autocomplete>
                         </ui-field>
                     </div>
                     <div class="ui grid no gutter">
