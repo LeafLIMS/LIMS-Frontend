@@ -30,6 +30,12 @@ export class UiAutocomplete {
         }
     }
 
+    defaultTextChanged(value) {
+        if (this.dropdown) {
+            this.dropdown.dropdown('set text', this.defaultText);
+        }
+    }
+
     attached() {
         setTimeout(() => {
             this.dropdown = $('.search.selection.dropdown', this.element).dropdown({
