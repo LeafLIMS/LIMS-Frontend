@@ -11,6 +11,7 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Name</th>
                             <th>Equipment</th>
                             <th>From</th>
                             <th>To</th>
@@ -22,7 +23,7 @@
                             <td>
                                 <ui-checkbox checked.bind="c.is_confirmed"></ui-checkbox>
                             </td>
-                            <td>${ c.full_user_name }</td>
+                            <td>${ c.username }</td>
                             <td>${ c.equipment_reserved }</td>
                             <td>${ c.start|dateFormat }</td>
                             <td>${ c.end|dateFormat }</td>
