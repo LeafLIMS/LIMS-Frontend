@@ -1,19 +1,20 @@
-import { inject } from 'aurelia-framework';
+import { inject, BindingEngine } from 'aurelia-framework';
 import { WorkflowApi } from '../../workflows/api';
 import { SharedApi } from '../../shared/api';
 import { EquipmentApi } from '../../equipment/api';
 import { SettingsTable } from '../settings-table';
 import { ValidationRules } from 'aurelia-validation';
 
-@inject(WorkflowApi, SharedApi, EquipmentApi)
+@inject(WorkflowApi, SharedApi, EquipmentApi, BindingEngine)
 export class Tasks extends SettingsTable {
 
-    constructor(workflowApi, sharedApi, equipmentApi, ...rest) {
+    constructor(workflowApi, sharedApi, equipmentApi, bindingEngine, ...rest) {
         super(...rest);
 
         this.api = workflowApi;
         this.sharedApi = sharedApi;
         this.equipmentApi = equipmentApi;
+        this.be = bindingEngine;
 
         this.setFunctions('task');
         this.createTemplate = './workflows/create-task.html';
@@ -70,6 +71,38 @@ export class Tasks extends SettingsTable {
 
         this.removedFields = [];
         this.calculations = [];
+
+        this.equipmentObserver = this.be.propertyObserver(this.item, 'capable_equipment_source')
+            .subscribe((n, o) => {
+            if (!this.item.capable_equipment) {
+                this.item.capable_equipment = [];
+            }
+            this.item.capable_equipment.push(n);
+        });
+
+        this.equipmentFileObserver = this.be.propertyObserver(this.item,
+            'equipment_files_source').subscribe((n, o) => {
+            if (!this.item.equipment_files) {
+                this.item.equipment_files = [];
+            }
+            this.item.equipment_files.push(n);
+        });
+
+        this.inputFileObserver = this.be.propertyObserver(this.item, 'input_files_source')
+            .subscribe((n, o) => {
+            if (!this.item.input_files) {
+                this.item.input_files = [];
+            }
+            this.item.input_files.push(n);
+        });
+
+        this.outputFileObserver = this.be.propertyObserver(this.item, 'output_files_source')
+            .subscribe((n, o) => {
+            if (!this.item.output_files) {
+                this.item.output_files = [];
+            }
+            this.item.output_files.push(n);
+        });
 
     }
 
@@ -133,12 +166,10 @@ export class Tasks extends SettingsTable {
     }
 
     save() {
-        console.log('SAVE DATA', JSON.parse(JSON.stringify(this.item)));
         // Break up fields into different types
         // Save task
         // Save fields
         this.validator.validate().then(results => {
-            console.log(results);
             if (results.valid) {
                 this.isSaving = true;
                 this.api[this.saveFunc](this.item).then(data => {
@@ -181,7 +212,6 @@ export class Tasks extends SettingsTable {
     update() {
         // Divide into new/update fields by ID presence
         // Iterate through removed fields and delete
-        console.log(JSON.parse(JSON.stringify(this.item)));
         //super.update();
         this.validator.validate().then(results => {
             if (results.valid) {

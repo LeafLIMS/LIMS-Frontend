@@ -26,11 +26,12 @@
                     <ui-autocomplete value.bind="item.capable_equipment_source & validate"
                                      from="equipment"
                                      store-value="name"
-                                     multiple="true"
                                      placeholder="Capable equipment">
                     </ui-autocomplete>
                 </ui-field>
-                <ui-tags source.bind="item.capable_equipment"></ui-tags>
+                <div class="ui segment" if.bind="item.capable_equipment.length">
+                    <ui-tags source.bind="item.capable_equipment"></ui-tags>
+                </div>
                 <p class="help text">Pick the piece(s) of equipment that this task can run on.</p>
             </div>
             <div class="column">
@@ -38,11 +39,12 @@
                     <ui-autocomplete value.bind="item.equipment_files_source & validate"
                                      from="filetemplates"
                                      store-value="name"
-                                     multiple="true"
                                      placeholder="Equipment files">
                     </ui-autocomplete>
                 </ui-field>
-                <ui-tags source.bind="item.equipment_files"></ui-tags>
+                <div class="ui segment" if.bind="item.equipment_files.length">
+                    <ui-tags source.bind="item.equipment_files"></ui-tags>
+                </div>
                 <p class="help text">Choose which (if any) files can be generated for use in the
                                      above equipment. These files are defined in the file
                                      templates section of these settings.</p>
@@ -123,11 +125,12 @@
             <ui-autocomplete value.bind="item.input_files_source & validate"
                              from="filetemplates"
                              store-value="name"
-                             multiple="true"
                              placeholder="Input files">
             </ui-autocomplete>
         </ui-field>
-        <ui-tags source.bind="item.input_files"></ui-tags>
+        <div class="ui segment" if.bind="item.input_files.length">
+            <ui-tags source.bind="item.input_files"></ui-tags>
+        </div>
         <p class="help text">Choose which (if any) files can be supplied for use in the
                              setting values in a task. These files are defined in the file
                              templates section of these settings with the values overriding
@@ -178,11 +181,12 @@
             <ui-autocomplete value.bind="item.output_files_source & validate"
                              from="filetemplates"
                              store-value="name"
-                             multiple="true"
                              placeholder="Output files">
             </ui-autocomplete>
         </ui-field>
-        <ui-tags source.bind="item.input_files"></ui-tags>
+        <div class="ui segment" if.bind="item.output_files.length">
+            <ui-tags source.bind="item.output_files"></ui-tags>
+        </div>
     </div>
     <p class="help text">Output files are designed to output information from a task into a format
                          that can be used in another system (e.g. an external inventory system).</p>
