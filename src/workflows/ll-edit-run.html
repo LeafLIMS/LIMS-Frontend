@@ -1,0 +1,47 @@
+<template>
+    <form class="ui form slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui attached header">Edit Run</h3>
+        <div class="ui attached segment">
+            <ui-field label="Name" required>
+                <input value.bind="run.name">
+            </ui-field>
+            <div class="ui mini steps">
+                <div class="step ${run.current_task == $index ? 'active' : ''}
+                            ${run.task_in_progress ? 'in_progress' : ''}
+                            ${$index < run.current_task ? 'completed' : ''}"
+                     repeat.for="t of tasks">
+                    <div class="content">
+                        <div class="title">${t.name}</div>
+                        <div class="content" if.bind="t.select">
+                            <ui-autocomplete value.bind="t.id"
+                                             from="tasks"
+                                             store-value="id"
+                                             display-value="name"
+                                             placeholder="Select task">
+                            </ui-autocomplete>
+                        </div>
+                        <div class="content" if.bind="$index >= run.current_task">
+                            <div class="ui mini basic fluid icon buttons">
+                                <button class="ui button" click.delegate="addAfter($index, t)">
+                                    <i class="add icon"></i>
+                                </button>
+                                <button class="ui button" click.delegate="removeTask($index, t)"
+                                        if.bind="$index > run.current_task">
+                                    <i class="remove icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Save</button>
+        </div>
+    </form>
+</template>

@@ -97,6 +97,10 @@ export class Workflow {
         run.addProducts = true;
     }
 
+    workflowFromRun(run) {
+        run.toWorkflow = true;
+    }
+
     removeProducts(run) {
         let message = 'Remove ' + run.selected.length + ' products from run?';
         this.dialog.open({viewModel: Prompt, model: message}).whenClosed(response => {

@@ -3,7 +3,9 @@
     <require from="./is-length"></require>
     <require from="./is-excluded"></require>
     <require from="./ll-new-run"></require>
+    <require from="./ll-edit-run"></require>
     <require from="./ll-add-products"></require>
+    <require from="./ll-run-to-workflow"></require>
     <div class="au-animate page content">
         <h2 if.bind="!limitTo">Workflow runs</h2>
         <h2 if.bind="limitTo">
@@ -33,6 +35,8 @@
                 </div>
             </div>
             <ll-edit-run toggle.bind="run.edit" source.bind="run"></ll-edit-run>
+            <ll-run-to-workflow toggle.bind="run.toWorkflow"
+                                  source.bind="run"></ll-run-to-workflow>
             <ll-add-products toggle.bind="run.addProducts" source.bind="run"></ll-add-products>
             <div class="ui attached segment stackable grid run">
                 <div class="four wide column">

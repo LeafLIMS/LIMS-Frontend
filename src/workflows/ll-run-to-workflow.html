@@ -1,0 +1,22 @@
+<template>
+    <form class="ui form slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3 class="ui attached header">Create workflow from run</h3>
+        <div class="ui attached segment">
+            <div class="ui two column wide grid">
+                <ui-field label="Name" required class="column">
+                    <input value.bind="data.name">
+                </ui-field>
+                <ll-permissions object="workflows" object-for.bind="data" class="column">
+                </ll-permissions>
+            </div>
+        </div>
+        <div class="ui attached message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui attached right aligned segment">
+            <button class="ui button" click.delegate="cancel()">Cancel</button>
+            <button class="ui primary button" type="submit">Create</button>
+        </div>
+    </form>
+</template>
