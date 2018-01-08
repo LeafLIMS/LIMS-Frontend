@@ -38,6 +38,7 @@
                 <ui-field label="Equipment files">
                     <ui-autocomplete value.bind="item.equipment_files_source & validate"
                                      from="filetemplates"
+                                     search-params.bind="{file_for: 'equipment'}"
                                      store-value="name"
                                      placeholder="Equipment files">
                     </ui-autocomplete>
@@ -124,6 +125,7 @@
         <ui-field label="Input files">
             <ui-autocomplete value.bind="item.input_files_source & validate"
                              from="filetemplates"
+                             search-params.bind="{file_for: 'input'}"
                              store-value="name"
                              placeholder="Input files">
             </ui-autocomplete>
@@ -180,6 +182,7 @@
         <ui-field label="Output files">
             <ui-autocomplete value.bind="item.output_files_source & validate"
                              from="filetemplates"
+                             search-params.bind="{file_for: 'output'}"
                              store-value="name"
                              placeholder="Output files">
             </ui-autocomplete>
