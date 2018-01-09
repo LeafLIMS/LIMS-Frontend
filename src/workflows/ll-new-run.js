@@ -54,9 +54,9 @@ export class LlNewRun {
     }
 
     cancel() {
-        this.run = {
-            products: [],
-        };
+        this.run.name = '';
+        this.run.products.splice(0, this.run.products.length);
+        this.run.workflow = '';
         this.toggle = false;
     }
 }
