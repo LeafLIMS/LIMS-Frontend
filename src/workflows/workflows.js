@@ -108,7 +108,7 @@ export class Workflow {
                 let selectedIds = run.selected.map(x => { return x.id });
                 let diffIds = run.products.filter(x => selectedIds.indexOf(x) < 0);
                 this.api.updateRun(run.id, {products: diffIds}).then(x => {
-                    run.product_list = x.product_list;
+                    run.products_list = x.products_list;
                 }).catch(err => {
                     this.error = err;
                 });

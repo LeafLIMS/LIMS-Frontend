@@ -22,6 +22,9 @@
         <div class="ui padded basic segment" if.bind="isLoading">
             <div class="ui active indeterminate large centered inline text loader">Loading</div>
         </div>
+        <div if.bind="runs.results.length == 0" class="ui basic segment">
+            <h2 class="ui center aligned grey header">No runs active</h2>
+        </div>
         <div repeat.for="run of runs.results" class="run-container">
             <div class="ui ordered mini attached inverted primary steps">
                 <div class="step ${run.current_task == $index ? 'active' : ''}
