@@ -9,7 +9,7 @@
                 <i if.bind="prop.from_calculation" class="icon calculator"></i>
                 <input value.bind="outputTo.properties[$index].amount"
                        placeholder="${prop.from_calculation ? 'Calculated' : 'Amount'}">
-                <div class="ui label">${prop.measure}</div>
+                <div class="ui label" if.bind="!prop.measure_not_required">${prop.measure}</div>
             </div>
         </div>
     </div>
