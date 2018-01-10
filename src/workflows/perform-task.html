@@ -42,8 +42,8 @@
                              if.bind="step.properties.length > 0">
                             <div class="column" repeat.for="prop of step.properties">
                                 <p>${prop.label}</p>
-                                <div class="ui fluid right labeled input">
-                                    <input value.bind="prop.amount">
+                                <div class="ui fluid right labeled input read only">
+                                    <input value.bind="prop.amount" disabled>
                                     <div class="ui label">${prop.measure}</div>
                                 </div>
                             </div>
