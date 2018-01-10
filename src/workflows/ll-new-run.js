@@ -28,7 +28,7 @@ export class LlNewRun {
         ValidationRules
             .ensure('name').required()
             .ensure('tasks').required()
-            .ensure('products').minItems(1).required()
+            .ensure('products').satisfies((v, o) => v.length > 0 ? true : false)
             .on(this.run);
 
         this.api.workflows({limit: 200}).then(data => {

@@ -89,7 +89,7 @@
                 </ui-table-wrapper>
             </div>
             <div class="ui bottom attached menu">
-                <a class="item" if.bind="!run.task_in_progress"
+                <a class="item" if.bind="!run.task_in_progress && run.products.length"
                    route-href="route: startTask; params.bind: {id: run.id}">
                     <i class="play icon"></i>
                     Start task

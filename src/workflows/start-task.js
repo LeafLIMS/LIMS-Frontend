@@ -115,7 +115,6 @@ export class StartTask {
                 }
                 */
                 if (this.canStart) {
-                    console.log(this.complete);
                     this.api.startTask(this.run.id, frmData).then(response => {
                         response.json().then(data => {
                             if (this.complete) {
@@ -133,14 +132,22 @@ export class StartTask {
                     this.setup = false;
                     this.requirements = true;
                     this.loadingRequirements = true;
+                    // Check that there is at least one product with valid inputs to the task
+                    let hasInputs = Object.values(this.run.validate_inputs).some((e, i, a) => e)
                     // TODO: If errors then show that, set this.hasError in the UI
                     // to show things
                     this.api.checkTask(this.run.id, frmData).then(response => {
                         response.json().then(data => {
                             if (response.status == 200) {
                                 this.taskRequirements = data;
+                                if (!hasInputs) {
+                                    let errorText = 'There are no inputs available for the task';
+                                    this.taskRequirements.errors.push(errorText);
+                                }
                                 this.loadingRequirements = false;
-                                if (data.errors.length == 0 && data.equipment_status == 'idle') {
+                                if (data.errors.length == 0 &&
+                                    hasInputs &&
+                                    data.equipment_status == 'idle') {
                                     this.canStart = true;
                                 }
                             } else {
