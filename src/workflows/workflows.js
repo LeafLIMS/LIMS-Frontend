@@ -66,7 +66,7 @@ export class Workflow {
         let excluded = run.exclude ? run.exclude.split(',') : [];
         let sId = itemId.toString();
         if (excluded.indexOf(sId) !== -1) {
-            excluded.splice(1, excluded.indexOf(sId));
+            excluded.splice(excluded.indexOf(sId), 1);
         } else {
             excluded.push(sId);
         }
