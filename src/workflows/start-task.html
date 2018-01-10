@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <h4 class="ui dividing header">Inputs</h4>
+            <h4 class="ui dividing header" if.bind="task.input_fields.length">Inputs</h4>
             <div class="ui blue segment">
                 <h5 class="ui header required">Input from product</h5>
                 <div class="ui right labeled fluid input">
@@ -71,12 +71,12 @@
                     </ll-input-field>
                 </div>
             </div>
-            <h4 class="ui dividing header">Steps</h4>
+            <h4 class="ui dividing header" if.bind="task.step_fields.length">Steps</h4>
             <ll-step-field repeat.for="field of task.step_fields"
                            field.bind="field"
                            output-to.bind="taskData.step_fields[$index]">
             </ll-step-field>
-            <h4 class="ui dividing header">Outputs</h4>
+            <h4 class="ui dividing header" if.bind="task.output_fields.length">Outputs</h4>
             <div class="ui three column wide stackable grid">
                 <div class="column" repeat.for="field of task.output_fields">
                     <ll-output-field field.bind="field"
@@ -84,7 +84,7 @@
                     </ll-output-field>
                 </div>
             </div>
-            <h4 class="ui dividing header">Variables</h4>
+            <h4 class="ui dividing header" if.bind="task.variable_fields.length">Variables</h4>
             <div class="ui five column wide stackable grid">
                 <div class="column" repeat.for="field of task.variable_fields">
                     <ll-variable-field field.bind="field"
@@ -92,7 +92,8 @@
                     </ll-variable-field>
                 </div>
             </div>
-            <h4 class="ui dividing header">Calculations</h4>
+            <h4 class="ui dividing header" if.bind="task.calculation_fields.length">
+                Calculations</h4>
             <div class="ui three column wide stackable grid">
                 <div class="column" repeat.for="field of task.calculation_fields">
                     <ll-calculation-field field.bind="field"
