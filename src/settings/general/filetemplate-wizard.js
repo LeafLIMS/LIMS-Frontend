@@ -84,6 +84,14 @@ export class FiletemplateWizard {
         });
     }
 
+    addField() {
+        this.item.fields.push({});
+    }
+
+    removeField(index) {
+        this.item.fields.splice(index, 1);
+    }
+
     activate(model) {
         this.item = model;
     }
