@@ -93,6 +93,7 @@ export class FiletemplateWizard {
     }
 
     activate(model) {
+        this.used_for = undefined;
         this.item = model;
     }
 }
