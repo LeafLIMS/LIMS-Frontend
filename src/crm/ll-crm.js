@@ -38,8 +38,13 @@ export class LlCrm {
     }
 
     remove() {
-        // TODO: Implement remove behaviour
-        console.log('NOT IMPLEMENTED');
+        this.api.disassociateCRMProject(this.source.id).then(data => {
+            this.ea.publish('projectUpdated', {source: 'crm', id: this.source.id});
+            this.add = false;
+            this.change = false;
+        }).catch(err => {
+            this.error = err;
+        });
     }
 
 }

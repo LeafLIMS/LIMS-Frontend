@@ -16,7 +16,8 @@ export class CrmApi {
         return this.endpoint.post('crm/link/', {id: projectId, identifier: crmProjectId});
     }
 
-    disassociateCRMProject(projectId, crmProjectId) {
+    disassociateCRMProject(projectId) {
+        return this.endpoint.destroy('crm/link/', {project_id: projectId});
     }
 
     addAccount(emailAddress) {
