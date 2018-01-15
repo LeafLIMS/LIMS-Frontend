@@ -10,9 +10,10 @@ export class UiTableRowCustomAttribute {
         this.element = element;
         this.router = router;
         this.handler = e => {
-            if (e.target.nodeName == 'TD') {
+            if (e.target.nodeName == 'TD' && e.target.firstChild.nodeName !== 'INPUT') {
                 this.router.navigateToRoute(this.route, this.params);
             }
+            return true;
         }
     }
 

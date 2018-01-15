@@ -11,7 +11,7 @@ export class UiTableSelectCustomElement {
     }
 
     attached() {
-        jQuery('.ui.table.checkbox', this.element).checkbox();
+        let checkbox = jQuery('.ui.tabular.checkbox', this.element).checkbox();
     }
 
     selectMatcherChanged(n, o) {
