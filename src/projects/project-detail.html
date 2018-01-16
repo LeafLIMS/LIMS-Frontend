@@ -79,11 +79,13 @@
             </ui-table-pagination>
         </div>
         <div class="five wide column">
-            <div class="ui form segment">
+            <form class="ui form clearing segment" novalidate submit.delegate="save()">
                 <p><b>Date started:</b> ${project.date_started|dateFormat}</p>
-                <ui-field label="Project status">
-                    <ui-dropdown value.bind="project.status"
-                                 change.delegate="setStatus($event)">
+                <ui-field label="Name" required>
+                    <input value.bind="project.name & validate">
+                </ui-field>
+                <ui-field label="Project status" required>
+                    <ui-dropdown value.bind="project.status & validate">
                         <ui-item repeat.for="status of statuses.results"
                                  value.bind="status.name">${status.name}</ui-item>
                     </ui-dropdown>
@@ -91,10 +93,19 @@
                 <ui-field label="Description">
                     <textarea value.bind="project.description" rows="10"></textarea>
                 </ui-field>
-                <button class="ui basic button" click.delegate="updateDescription()">
-                    Update description
+                <ui-field label="Primary lab contact" required>
+                    <ui-autocomplete from="users"
+                            value.bind="project.primary_lab_contact & validate"
+                            store-value="username"
+                            display-value="username"
+                            default-text.bind="project.primary_lab_contact">
+                    </ui-autocomplete>
+                </ui-field>
+                <div class="ui divider"></div>
+                <button class="ui primary button" type="submit">
+                    Save
                 </button>
-            </div>
+            </form>
             <div class="ui segment">
                 <h3>CRM</h3>
                 <ll-crm source.bind="project"></ll-crm>

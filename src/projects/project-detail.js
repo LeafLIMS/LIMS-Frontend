@@ -1,4 +1,4 @@
-import { inject } from 'aurelia-framework';
+import { inject, NewInstance } from 'aurelia-framework';
 import { ProjectApi } from './api';
 import { CrmApi } from '../crm/api';
 import { EventAggregator } from 'aurelia-event-aggregator';
@@ -6,16 +6,23 @@ import { Router } from 'aurelia-router';
 import { DialogService } from 'aurelia-dialog';
 import { CrmPrompt } from '../crm/crm-prompt';
 import { Prompt } from '../components/semantic-ui/ui-prompt';
+import { ValidationRules, ValidationController, validateTrigger } from 'aurelia-validation';
+import { UiValidationRenderer } from '../components/semantic-ui/ui-validation-renderer';
 
-@inject(ProjectApi, CrmApi, EventAggregator, Router, DialogService)
+@inject(ProjectApi, CrmApi, EventAggregator, Router, DialogService,
+        NewInstance.of(ValidationController))
 export class ProjectDetail {
 
-    constructor(projectApi, crmApi, eventAggregator, router, dialogService) {
+    constructor(projectApi, crmApi, eventAggregator, router, dialogService, validationController) {
         this.ea = eventAggregator;
         this.api = projectApi;
         this.crmApi = crmApi;
         this.router = router;
         this.dialog = dialogService;
+
+        this.validator = validationController;
+        this.validator.validateTrigger = validateTrigger.changeOrBlur;
+        this.validator.addRenderer(new UiValidationRenderer());
 
         this.query = {
             limit: 10,
@@ -24,12 +31,17 @@ export class ProjectDetail {
         this.selected = [];
         this.isLoading = true;
 
+        this.project = {};
+
+        this.setRules();
+
         this.getProjectStatuses();
     }
 
     activate(params, routeMap) {
         this.api.projectDetail(params.id).then(data => {
             this.project = data;
+            this.setRules();
             routeMap.navModel.title = this.project.name;
             this.getProducts();
         });
@@ -37,7 +49,7 @@ export class ProjectDetail {
 
     attached() {
         this.updateSubscriber = this.ea.subscribe('projectUpdated', response => {
-            this.updateProject();
+            this.save();
         });
         this.querySubscriber = this.ea.subscribe('queryChanged', response => {
             this.getProducts();
@@ -51,6 +63,14 @@ export class ProjectDetail {
         this.updateSubscriber.dispose();
         this.querySubscriber.dispose();
         this.productSubsciber.dispose();
+    }
+
+    setRules() {
+        ValidationRules
+            .ensure('name').required()
+            .ensure('status').required()
+            .ensure('primary_lab_contact').required()
+            .on(this.project);
     }
 
     getProducts() {
@@ -68,23 +88,16 @@ export class ProjectDetail {
         });
     }
 
-    setStatus(event) {
-        setTimeout(() => {
-            this.updateProject();
-        }, 1);
-    }
-
-    updateProject() {
-        this.api.updateProject(this.project.id, this.project).then(data => {
-            this.project = data;
+    save() {
+        this.validator.validate().then(results => {
+            if (results.valid) {
+                this.api.updateProject(this.project.id, this.project)
+                    .then(data => {
+                    this.project = data;
+                    this.setRules();
+                }).catch(err => this.error = err);
+            }
         });
-    }
-
-    updateDescription() {
-        this.api.updateProject(this.project.id, {description: this.project.description})
-            .then(data => {
-            this.project = data;
-        }).catch(err => this.error = err);
     }
 
     deleteItems() {

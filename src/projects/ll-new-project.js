@@ -58,7 +58,6 @@ export class LlNewProject {
     save() {
         this.validator.validate().then(results => {
             if (results.valid) {
-                console.log(this.project.crmId);
                 this.api.createProject(this.project).then(data => {
                     if (this.project.crmId) {
                         this.crmApi.associateCRMProject(data.id, this.project.crmId);
