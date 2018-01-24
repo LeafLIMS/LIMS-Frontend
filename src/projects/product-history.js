@@ -26,7 +26,6 @@ export class ProductHistory {
     }
 
     showData(data) {
-        console.log(data);
         this.dialog.open({viewModel: HistoryDialog, model: data}).whenClosed(response => {
             if (!response.wasCancelled) {
             }
