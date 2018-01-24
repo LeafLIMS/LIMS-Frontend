@@ -24,7 +24,8 @@
         <div class="eleven wide column">
             <ui-table-header search.bind="query.search">
                 <div class="item">
-                    <a route-href="route: productHistory; params.bind: {id: project.id}"
+                    <a map-href="route: project/productHistory; params.bind: {id: project.id}"
+                       if.bind="project.id"
                        class="ui basic icon button">
                         <i class="clock icon"></i>
                     </a>
