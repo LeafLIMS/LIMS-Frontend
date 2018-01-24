@@ -37,6 +37,11 @@ ui-table-header > .ui.secondary.menu > .item:first-child {
     padding-left: 0;
 }
 
+ui-table-header .item .ui.button {
+    border: 0 !important;
+    box-shadow: none;
+}
+
 [ui-table-row] {
     cursor: pointer;
 }
@@ -221,6 +226,10 @@ ui-field[required] label:after, ui-field.required label:after, .required:not(ui-
 .ui.scrollable.list {
     max-height: 20em;
     overflow-y: auto;
+}
+
+.ui.scrollable.steps {
+    overflow: scroll;
 }
 
 .ui.input.read.only input {

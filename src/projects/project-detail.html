@@ -23,6 +23,12 @@
     <div class="ui two column stackable grid">
         <div class="eleven wide column">
             <ui-table-header search.bind="query.search">
+                <div class="item">
+                    <a route-href="route: productHistory; params.bind: {id: project.id}"
+                       class="ui basic icon button">
+                        <i class="clock icon"></i>
+                    </a>
+                </div>
                 <ui-dropdown-menu class="item"
                              icon="ellipsis vertical">
                     <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"

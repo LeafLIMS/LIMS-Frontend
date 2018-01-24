@@ -1,0 +1,72 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <div class="header">${data.run}: ${data.task}</div>
+        <ux-dialog-body>
+            <div class="content">
+                <div class="ui grid">
+                    <div class="four wide column">
+                        <h4 class="ui dividing header">Inputs</h4>
+                        <div class="ui blue labels">
+                            <div class="ui label"
+                                 repeat.for="input of data.data.product_input_amounts">
+                                ${input.name}
+                                <div class="detail">
+                                    ${input.amount}${input.measure}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eight wide column">
+                        <h4 class="ui dividing header">Steps</h4>
+                        <div class="ui violet segment custom step field"
+                             repeat.for="step of data.data.step_fields">
+                            <h5 class="ui header">${step.label}</h5>
+                            <p class="maintain-breaks">${step.description}</p>
+                            <div class="ui four column wide grid"
+                                 if.bind="step.properties.length > 0">
+                                <div class="column" repeat.for="prop of step.properties">
+                                    <p>${prop.label}</p>
+                                    <div class="ui fluid right labeled input read only">
+                                        <input value.bind="prop.amount" disabled>
+                                        <div class="ui label">${prop.measure}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="ui dividing header">Variables</h4>
+                        <div repeat.for="variable of data.data.variable_fields">
+                            <p>${variable.label}</p>
+                            <div class="ui fluid right labeled input read only">
+                                <input value.bind="variable.amount" disabled>
+                                <div class="ui label">${variable.measure}</div>
+                            </div>
+                        </div>
+                        <h4 class="ui dividing header">Calculations</h4>
+                        <div repeat.for="calculation of data.data.calculation_fields">
+                            <p>${calculation.label}</p>
+                            <pre class="ui segment">
+                                ${calculation.calculation}
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="four wide column">
+                        <h4 class="ui dividing header">Outputs</h4>
+                        <div class="ui orange labels">
+                            <div class="ui label"
+                                 repeat.for="output of data.data.output_fields">
+                                ${output.label}
+                                <div class="detail">
+                                    ${output.amount}${output.measure}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui ok button"
+                    click.trigger="dialog.ok(selected)">Done</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

@@ -1,0 +1,24 @@
+<template>
+    <require from="../shared/reverse"></require>
+    <h2><a class="dim"
+           if.bind="project"
+           route-href="route: projectDetail; params.bind: {id: project.id}">
+            Project: ${project.name}</a>
+        &nbsp;| Products History</h2>
+
+    <div repeat.for="p of products.results">
+        <h3 class="ui top attached header">${p.product_identifier}: ${p.name}
+            <span class="dim">(${p.data.length} tasks completed)</span></h3>
+        <div class="ui bottom attached segment">
+            <div class="ui mini stackable scrollable ordered steps">
+                <a class="step" repeat.for="t of p.data | reverse" click.delegate="showData(t)">
+                    <div class="content">
+                        <div class="title">${t.run}</div>
+                        <div class="description">${t.task}</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <p></p>
+    </div>
+</template>
