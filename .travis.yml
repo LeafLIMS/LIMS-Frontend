@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- '5.7.0'
+sudo: required
+services: docker
+before_install:
+  - docker create -v /var/lib/postgresql/data --name db_data postgres:latest /bin/echo "Data only container for DB"
+  - docker run -d --name db --volumes-from db_data postgres:latest
+  - docker pull leaflims/backend
+  - docker run -t -i --link db:db leaflims/backend python manage.py migrate
+  - echo "from django.contrib.auth.models import User; User.objects.create_superuser('test', 'test@example.com', 'test')" | docker run -i --link db:db leaflims/backend python manage.py shell
+  - docker run -p 8000:8000 --link db:db --name app -d leaflims/backend
+before_script:
+  - npm install
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
