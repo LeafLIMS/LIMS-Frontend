@@ -7,7 +7,9 @@
     <require from="../crm/ll-crm"></require>
     <require from="../components/shared/show-row"></require>
     <require from="../shared/string-truncate"></require>
-    <h2><a class="dim" route-href="route: project">Project:</a> ${project.name}</h2>
+    <h2>
+        <a class="dim" route-href="route: project">Project</a>
+        <span class="highlight">${project.project_identifier}:</span> ${project.name}</h2>
     <div class="ui inverted stackable primary menu">
         <a class="item" click.delegate="newProduct = true">
             <i class="icon add"></i>
