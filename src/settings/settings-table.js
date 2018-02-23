@@ -53,6 +53,7 @@ export class SettingsTable {
     getData() {
         this.api[this.getFunc](this.query).then(data => {
             this.table = data;
+            this.query.page = 1;
             this.isLoading = false;
         }).catch(err => {
             this.tableError = err;
@@ -106,6 +107,9 @@ export class SettingsTable {
             if (response.source == 'pagination') {
                 this.query.page = response.page;
                 this.query.limit = response.limit;
+            }
+            if (response.source == 'search') {
+                this.query.search = response.value;
             }
             this.getData();
         });

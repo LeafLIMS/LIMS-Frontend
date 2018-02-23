@@ -71,6 +71,9 @@ export class Inventory {
                 this.query.page = response.page;
                 this.query.limit = response.limit;
             }
+            if (response.source == 'search') {
+                this.query.search = response.value;
+            }
             this.getInventory();
         });
 
@@ -87,6 +90,7 @@ export class Inventory {
     getInventory() {
         this.api.inventory(this.query).then(data => {
             this.inventory = data;
+            this.query.page = 1;
             this.isLoading = false;
         });
     }

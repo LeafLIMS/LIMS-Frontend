@@ -36,8 +36,8 @@ export class UiTableHeaderCustomElement {
         this.addTerm();
     }
 
-    searchChanged() {
-        this.ea.publish('queryChanged', {source: 'search'});
+    searchChanged(n) {
+        this.ea.publish('queryChanged', {source: 'search', value: n});
     }
 
     toggleAdvanced() {

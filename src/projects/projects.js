@@ -31,6 +31,9 @@ export class Projects {
                 this.query.page = response.page;
                 this.query.limit = response.limit;
             }
+            if (response.source == 'search') {
+                this.query.search = response.value;
+            }
             this.getProjects();
         });
 
@@ -44,6 +47,7 @@ export class Projects {
     getProjects() {
         this.api.projects(this.query).then(data => {
             this.projects = data;
+            this.query.page = 1;
             this.isLoading = false;
         });
     }
