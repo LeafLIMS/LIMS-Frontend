@@ -5,6 +5,7 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 @inject(UserApi, EventAggregator)
 export class LlPermissions {
     @bindable({defaultBindingMode: bindingMode.twoWay}) objectFor;
+    @bindable({defaultBindingMode: bindingMode.twoWay}) reset;
     @bindable object;
 
     constructor(api, eventAggregator) {
@@ -50,7 +51,16 @@ export class LlPermissions {
         });
     }
 
-    objectForChanged() {
+    resetChanged(n) {
+        // Reset permissions list and rebuild when cancelled to ensure
+        // when cancelled that permissions are not saved in the UI
+        if (!n) {
+            this.perms = {};
+            this.buildPerms();
+        }
+    }
+
+    objectForChanged(n) {
         if (this.objectFor && 'permissions' in this.objectFor && !this.fromServer) {
             this.buildPerms();
             this.fromServer = true;

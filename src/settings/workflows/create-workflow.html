@@ -24,7 +24,8 @@
             </div>
         </div>
         <div class="column">
-            <ll-permissions object="workflows" object-for.bind="item"></ll-permissions>
+            <ll-permissions object="workflows" object-for.bind="item" reset.bind="toggle">
+            </ll-permissions>
         </div>
     </div>
 </template>

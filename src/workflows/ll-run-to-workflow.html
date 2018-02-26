@@ -7,7 +7,8 @@
                 <ui-field label="Name" required class="column">
                     <input value.bind="data.name">
                 </ui-field>
-                <ll-permissions object="workflows" object-for.bind="data" class="column">
+                <ll-permissions object="workflows" object-for.bind="data" reset.bind="toggle"
+                                class="column">
                 </ll-permissions>
             </div>
         </div>

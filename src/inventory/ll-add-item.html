@@ -95,7 +95,8 @@
                     </button>
                 </div>
                 <div class="column six wide">
-                    <ll-permissions object="inventory" object-for.bind="item"></ll-permissions>
+                    <ll-permissions object="inventory" object-for.bind="item" reset.bind="toggle">
+                    </ll-permissions>
                 </div>
             </div>
         </div>

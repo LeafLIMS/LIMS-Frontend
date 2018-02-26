@@ -27,15 +27,6 @@ export class LlAddMultipleItems {
         this.validator.validateTrigger = validateTrigger.changeOrBlur;
         this.validator.addRenderer(new UiValidationRenderer());
 
-
-        ValidationRules
-            .ensure('file_template').required()
-            .ensure('items_file').required()
-            .on(this.options);
-
-        this.filetemplateApi.filetemplates().then(data => {
-            this.fileTemplates = data;
-        });
     }
 
     setFields(event) {
@@ -47,6 +38,19 @@ export class LlAddMultipleItems {
             this.fields += field.name+', ';
         }
         this.fields.trim(', ');
+    }
+
+    toggleChanged(value) {
+        if (value) {
+            ValidationRules
+                .ensure('file_template').required()
+                .ensure('items_file').required()
+                .on(this.options);
+
+            this.filetemplateApi.filetemplates({limit: 200}).then(data => {
+                this.fileTemplates = data;
+            });
+        }
     }
 
     save() {
