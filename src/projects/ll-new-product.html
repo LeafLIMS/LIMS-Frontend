@@ -14,11 +14,12 @@
                 </ui-dropdown>
             </ui-field>
             <ui-field label="Product type" required>
-                <ui-dropdown value.bind="product.product_type & validate">
-                    <ui-item repeat.for="item of productTypes.results" value.bind="item.name">
-                        ${item.display_name}
-                    </ui-item>
-                </ui-dropdown>
+                <ui-autocomplete from="itemtypes"
+                        value.bind="product.product_type & validate"
+                        store-value="name"
+                        display-value="display_name"
+                        default-text.bind="product.product_type">
+                </ui-autocomplete>
             </ui-field>
             <ll-template-hook name="create-product" source.bind="product"></ll-template-hook>
         </div>
