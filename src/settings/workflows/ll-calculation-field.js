@@ -10,7 +10,7 @@ export class LlCalculationFieldCustomElement {
     }
 
     outputToChanged() {
-        if (Object.keys(this.outputTo).length === 0 && this.field) {
+        if (this.outputTo && Object.keys(this.outputTo).length === 0 && this.field) {
             this.outputTo.label = this.field.label;
             this.outputTo.calculation = this.field.calculation;
             this.outputTo.id = this.field.id;

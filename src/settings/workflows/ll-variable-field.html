@@ -2,17 +2,6 @@
     <ui-field label="Field label" required>
         <input value.bind="field.label & validate">
     </ui-field>
-    <ui-field label="Use calculation for amount">
-        <ui-checkbox checked.bind="field.from_calculation"></ui-checkbox>
-    </ui-field>
-    <ui-field if.bind="field.from_calculation" label="Calculation"
-              required.bind="field.from_calculation">
-        <ui-dropdown value.bind="field.calculation_used">
-            <ui-item repeat.for="calc of calculations" value.bind="calc.id">
-                ${ calc.label }
-            </ui-item>
-        </ui-dropdown>
-    </ui-field>
     <ui-field label="Measure not required">
         <ui-checkbox checked.bind="field.measure_not_required"></ui-checkbox>
     </ui-field>

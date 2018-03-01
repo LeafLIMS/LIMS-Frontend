@@ -3,6 +3,7 @@ import { inject, bindable, bindingMode } from 'aurelia-framework';
 @inject(Element)
 export class LlVariableFieldCustomElement {
     @bindable field;
+    @bindable calculations;
     @bindable({defaultBindingMode: bindingMode.twoWay}) outputTo;
 
     constructor(element) {
@@ -10,7 +11,7 @@ export class LlVariableFieldCustomElement {
     }
 
     outputToChanged() {
-        if (Object.keys(this.outputTo).length === 0 && this.field) {
+        if (this.outputTo && Object.keys(this.outputTo).length === 0 && this.field) {
             this.outputTo.label = this.field.label;
             this.outputTo.amount = this.field.amount;
             this.outputTo.measure = this.field.measure;

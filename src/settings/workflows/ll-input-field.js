@@ -33,6 +33,7 @@ export class LlInputFieldCustomElement {
             this.outputTo.measure = this.field.measure;
             this.outputTo.from_calculation = this.field.from_calculation;
             this.outputTo.from_input_file = this.field.from_input_file;
+            this.outputTo.auto_find_in_inventory = this.field.auto_find_in_inventory;
         }
     }
 

@@ -54,6 +54,7 @@ export class Tasks extends SettingsTable {
                                 .ensure('amount').required()
                                 .matches(/^-?[0-9.]+/)
                                 .ensure('measure').required()
+                                .when(obj => !obj.measure_not_required)
                                 .rules,
             calculation_fields: ValidationRules
                                     .ensure('label').required()
@@ -119,7 +120,7 @@ export class Tasks extends SettingsTable {
     parseItem(item) {
         // Convert array to string for equipment
         //item.capable_equipment = item.capable_equipment.join(',');
-        this.calculations = item.calculation_fields;
+        this.calculations = item.calculation_fields.slice(0);
         // Need to process fields so they use labels not id's for the calculation.
         // They will be converted back on a save.
         for (let fieldType of this.fieldTypes) {
@@ -189,6 +190,9 @@ export class Tasks extends SettingsTable {
                                 calc.id = c.id;
                             }
                             fields = this.createOrUpdateFields(data.id);
+                        }).catch(err => {
+                            this.isSaving = false;
+                            this.error = err;
                         });
                     } else {
                         fields = this.createOrUpdateFields(data.id);
@@ -216,7 +220,7 @@ export class Tasks extends SettingsTable {
         this.validator.validate().then(results => {
             if (results.valid) {
                 this.api[this.updateFunc](this.item.id, this.item).then(data => {
-                    let fields;
+                    let fields = [];
                     // Need to create calculation fields first
                     // Then take those ID's and assign to calculations list
                     // Use this to assign proper ID's to fields that use calculations
@@ -237,6 +241,9 @@ export class Tasks extends SettingsTable {
                                 calc.id = c.id;
                             }
                             fields = this.createOrUpdateFields(data.id);
+                        }).catch(err => {
+                            this.isSaving = false;
+                            this.error = err;
                         });
                     } else {
                         fields = this.createOrUpdateFields(data.id);

@@ -2,9 +2,14 @@
     <ui-field label="Field label" required>
         <input value.bind="field.label & validate">
     </ui-field>
-    <ui-field label="Use calculation for amount">
-        <ui-checkbox checked.bind="field.from_calculation"></ui-checkbox>
-    </ui-field>
+    <div class="ui two column wide vertically padded grid">
+        <ui-field label="Use calculation for amount" class="column">
+            <ui-checkbox checked.bind="field.from_calculation"></ui-checkbox>
+        </ui-field>
+        <ui-field label="Automatically fetch from inventory based on property" class="column">
+            <ui-checkbox checked.bind="field.auto_find_in_inventory"></ui-checkbox>
+        </ui-field>
+    </div>
     <ui-field if.bind="field.from_calculation" label="Calculation"
               required.bind="field.from_calculation">
         <ui-dropdown value.bind="field.calculation_used & validate">
