@@ -14,7 +14,7 @@
                 <button class="ui primary button" click.delegate="addTask()">Add</button>
             </div>
             <div class="ui segments" sortable.bind="{draggable: '.segment'}">
-                <div class="ui clearing segment" repeat.for="task of taskList">
+                <div class="ui clearing dragable segment" repeat.for="task of taskList">
                     <div class="ui circular label">${$index + 1}</div> ${task.name}
                     <button class="ui right floated circular small icon button"
                             click.delegate="removeTask($index)">
