@@ -11,6 +11,7 @@ export class UiAutocomplete {
     @bindable storeValue = 'id';
     @bindable defaultText = '';
     @bindable multiple = false;
+    @bindable autofill = false;
 
     constructor(element, config) {
         this.element = element;
@@ -28,11 +29,27 @@ export class UiAutocomplete {
         this.updateFromDropdown = (value, text, choice) => {
             this.value = value;
         }
+
+        this.doAutoFill = () => {
+            let path = `${this.from}/`;
+            this.endpoint.find(path, this.searchParams).then(data => {
+                if (data.results.length == 1) {
+                    this.dropdown.dropdown('set text', data.results[0][this.displayValue]);
+                    this.value = data.results[0][this.storeValue];
+                }
+            });
+        }
     }
 
     defaultTextChanged(value) {
         if (this.dropdown) {
             this.dropdown.dropdown('set text', this.defaultText);
+        }
+    }
+
+    searchParamsChanged(value) {
+        if (this.autofill) {
+            this.doAutoFill();
         }
     }
 

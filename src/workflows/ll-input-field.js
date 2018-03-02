@@ -20,6 +20,18 @@ export class LlInputFieldCustomElement {
             });
         }
 
+        this.fillInSingle = (dropdown) => {
+            let params = {
+                item_type__name: this.field.lookup_type,
+            }
+            this.api.inventory(params).then(data => {
+                if (data.results.length == 1) {
+                    dropdown.dropdown('set text', data.results[0].name);
+                    this.outputTo[this.field.store_value_in] = data.results[0].id;
+                }
+            });
+        }
+
         this.updateFromDropdown = (value, text, choice) => {
             this.outputTo[this.field.store_value_in] = value;
         }
@@ -38,7 +50,7 @@ export class LlInputFieldCustomElement {
     }
 
     attached() {
-        $('.search.selection.dropdown', this.element).dropdown({
+        let dropdown = $('.search.selection.dropdown', this.element).dropdown({
             apiSettings: {
                 responseAsync: this.doQuery,
             },
@@ -49,5 +61,6 @@ export class LlInputFieldCustomElement {
             },
             onChange: this.updateFromDropdown
         });
+        this.fillInSingle(dropdown);
     }
 }

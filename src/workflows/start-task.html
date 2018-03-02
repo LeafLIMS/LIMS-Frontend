@@ -43,6 +43,7 @@
                                     <ui-autocomplete from="inventory"
                                             value.bind="taskData.labware_identifier & validate"
                                             search-params.bind="{item_type__name: task.labware}"
+                                            autofill="true"
                                             placeholder="Lookup ${task.labware} from inventory">
                                     </ui-autocomplete>
                                 </ui-field>
