@@ -11,8 +11,7 @@
                         <ui-dropdown value.bind="item.file_for">
                             <ui-item value="input">Input</ui-item>
                             <ui-item value="output">Output</ui-item>
-                            <ui-item value="equipment" if.bind="used_for == 'task'">
-                                Equipment</ui-item>
+                            <ui-item value="equipment">Equipment</ui-item>
                         </ui-dropdown>
                     </ui-field>
                     <ui-field label="Template to be used in" required if.bind="item.file_for">
@@ -33,8 +32,8 @@
                     <table ui-table>
                         <thead>
                             <tr as-element="ui-table-sort" query.bind="query">
-                                <th>Name</th>
-                                <th>Map to</th>
+                                <th class="five wide">Name</th>
+                                <th class="five wide">Map to</th>
                                 <th>Required?</th>
                                 <th>Use as an identifier</th>
                                 <th>Use as a property</th>

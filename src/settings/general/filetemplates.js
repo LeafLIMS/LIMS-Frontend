@@ -38,6 +38,9 @@ export class FileTemplates extends SettingsTable {
                 .whenClosed(response => {
                 if (!response.wasCancelled) {
                     this.save();
+                } else {
+                    this.item.file_for = '';
+                    this.item.fields.splice(0);
                 }
             });
         }

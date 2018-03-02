@@ -53,7 +53,7 @@ export class FiletemplateWizard {
             'product_input_measure',
         ];
 
-        this.be.propertyObserver(this, 'used_for').subscribe((n, o) => {
+        this.observeUsedFor = (n, o) => {
             // Add required fields to the list!
             this.item.fields.splice(0, this.item.fields.length);
             if (this.item.file_for == 'input') {
@@ -68,9 +68,9 @@ export class FiletemplateWizard {
                     }
                 }
             }
-        });
+        }
 
-        this.be.propertyObserver(this, 'task').subscribe((n, o) => {
+        this.observeTask = (n, o) => {
             let availableFields = this.taskFields.slice();
             let fieldList = ['input_fields', 'output_fields', 'variable_fields'];
             this.api.taskDetail(n).then(data => {
@@ -81,7 +81,7 @@ export class FiletemplateWizard {
                 }
                 this.mapFields = availableFields;
             });
-        });
+        }
     }
 
     addField() {
@@ -93,7 +93,18 @@ export class FiletemplateWizard {
     }
 
     activate(model) {
-        this.used_for = undefined;
         this.item = model;
+        this.task = undefined;
+        this.used_for = undefined;
+        this.usedForObserver = this.be.propertyObserver(this, 'used_for')
+                                      .subscribe(this.observeUsedFor);
+        this.taskObserver = this.be.propertyObserver(this, 'task').subscribe(this.observeTask);
+        console.log('I have been activated!', model);
+    }
+
+    deactivate() {
+        console.log('bye bye');
+        this.usedForObserver.dispose();
+        this.taskObserver.dispose();
     }
 }
