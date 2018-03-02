@@ -41,7 +41,13 @@ export class UiTableHeaderCustomElement {
     }
 
     toggleAdvanced() {
-        this.showAdvanced = this.showAdvanced ? false : true;
+        if (this.showAdvanced) {
+            this.showAdvanced = false;
+            this.cleanQuery();
+            this.ea.publish('queryChanged', {source: 'advancedSearch'});
+        } else {
+            this.showAdvanced = true;
+        }
     }
 
     addTerm() {
