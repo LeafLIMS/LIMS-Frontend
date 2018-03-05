@@ -104,8 +104,8 @@
             </form>
             <div class="five wide column">
                 <div class="ui segment">
-                    <p><b>Last updated:</b> ${item.last_updated_on}</p>
-                    <p><b>Added on:</b> ${item.added_on}</p>
+                    <p><b>Last updated:</b> ${item.last_updated_on|dateFormat}</p>
+                    <p><b>Added on:</b> ${item.added_on|dateFormat}</p>
                     <p><b>Added by:</b> ${item.added_by}</p>
                     <ui-accordion>
                         <ui-accordion-content title="Description">
