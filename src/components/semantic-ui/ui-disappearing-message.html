@@ -1,0 +1,7 @@
+<template>
+    <div class="ui ${colour} ${visible ? 'visible' : 'hidden'} message">
+        <i class="close icon" click.delegate="visible = false"></i>
+        <div class="header">${title}</div>
+        <p>${text}</p>
+    </div>
+</template>

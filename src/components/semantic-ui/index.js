@@ -22,5 +22,6 @@ export function configure(aurelia) {
                             './ui-autocomplete',
                             './ui-tags',
                             './ui-datetime',
+                            './ui-disappearing-message',
     );
 }
