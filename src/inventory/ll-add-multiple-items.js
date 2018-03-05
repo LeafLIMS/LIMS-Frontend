@@ -32,7 +32,7 @@ export class LlAddMultipleItems {
     setFields(event) {
         this.fields = '';
         let fileTemplate = this.fileTemplates.results.find(elem => {
-            return elem.id = event.target.value;
+            return elem.id == event.target.value;
         });
         for (let field of fileTemplate.fields) {
             this.fields += field.name+', ';
@@ -71,7 +71,9 @@ export class LlAddMultipleItems {
                         } else {
                             this.cancel();
                         }
-                        this.ea.publish('queryChanged', {source: 'importInventory'});
+                        this.ea.publish('queryChanged', {source: 'importInventory',
+                                                         saved: response.saved,
+                                                         rejected: response.rejected});
                     }).catch(err => {
                         this.isLoading = false;
                         this.error = data;

@@ -29,6 +29,9 @@
         <ll-add-multiple-items toggle.bind="addMultipleItems"></ll-add-multiple-items>
         <ll-dispense-multiple-items toggle.bind="dispenseMultipleItems">
         </ll-dispense-multiple-items>
+        <ui-disappearing-message visible.bind="tempMessage" colour.bind="tempMessageColour"
+                                 title.bind="tempMessageTitle" text.bind="tempMessageText">
+        </ui-disappearing-message>
         <ui-table-header search.bind="query.search" search-options.bind="searchOptions"
                          search-query.bind="query">
             <ui-dropdown-menu class="item"

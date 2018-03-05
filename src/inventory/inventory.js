@@ -18,7 +18,9 @@ export class Inventory {
 
         this.addItem = false;
         this.addMultipleItems = false;
-        this.dispenseMutlipleItems = false;
+        this.dispenseMultipleItems = false;
+
+        this.tempMessage = false;
 
         this.searchOptions = {
             useAdvanced: true,
@@ -73,6 +75,12 @@ export class Inventory {
             }
             if (response.source == 'search') {
                 this.query.search = response.value;
+            }
+            if (response.source == 'importInventory') {
+                this.tempMessage = true;
+                this.tempMessageColour = 'positive';
+                this.tempMessageTitle = 'Import successful';
+                this.tempMessageText = `${response.saved.length} items where added.`;
             }
             this.getInventory();
         });
