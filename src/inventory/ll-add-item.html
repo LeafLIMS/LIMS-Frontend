@@ -14,8 +14,7 @@
                                     value.bind="item.item_type & validate"
                                     store-value="name"
                                     display-value="display_name"
-                                    default-text.bind="item.item_type"
-                                    placeholder="Select input type">
+                                    default-text.bind="item.item_type">
                             </ui-autocomplete>
                         </ui-field>
                     </div>
@@ -29,12 +28,11 @@
                     </div>
                     <div class="ui grid no gutter">
                         <ui-field class="column" label="Location" required>
-                            <ui-dropdown value.bind="item.location & validate">
-                                <ui-item repeat.for="loc of locations.results"
-                                         value.bind="loc.code">
-                                    ${loc.display_name}
-                                </ui-item>
-                            </ui-dropdown>
+                            <ui-autocomplete from="locations"
+                                    value.bind="item.location & validate"
+                                    store-value="code"
+                                    display-value="display_name">
+                            </ui-autocomplete>
                         </ui-field>
                     </div>
                     <div class="ui grid four column wide no gutter">
