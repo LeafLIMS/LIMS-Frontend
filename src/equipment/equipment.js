@@ -26,6 +26,7 @@ export class Equipment {
 
         this.newReservation = false;
         this.showReservation = (event, jsEvent, view) => {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
             this.newReservation = true;
             this.reservation = event;
         }
