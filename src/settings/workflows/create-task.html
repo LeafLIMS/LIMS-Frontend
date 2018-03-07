@@ -86,16 +86,17 @@
         <div class="ui four column wide grid">
             <div class="column">
                 <ui-field label="Input from product not required">
-                    <ui-checkbox checked.bind="item.input_not_required"></ui-checkbox>
+                    <ui-checkbox checked.bind="item.product_input_not_required"></ui-checkbox>
                 </ui-field>
             </div>
             <div class="column">
-                <ui-field label="Amount of input from product" required.bind="!item.input_not_required">
+                <ui-field label="Amount of input from product"
+                          required.bind="!item.product_input_not_required">
                     <input value.bind="item.product_input_amount & validate">
                 </ui-field>
             </div>
             <div class="column">
-                <ui-field label="Input measure" required.bind="!item.input_not_required">
+                <ui-field label="Input measure" required.bind="!item.product_input_not_required">
                     <ui-autocomplete from="measures"
                             value.bind="item.product_input_measure & validate"
                             store-value="symbol"
@@ -106,7 +107,7 @@
                 </ui-field>
             </div>
             <div class="column">
-                <ui-field label="Input type" required.bind="!item.input_not_required">
+                <ui-field label="Input type" required.bind="!item.product_input_not_required">
                     <ui-autocomplete from="itemtypes"
                             value.bind="item.product_input & validate"
                             store-value="name"
@@ -145,7 +146,7 @@
                             output-to.bind="item.input_fields[$index] & validate">
             </ll-input-field>
             <div class="ui basic bottom attached icon button"
-                 click.delegate="removeField($index, 'input', item)">
+                 click.delegate="removeField($index, 'input', field)">
                 <i class="remove icon"></i>
             </div>
         </div>
@@ -160,10 +161,11 @@
     <div class="ui one column wide stackable vertically padded grid">
         <div repeat.for="field of item.step_fields" class="column">
             <ll-step-field field.bind="field"
+                           calculations.bind="calculations"
                            output-to.bind="item.step_fields[$index]">
             </ll-step-field>
             <div class="ui basic bottom attached icon button"
-                 click.delegate="removeField($index, 'step', item)">
+                 click.delegate="removeField($index, 'step', field)">
                 <i class="remove icon"></i>
             </div>
         </div>
@@ -199,7 +201,7 @@
                              output-to.bind="item.output_fields[$index]">
             </ll-output-field>
             <div class="ui basic bottom attached icon button"
-                 click.delegate="removeField($index, 'output', item)">
+                 click.delegate="removeField($index, 'output', field)">
                 <i class="remove icon"></i>
             </div>
         </div>
@@ -218,7 +220,7 @@
                                output-to.bind="item.variable_fields[$index]">
             </ll-variable-field>
             <div class="ui basic bottom attached icon button"
-                 click.delegate="removeField($index, 'variable', item)">
+                 click.delegate="removeField($index, 'variable', field)">
                 <i class="remove icon"></i>
             </div>
         </div>
@@ -236,7 +238,7 @@
                                   output-to.bind="item.calculation_fields[$index]">
             </ll-calculation-field>
             <div class="ui basic bottom attached icon button"
-                 click.delegate="removeField($index, 'calculation', item)">
+                 click.delegate="removeField($index, 'calculation', field)">
                 <i class="remove icon"></i>
             </div>
         </div>

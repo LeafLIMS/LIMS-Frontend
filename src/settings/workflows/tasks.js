@@ -111,9 +111,13 @@ export class Tasks extends SettingsTable {
         ValidationRules
             .ensure('name').required()
             .ensure('product_input_amount').required()
+            .when(elem => !elem.product_input_not_required)
             .ensure('product_input').required()
+            .when(elem => !elem.product_input_not_required)
             .ensure('product_input_measure').required()
+            .when(elem => !elem.product_input_not_required)
             .ensure('labware').required()
+            .when(elem => !elem.labware_not_required)
             .on(this.item);
     }
 
@@ -213,6 +217,25 @@ export class Tasks extends SettingsTable {
         });
     }
 
+    _doUpdate(fields) {
+        // All removed fields are added to the removedFields list. If they have been
+        // added to the DB (e.g. have ID) remove via API.
+        for (let f of this.removedFields) {
+            if (f.id) {
+                fields.push(this.api.deleteTaskField(f.id, f.field_type));
+            }
+        }
+        Promise.all(fields).then(response => {
+            this.isSaving = false;
+            this.removedFields = [];
+            this.getData();
+            this.cancel();
+        }).catch(err => {
+            this.isSaving = false;
+            this.error = err;
+        });
+    }
+
     update() {
         // Divide into new/update fields by ID presence
         // Iterate through removed fields and delete
@@ -220,7 +243,7 @@ export class Tasks extends SettingsTable {
         this.validator.validate().then(results => {
             if (results.valid) {
                 this.api[this.updateFunc](this.item.id, this.item).then(data => {
-                    let fields = [];
+                    let fields;
                     // Need to create calculation fields first
                     // Then take those ID's and assign to calculations list
                     // Use this to assign proper ID's to fields that use calculations
@@ -241,28 +264,15 @@ export class Tasks extends SettingsTable {
                                 calc.id = c.id;
                             }
                             fields = this.createOrUpdateFields(data.id);
+                            this._doUpdate(fields);
                         }).catch(err => {
                             this.isSaving = false;
                             this.error = err;
                         });
                     } else {
                         fields = this.createOrUpdateFields(data.id);
+                        this._doUpdate(fields);
                     }
-                    // All removed fields are added to the removedFields list. If they have been
-                    // added to the DB (e.g. have ID) remove via API.
-                    for (let f of this.removedFields) {
-                        if (f.id) {
-                            fields.push(this.api.deleteTaskField(f.id, f.field_type));
-                        }
-                    }
-                    Promise.all(fields).then(response => {
-                        this.isSaving = false;
-                        this.getData();
-                        this.cancel();
-                    }).catch(err => {
-                        this.isSaving = false;
-                        this.error = err;
-                    });
                 }).catch(err => {
                     this.isSaving = false;
                     this.error = err;

@@ -3,6 +3,7 @@ import { inject, bindable, bindingMode } from 'aurelia-framework';
 @inject(Element)
 export class LlStepFieldCustomElement {
     @bindable field = {};
+    @bindable calculations;
     @bindable({defaultBindingMode: bindingMode.twoWay}) outputTo;
 
     constructor(element) {
