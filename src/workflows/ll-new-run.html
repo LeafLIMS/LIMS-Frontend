@@ -8,12 +8,10 @@
                     <input value.bind="run.name & validate" required>
                 </ui-field>
                 <ui-field label="Workflow" required class="column">
-                    <ui-dropdown value.bind="run.tasks & validate">
-                        <ui-item repeat.for="workflow of workflows.results"
-                                 value.bind="workflow.order">
-                            ${workflow.name}
-                        </ui-item>
-                    </ui-dropdown>
+                    <ui-autocomplete from="workflows"
+                                     store-value="order"
+                                     value.bind="run.tasks & validate">
+                    </ui-autocomplete>
                 </ui-field>
             </div>
             <ll-template-hook name="new-run" source.bind="run"></ll-template-hook>

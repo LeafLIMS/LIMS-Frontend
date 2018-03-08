@@ -30,10 +30,6 @@ export class LlNewRun {
             .ensure('tasks').required()
             .ensure('products').satisfies((v, o) => v.length > 0 ? true : false)
             .on(this.run);
-
-        this.api.workflows({limit: 200}).then(data => {
-            this.workflows = data;
-        });
     }
 
     save() {

@@ -43,6 +43,7 @@ export class StartTask {
 
         ValidationRules
             .ensure('equipment_choice').required()
+            .when(obj => !obj.equipment_choice.length == 0)
             .ensure('labware_identifier').required()
             .when(obj => !obj.labware_not_required)
             .on(this.taskData);
@@ -65,6 +66,7 @@ export class StartTask {
 
     generateTaskData() {
         // Defaults required for submission
+        this.taskData.product_input_not_required = this.task.product_input_not_required;
         this.taskData.product_input = this.task.product_input;
         this.taskData.product_input_measure = this.task.product_input_measure;
         this.taskData.product_input_amount = this.task.product_input_amount;

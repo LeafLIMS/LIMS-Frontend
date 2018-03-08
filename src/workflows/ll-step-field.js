@@ -14,6 +14,7 @@ export class LlStepFieldCustomElement {
             this.outputTo.label = this.field.label;
             this.outputTo.description = this.field.description;
             this.outputTo.properties = this.field.properties;
+            this.outputTo.measure_not_required = this.field.measure_not_required;
         }
     }
 }

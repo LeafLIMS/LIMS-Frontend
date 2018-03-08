@@ -4,7 +4,7 @@
     <div class="ui four column wide grid" if.bind="field.properties.length > 0">
         <div class="column" repeat.for="prop of field.properties">
             <p>${prop.label}</p>
-            <div class="ui fluid right labeled input
+            <div class="ui fluid ${!prop.measure_not_required ? 'right labeled' : ''} input
                         ${prop.from_calculation ? 'disabled left icon' : ''}">
                 <i if.bind="prop.from_calculation" class="icon calculator"></i>
                 <input value.bind="outputTo.properties[$index].amount"

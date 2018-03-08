@@ -17,9 +17,12 @@
             Setup
         </div>
         <div show.bind="setup" class="ui attached ${isLoading ? 'loading' : ''} segment">
-            <h4 class="ui dividing header">Equipment</h4>
-            <div class="ui teal segment">
-                <div class="ui two column wide stackable grid">
+            <h4 class="ui dividing header"
+                if.bind="task.equipment_choice.length && !task.labware_not_required">Equipment</h4>
+            <div class="ui teal segment"
+                 if.bind="task.equipment_choice.length && !task.labware_not_required">
+                <div class="ui two column wide stackable grid"
+                     if.bind="task.equipment_choice.length">
                     <div class="six wide column">
                         <ui-field label="Equipment to use" required>
                             <ui-dropdown value.bind="taskData.equipment_choice & validate"
@@ -57,8 +60,9 @@
                     </div>
                 </div>
             </div>
-            <h4 class="ui dividing header" if.bind="task.input_fields.length">Inputs</h4>
-            <div class="ui blue segment">
+            <h4 class="ui dividing header"
+                if.bind="task.input_fields.length && task.product_input">Inputs</h4>
+            <div class="ui blue segment" if.bind="task.product_input">
                 <h5 class="ui header required">Input from product</h5>
                 <div class="ui right labeled fluid input">
                     <input type="number" value.bind="taskData.product_input_amount & validate">

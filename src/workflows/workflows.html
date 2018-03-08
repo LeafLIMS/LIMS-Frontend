@@ -76,10 +76,17 @@
                                         <span class="detail">${item.item_type}</span>
                                     </a>
                                     <div class="ui active mini warning icon message"
-                                         if.bind="row.linked_inventory|excludeType:run.tasks_list[run.current_task].valid_product_input_types|isLength:'0'">
+                                         if.bind="row.linked_inventory|excludeType:run.tasks_list[run.current_task].valid_product_input_types|isLength:'0' && run.tasks_list[run.current_task].product_input_not_required">
                                         <i class="warning icon"></i>
                                         <div class="content">
                                             <div class="header">No valid inputs available</div>
+                                        </div>
+                                    </div>
+                                    <div class="ui active mini info icon message"
+                                         if.bind="run.tasks_list[run.current_task].product_input_not_required">
+                                        <i class="info icon"></i>
+                                        <div class="content">
+                                            <div class="header">No inputs required for task</div>
                                         </div>
                                     </div>
                                 </td>
