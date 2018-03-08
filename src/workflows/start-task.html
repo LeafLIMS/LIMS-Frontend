@@ -18,11 +18,11 @@
         </div>
         <div show.bind="setup" class="ui attached ${isLoading ? 'loading' : ''} segment">
             <h4 class="ui dividing header"
-                if.bind="task.equipment_choice.length && !task.labware_not_required">Equipment</h4>
+                if.bind="task.capable_equipment.length || !task.labware_not_required">Equipment</h4>
             <div class="ui teal segment"
-                 if.bind="task.equipment_choice.length && !task.labware_not_required">
+                 if.bind="task.capable_equipment.length || !task.labware_not_required">
                 <div class="ui two column wide stackable grid"
-                     if.bind="task.equipment_choice.length">
+                     if.bind="task.capable_equipment.length">
                     <div class="six wide column">
                         <ui-field label="Equipment to use" required>
                             <ui-dropdown value.bind="taskData.equipment_choice & validate"

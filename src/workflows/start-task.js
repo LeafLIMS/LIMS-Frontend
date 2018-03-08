@@ -40,13 +40,6 @@ export class StartTask {
                                     .ensure('calculation').required()
                                     .rules,
         }
-
-        ValidationRules
-            .ensure('equipment_choice').required()
-            .when(obj => !obj.equipment_choice.length == 0)
-            .ensure('labware_identifier').required()
-            .when(obj => !obj.labware_not_required)
-            .on(this.taskData);
     }
 
     activate(params, routeMap) {
@@ -60,6 +53,12 @@ export class StartTask {
                 this.isLoading = false;
                 this.task = data;
                 this.generateTaskData();
+                ValidationRules
+                    .ensure('equipment_choice').required()
+                    .when(obj => this.task.capable_equipment.length > 0)
+                    .ensure('labware_identifier').required()
+                    .when(obj => !obj.labware_not_required)
+                    .on(this.taskData);
             });
         });
     }
