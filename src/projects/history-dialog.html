@@ -7,6 +7,9 @@
                     <div class="four wide column">
                         <h4 class="ui dividing header">Inputs</h4>
                         <div class="ui blue labels">
+                            <div if.bind="data.data.product_input_amounts.length == 0">
+                                <i>No inputs for this task</i>
+                            </div>
                             <div class="ui label"
                                  repeat.for="input of data.data.product_input_amounts">
                                 ${input.name}
@@ -26,31 +29,49 @@
                                  if.bind="step.properties.length > 0">
                                 <div class="column" repeat.for="prop of step.properties">
                                     <p>${prop.label}</p>
-                                    <div class="ui fluid right labeled input read only">
+                                    <div class="ui fluid
+                                                ${!prop.measure_not_required ? 'right labeled' : ''}
+                                                input read only">
                                         <input value.bind="prop.amount" disabled>
-                                        <div class="ui label">${prop.measure}</div>
+                                        <div class="ui label" if.bind="!prop.measure_not_required">
+                                            ${prop.measure}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <h4 class="ui dividing header">Variables</h4>
-                        <div repeat.for="variable of data.data.variable_fields">
-                            <p>${variable.label}</p>
-                            <div class="ui fluid right labeled input read only">
-                                <input value.bind="variable.amount" disabled>
-                                <div class="ui label">${variable.measure}</div>
+                        <h4 class="ui dividing header"
+                            if.bind="data.data.variable_fields.length > 0">Variables</h4>
+                        <div class="ui grid">
+                            <div repeat.for="variable of data.data.variable_fields"
+                                 class="row">
+                                <div class="eight wide column">${variable.label}</div>
+                                <div class="eight wide column">
+                                    <div class="ui fluid
+                                                ${!variable.measure_not_required ? 'right labeled' : ''}
+                                                input read only">
+                                        <input value.bind="variable.amount" disabled>
+                                        <div class="ui label"
+                                             if.bind="!variable.measure_not_required">
+                                            ${variable.measure}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <h4 class="ui dividing header">Calculations</h4>
-                        <div repeat.for="calculation of data.data.calculation_fields">
-                            <p>${calculation.label}</p>
-                            <pre class="ui segment">
+                        <h4 class="ui dividing header"
+                            if.bind="data.data.calculation_fields.length > 0">Calculations</h4>
+                        <div class="ui brown segment"
+                             repeat.for="calculation of data.data.calculation_fields">
+                            <h5 class="ui header">${calculation.label}</h5>
+                            <pre>
                                 ${calculation.calculation}
                             </pre>
                         </div>
                     </div>
                     <div class="four wide column">
                         <h4 class="ui dividing header">Outputs</h4>
+                        <div if.bind="data.data.output_fields.length == 0">
+                            <i>No outputs for this task</i>
+                        </div>
                         <div class="ui orange labels">
                             <div class="ui label"
                                  repeat.for="output of data.data.output_fields">
