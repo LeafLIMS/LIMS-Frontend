@@ -40,6 +40,20 @@ export class Dashboard {
             this.product_statuses = this.makeDataset('status__name', data);
         });
 
+        this.api.stats('projects', 'deadline_status').then(data => {
+            this.deadlines = this.makeDataset('deadline_status', data);
+        });
+
+        this.projectApi.projects({limit: 50, ordering: 'deadline_status',
+                                  'deadline_status': 'Past'}).then(data => {
+            this.past_deadlines = data;
+        });
+
+        this.projectApi.projects({limit: 50, ordering: 'deadline_status',
+                                  'deadline_status': 'Warn'}).then(data => {
+            this.warn_deadlines = data;
+        });
+
         this.equipmentApi.equipment({status: 'error'}).then(data => {
             this.equipment_count = data.meta.count;
         });

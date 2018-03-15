@@ -75,7 +75,6 @@ export class ProjectDetail {
 
     getProducts() {
         this.api.productsForProject(this.project.id, this.query).then(data => {
-            console.log('GET PRODUCT FOR PROJECT', this.project.id);
             // Set toggled to false to allow for hide/show behaviour
             data.results = data.results.map(x => { x.toggled = false; return x });
             this.products = data;
@@ -88,6 +87,7 @@ export class ProjectDetail {
             this.statuses = data;
         });
     }
+
 
     save() {
         this.validator.validate().then(results => {

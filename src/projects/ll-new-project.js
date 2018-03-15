@@ -30,6 +30,11 @@ export class LlNewProject {
 
         this.project = {};
 
+        this.config = {
+            type: 'date',
+            today: true,
+        }
+
         ValidationRules
             .ensure('name').required()
             .ensure('status').required()
@@ -38,10 +43,6 @@ export class LlNewProject {
 
         this.api.projectStatuses().then(data => {
             this.statuses = data;
-        });
-
-        this.userApi.users().then(data => {
-            this.labContacts = data.results;
         });
 
         this.be.propertyObserver(this, 'crm_project').subscribe((n, o) => {

@@ -7,6 +7,7 @@
     <require from="../crm/ll-crm"></require>
     <require from="../components/shared/show-row"></require>
     <require from="../shared/string-truncate"></require>
+    <require from="./ll-deadline"></require>
     <h2>
         <a class="dim" route-href="route: project">Project</a>
         <span class="highlight">${project.project_identifier}:</span> ${project.name}</h2>
@@ -88,6 +89,12 @@
             </ui-table-pagination>
         </div>
         <div class="five wide column">
+            <ll-deadline project-id.bind="project.id"
+                         deadline.bind="project.deadline"
+                         extensions.bind="project.deadline_extensions"
+                         inactive.bind="project.archive"
+                         warn.bind="project.warn_deadline"
+                         past.bind="project.past_deadline"></ll-deadline>
             <form class="ui form clearing segment" novalidate submit.delegate="save()">
                 <p><b>Date started:</b> ${project.date_started|dateFormat}</p>
                 <ui-field label="Name" required>

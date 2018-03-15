@@ -37,9 +37,10 @@
                         <th sort-by="identifier">Identifier</th>
                         <th sort-by="name">Name</th>
                         <th>Description</th>
-                        <th>Status</th>
+                        <th sort-by="status__name">Status</th>
                         <th>Project account</th>
                         <th>Lab contact</th>
+                        <th sort-by="deadline">Deadline</th>
                         <th sort-by="archived">Archived</th>
                     </tr>
                 </thead>
@@ -58,6 +59,10 @@
                             ${row.crm_project.account.account_name}<br>
                         </td>
                         <td>${row.primary_lab_contact}</td>
+                        <td>
+                            <span class="${row.warn_deadline && !row.past_deadline ? 'ui orange message' : ''}
+                                         ${row.past_deadline ? 'ui red message' : ''}">
+                                ${row.deadline|dateFormat:"DD/MM/YY"}</span></td>
                         <td><ui-boolean source.bind="row.archive"></ui-boolean></td>
                     </tr>
                 </tbody>

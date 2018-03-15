@@ -1,0 +1,42 @@
+<template>
+    <div class="ui visible
+                ${warn && !past ? 'orange' : ''}
+                ${past ? 'red' : ''}
+                message">
+        <div if.bind="deadline && !inactive">
+            <b>Deadline:</b> ${deadline|dateFormat:"DD/MM/YY"}
+            <span if.bind="!deadlinePassed">(${daysToDeadline} days remaning)</span>
+            <span if.bind="deadlinePassed">(${daysToDeadline} days overdue)</span>
+            <i class="calendar plus link right floated icon" click.delegate="edit = true"></i>
+            <div class="ui list" repeat.for="e of extensions">
+                <b>Previous deadline:</b> ${e.previous_deadline|dateFormat:"DD/MM/YY"}
+                extended by ${e.extended_by} on ${e.extended_on|dateFormat:"DD/MM/YY"}<br>
+                <b>Reason:</b> ${e.reason}
+            </div>
+        </div>
+        <form submit.delegate="setDeadline()"
+              if.bind="(!deadline && !inactive) || edit" class="ui form">
+            <div class="ui two column wide vertically padded grid">
+                <div class="column">
+                    <ui-field label="Deadline" required class="column">
+                        <ui-datetime value.bind="deadline"
+                                     config.bind="config"></ui-datetime>
+                    </ui-field>
+                </div>
+                <div class="column">
+                    <ui-field label="Days to warn before deadline">
+                        <input value.bind="deadlineWarn"
+                               placeholder="7">
+                    </ui-field>
+                </div>
+            </div>
+            <ui-field label="Reason for extension" if.bind="edit" required>
+                <textarea value.bind="reason" rows="3"></textarea>
+            </ui-field>
+            <div class="ui horizontal divider"></div>
+            <button class="ui primary button" type="submit">
+                Save
+            </button>
+        </form>
+    </div>
+</template>

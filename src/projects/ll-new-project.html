@@ -33,6 +33,21 @@
                                 default-text.bind="project.primary_lab_contact">
                         </ui-autocomplete>
                     </ui-field>
+                    <div class="ui two column wide vertically padded grid">
+                        <div class="column">
+                            <ui-field label="Deadline" required class="column">
+                                <ui-datetime value.bind="project.deadline"
+                                             name="from_date"
+                                             config.bind="config"></ui-datetime>
+                            </ui-field>
+                        </div>
+                        <div class="column">
+                            <ui-field label="Days to warn before deadline">
+                                <input value.bind="project.deadline_warn"
+                                       placeholder="7">
+                            </ui-field>
+                        </div>
+                    </div>
                     <ll-template-hook name="create-project" source.bind="project">
                     </ll-template-hook>
                 </div>

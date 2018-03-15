@@ -28,6 +28,11 @@ export class ProjectApi {
         return this.endpoint.destroyOne('projects/', id);
     }
 
+    updateDeadline(id, data) {
+        let endpoint = `projects/${id}/update_deadline/`;
+        return this.endpoint.patch(endpoint, null, data);
+    }
+
     productsForProject(id, params) {
         params.project = id;
         return this.endpoint.find('products/', params);
