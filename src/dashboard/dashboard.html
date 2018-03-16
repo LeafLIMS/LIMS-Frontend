@@ -1,5 +1,6 @@
 <template>
     <require from="../components/shared/chart"></require>
+    <require from="./deadline-format"></require>
     <h1>Dashboard</h1>
     <div class="ui inverted primary segment">
         <div class="ui four huge inverted statistics">
@@ -87,7 +88,8 @@
                     <i class="clock icon"></i>
                     <div class="content">
                         <span class="header">${item.name}</span>
-                        Due ${item.deadline|dateFormat:"DD/MM/YY"}
+                        Due <b>${item.deadline|dateFormat:"DD/MM/YY"}</b>
+                        ${item.deadline|deadlineFormat}
                     </div>
                 </a>
                 <a repeat.for="item of warn_deadlines.results"
@@ -96,7 +98,8 @@
                     <i class="clock icon"></i>
                     <div class="content">
                         <span class="header">${item.name}</span>
-                        Due ${item.deadline|dateFormat:"DD/MM/YY"}
+                        Due <b>${item.deadline|dateFormat:"DD/MM/YY"}</b>
+                        ${item.deadline|deadlineFormat}
                     </div>
                 </a>
             </div>

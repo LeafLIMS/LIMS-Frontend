@@ -6,6 +6,8 @@ import moment from 'moment';
 export class LlDeadline {
     @bindable projectId;
     @bindable deadline;
+    @bindable deadlineStatus;
+    @bindable deadlineWarn;
     @bindable extensions;
     @bindable inactive;
     @bindable warn;
@@ -35,7 +37,19 @@ export class LlDeadline {
     }
 
     setDeadline() {
-        if (this.deadline && this.reason) {
+        if (this.deadline && !this.deadlineStatus) {
+            let data = {
+                deadline: this.deadline
+            }
+            if (this.deadlineWarn) {
+                data.deadline_warn = this.deadlineWarn;
+            }
+            this.api.updateProject(this.projectId, data).then(result => {
+                this.deadlineStatus = result.deadline_status;
+                this.warn = result.warn_deadline;
+                this.past = result.past_deadline;
+            });
+        } else if (this.deadline && this.reason && this.deadlineStatus) {
             let data = {
                 deadline: this.deadline,
                 reason: this.reason,
@@ -43,17 +57,13 @@ export class LlDeadline {
             if (this.deadlineWarn) {
                 data.deadline_warn = this.deadlineWarn;
             }
-            let extData = {
-                reason: this.reason,
-                deadline: this.deadline,
-            }
-            this.api.updateDeadline(this.projectId, extData).then(result => {
+            this.api.updateDeadline(this.projectId, data).then(result => {
                 this.edit = false;
                 this.reason = '';
                 this.warn = result.warn_deadline;
                 this.past = result.past_deadline;
-                this.deadlineChanged(this.deadline);
                 this.extensions = result.deadline_extensions;
+                this.deadlineChanged(this.deadline);
             });
         }
     }

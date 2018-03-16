@@ -15,7 +15,7 @@
             </div>
         </div>
         <form submit.delegate="setDeadline()"
-              if.bind="(!deadline && !inactive) || edit" class="ui form">
+              if.bind="!deadlineStatus || edit" class="ui form">
             <div class="ui two column wide vertically padded grid">
                 <div class="column">
                     <ui-field label="Deadline" required class="column">
@@ -36,6 +36,11 @@
             <div class="ui horizontal divider"></div>
             <button class="ui primary button" type="submit">
                 Save
+            </button>
+            <button class="ui basic right floated button"
+                    if.bind="edit"
+                    click.delegate="edit = false">
+                Cancel
             </button>
         </form>
     </div>
