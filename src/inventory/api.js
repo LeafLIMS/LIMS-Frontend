@@ -36,6 +36,30 @@ export class InventoryApi {
         return this.endpoint.destroyOne('inventory/', id);
     }
 
+    exportItems(fileTemplate, selected, queryValues) {
+        // Create path from queryValues
+        // Don't use: page, limit, ordering
+        let path = 'inventory/export_items/';
+        let ignore = ['page', 'limit', 'ordering'];
+        if (queryValues) {
+            path += '?'
+            for (let q in queryValues) {
+                if (ignore.indexOf(q) == -1 && queryValues[q]) {
+                    path += `&${q}=${queryValues[q]}`;
+                }
+            }
+        }
+        let data = {
+            filetemplate: fileTemplate,
+        }
+        if (selected) {
+            data.selected = selected
+        }
+        console.log(path);
+        console.log(data);
+        return this.endpoint.post(path, data);
+    }
+
     createMultipleItems(data) {
         let path = 'inventory/importitems/';
         return this.endpoint.client.fetch(path, {

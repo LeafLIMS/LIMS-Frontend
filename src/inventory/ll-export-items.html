@@ -1,0 +1,23 @@
+<template>
+    <form class="ui form attached clearing segment slide-down au-animate" if.bind="toggle"
+          submit.delegate="save()" novalidate>
+        <h3>Export ${count} items</h3>
+        <ui-field class="column" label="File template" required>
+            <ui-autocomplete from="filetemplates"
+                    value.bind="exportData.filetemplate & validate"
+                    search-params.bind="{file_for: 'output'}">
+            </ui-autocomplete>
+        </ui-field>
+        <div class="ui message" if.bind="error">
+            <ui-error-message error-source.bind="error"></ui-error-message>
+        </div>
+        <div class="ui divider"></div>
+        <div class="right floated">
+            <button class="ui basic button" click.delegate="cancel()">Cancel</button>
+            <button class="ui basic primary ${generatingFile ? 'loading' : ''} button"
+                    type="submit">Generate file</button>
+            <a class="ui basic green button" if.bind="download"
+                    href.bind="fileUrl">Download</a>
+        </div>
+    </form>
+</template>

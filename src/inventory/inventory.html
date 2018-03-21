@@ -2,6 +2,7 @@
     <require from="./ll-add-item"></require>
     <require from="./ll-add-multiple-items"></require>
     <require from="./ll-dispense-multiple-items"></require>
+    <require from="./ll-export-items"></require>
     <require from="../components/shared/show-row"></require>
     <div class="au-animate page">
         <h2>Inventory</h2>
@@ -42,12 +43,19 @@
             </ui-dropdown-menu>
             <ui-dropdown-menu class="item"
                          icon="ellipsis vertical">
+                <ui-dropdown-menu-item click.delegate="exportItems = true" icon="file">
+                    Export Items
+                </ui-dropdown-menu-item>
+                <div class="ui divider"></div>
                 <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
                                        click.delegate="deleteItems()" icon="erase">
                     Delete selected
                 </ui-dropdown-menu-item>
             </ui-dropdown-menu>
         </ui-table-header>
+        <ll-export-items toggle.bind="exportItems" query-data="query"
+                         selected.bind="selected" search-count.bind="inventory.meta.count">
+        </ll-export-items>
         <div class="ui attached very padded loading segment" if.bind="isLoading"></div>
         <ui-table-wrapper if.bind="!isLoading">
             <table ui-table>

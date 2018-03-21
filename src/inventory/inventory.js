@@ -60,6 +60,8 @@ export class Inventory {
             ordering: 'barcode'
         }
 
+        this.exportItems = false;
+
         this.isLoading = true;
         this.isLoadingTransfers = true;
 
@@ -140,6 +142,20 @@ export class Inventory {
                 });
             }
         });
+    }
+
+    exportSelectedItems() {
+    }
+
+    exportItems() {
+        /*
+        let message = 'Export search results';
+        this.dialog.open({viewModel: Prompt, model: message}).whenClosed(response => {
+            if (!response.wasCancelled) {
+                console.log('ok');
+            }
+        });
+        */
     }
 
 }
