@@ -5,7 +5,7 @@
         <div class="ui attached segment">
             <div class="ui two column wide stackable grid">
                 <div class="column ten wide">
-                    <div class="ui grid two column wide no gutter">
+                    <div class="ui stackable grid two column wide no gutter">
                         <ui-field class="column" label="Name" required>
                             <input value.bind="item.name & validate" required>
                         </ui-field>
@@ -18,7 +18,7 @@
                             </ui-autocomplete>
                         </ui-field>
                     </div>
-                    <div class="ui grid two column wide no gutter">
+                    <div class="ui stackable grid two column wide no gutter">
                         <ui-field class="column" label="Identifier">
                             <input value.bind="item.identifier">
                         </ui-field>
@@ -26,7 +26,7 @@
                             <input value.bind="item.barcode">
                         </ui-field>
                     </div>
-                    <div class="ui grid no gutter">
+                    <div class="ui stackable grid no gutter">
                         <ui-field class="column" label="Location" required>
                             <ui-autocomplete from="locations"
                                     value.bind="item.location & validate"
@@ -35,7 +35,7 @@
                             </ui-autocomplete>
                         </ui-field>
                     </div>
-                    <div class="ui grid four column wide no gutter">
+                    <div class="ui stackable grid four column wide no gutter">
                         <ui-field class="column" label="Amount" required>
                             <input name="amount_available"
                                    value.bind="item.amount_available & validate"
@@ -72,7 +72,7 @@
                     <ll-template-hook name="create-inventory-item" source.bind="item">
                     </ll-template-hook>
                     <div class="ui horizontal divider header">Properties</div>
-                    <div class="ui two column wide grid" repeat.for="p of item.properties">
+                    <div class="ui two column wide stackable grid" repeat.for="p of item.properties">
                         <ui-field class="column" label="Name">
                             <input name="prop_${index}" value.bind="p.name & validate">
                         </ui-field>

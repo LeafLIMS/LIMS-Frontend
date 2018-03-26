@@ -12,17 +12,23 @@
                 <table ui-table>
                     <thead>
                         <tr>
+                            <th></th>
                             <th sort-by="identifier">Identifier</th>
                             <th sort-by="barcode">Barcode</th>
                             <th sort-by="name">Name</th>
                             <th sort-by="item_type__name">Type</th>
                             <th>Amount available</th>
                             <th sort-by="location">Location</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr repeat.for="row of items.results">
+                            <td>
+                                <button class="ui circular icon button"
+                                        click.delegate="addItem(row)">
+                                    <i class="add icon"></i>
+                                </button>
+                            </td>
                             <td>${row.identifier}</td>
                             <td>${row.barcode}</td>
                             <td>${row.name}</td>
@@ -35,18 +41,12 @@
                                 </i>
                             </td>
                             <td>${row.location_path}</td>
-                            <td>
-                                <button class="ui circular icon button"
-                                        click.delegate="addItem(row)">
-                                    <i class="add icon"></i>
-                                </button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
             </ui-table-wrapper>
             <h4 class="section-header">Items to dispense</h4>
-            <div class="ui five column wide padded grid">
+            <div class="ui five column wide padded stackable grid">
                 <div class="row" repeat.for="item of dispense">
                     <div class="column"><b>${item.name}</b></div>
                     <div class="column">
