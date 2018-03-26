@@ -277,6 +277,25 @@ ui-field[required] label:after, ui-field.required label:after, .required:not(ui-
     color: orange !important;
 }
 
+// Stacking elements
+@media (max-width: 768px) {
+    .ui.horizontal.stacking.segments {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        margin: 1rem 0;
+        border: 1px solid rgba(34,36,38,.15);
+        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+        border-radius: .28571429rem;
+    }
+
+    .ui.stacking.statistics .statistic {
+        min-width: 100%;
+    }
+}
+
 // Charts
 .chart {
     display: block;

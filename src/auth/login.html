@@ -1,6 +1,7 @@
 <template>
-    <div class="ui three column full height centered grid">
-        <form class="ui form column" submit.delegate="login()">
+    <div class="ui full height centered grid">
+        <form class="ui form sixteen wide mobile five wide computer column"
+              submit.delegate="login()">
             <img src="img/leaflims-logo.svg" class="responsive width">
             <div class="ui top attached inverted primary header">Login</div>
             <div class="ui attached visible error message" if.bind="error">

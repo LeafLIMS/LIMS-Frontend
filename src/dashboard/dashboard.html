@@ -3,7 +3,7 @@
     <require from="./deadline-format"></require>
     <h1>Dashboard</h1>
     <div class="ui inverted primary segment">
-        <div class="ui four huge inverted statistics">
+        <div class="ui four huge inverted stacking statistics">
             <div class="statistic">
                 <div class="value">${project_count}</div>
                 <div class="label">Active projects</div>
@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="ui horizontal equal segments">
+    <div class="ui horizontal equal stacking segments">
         <div class="ui segment">
             <h3 class="ui primary header">Latest projects</h3>
             <div class="ui relaxed selection list">
@@ -69,7 +69,7 @@
             </a>
         </div>
     </div>
-    <div class="ui horizontal equal segments">
+    <div class="ui horizontal equal stacking segments">
         <div class="ui segment">
             <h3>Project statuses</h3>
             <chart data.bind="project_statuses"></chart>
