@@ -3,7 +3,7 @@
           submit.delegate="save()" novalidate>
         <h3 class="ui top attached inverted primary header">New Reservation</h3>
         <div class="ui attached segment">
-            <div class="ui two column wide grid">
+            <div class="ui two column wide stackable grid">
                 <ui-field label="Equipment to reserve" required class="sixteen wide column">
                     <ui-dropdown value.bind="source.equipment_reserved & validate">
                         <ui-item value=""></ui-item>
@@ -14,7 +14,7 @@
                 </ui-field>
                 <div class="column">
                     <h4 class="section-header">Book from</h4>
-                    <div class="ui three column wide grid">
+                    <div class="ui three column wide stackable grid">
                         <ui-field label="Date" required class="column">
                             <ui-datetime value.bind="source.from_date & validate"
                                          name="from_date"
@@ -43,7 +43,7 @@
                 </div>
                 <div class="column">
                     <h4 class="section-header">Book to</h4>
-                    <div class="ui three column wide grid">
+                    <div class="ui three column wide stackable grid">
                         <ui-field label="Date" required class="column">
                             <ui-datetime value.bind="source.to_date & validate"
                                          name="to_date"

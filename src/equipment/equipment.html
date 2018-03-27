@@ -64,8 +64,8 @@
             </div>
         </div>
         <div class="ui segment">
-            <div class="ui six column wide padded grid">
-                <div class="column" repeat.for="e of events">
+            <div class="ui padded grid">
+                <div class="eight wide mobile four wide computer column" repeat.for="e of events">
                     <span class="ui empty circular label" style="background: ${e.color}"></span>
                     ${ e.equipmentName }
                 </div>

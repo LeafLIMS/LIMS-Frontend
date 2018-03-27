@@ -58,10 +58,19 @@ export class CalendarCustomElement {
             defaultView: this.view || 'month',
             weekends: true,
             firstDay: 1,
-            //dayClick: (date, jsEvent, view) => this.dayClick(date, jsEvent, view),
-            //eventClick: event => this.eventClick(event),
-            //events: eventSource,
             eventSources: this.events,
+            viewRender: (view, element) => {
+                let windowSize = $(window).width();
+                if (windowSize <= 768) {
+                    this.calendar.fullCalendar('changeView', 'listWeek');
+                }
+            },
+            windowResize: view => {
+                let windowSize = $(window).width();
+                if (windowSize <= 768) {
+                    this.calendar.fullCalendar('changeView', 'listWeek');
+                }
+            }
         }
 
         this.calendar.fullCalendar(Object.assign(defaultValues, this.options));
