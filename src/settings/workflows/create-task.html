@@ -20,7 +20,7 @@
     <ll-permissions object="tasks" object-for.bind="item" reset.bind="toggle"></ll-permissions>
     <h4 class="ui dividing header">Equipment and labware</h4>
     <div class="ui teal segment">
-        <div class="ui two column wide grid">
+        <div class="ui two column wide stackable grid">
             <div class="column">
                 <ui-field label="Capable equipment">
                     <ui-autocomplete value.bind="item.capable_equipment_source & validate"
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="ui teal segment">
-        <div class="ui three column wide grid">
+        <div class="ui three column wide stackable grid">
             <div class="four wide column">
                 <ui-field label="Labware not required">
                     <ui-checkbox checked.bind="item.labware_not_required"></ui-checkbox>
@@ -83,7 +83,7 @@
     </div>
     <h4 class="ui dividing header">Inputs</h4>
     <div class="ui blue segment">
-        <div class="ui four column wide grid">
+        <div class="ui four column wide stackable grid">
             <div class="column">
                 <ui-field label="Input from product not required">
                     <ui-checkbox checked.bind="item.product_input_not_required"></ui-checkbox>

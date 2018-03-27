@@ -1,5 +1,5 @@
 <template>
-    <div class="ui two column wide grid">
+    <div class="ui two column wide stackable grid">
         <ui-field label="Name" required class="sixteen wide column">
             <input value.bind="item.name & validate">
         </ui-field>
@@ -25,7 +25,7 @@
         <textarea value.bind="item.email_template & validate"></textarea>
     </ui-field>
     <h4>Triggers</h4>
-    <div repeat.for="t of item.triggers" class="ui four column grid">
+    <div repeat.for="t of item.triggers" class="ui four column stackable grid">
         <div class="fifteen wide column">
             <ui-field label="Trigger when object created">
                 <ui-checkbox checked.bind="t.fire_on_create & validate"></ui-checkbox>
@@ -57,7 +57,7 @@
     <button class="ui basic button" click.delegate="addTrigger()"
             if.bind="item.model">Add trigger</button>
     <h4>Subscriptions</h4>
-    <div repeat.for="s of item.subscriptions" class="ui three column grid">
+    <div repeat.for="s of item.subscriptions" class="ui three column stackable grid">
         <ui-field label="User" required class="eight wide column">
             <ui-autocomplete value.bind="s.user & validate"
                              from="users"

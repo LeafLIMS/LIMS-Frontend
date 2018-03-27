@@ -5,7 +5,7 @@
     <ui-field label="Description">
         <textarea rows="3" value.bind="field.description & validate"></textarea>
     </ui-field>
-    <div class="ui four column wide vertically padded grid">
+    <div class="ui four column wide vertically padded stackable grid">
         <div class="column" repeat.for="prop of field.properties">
             <div class="ui top attached segment">
                 <ui-field label="Property label" required>
@@ -25,7 +25,7 @@
                 <ui-field label="Measure not required">
                     <ui-checkbox checked.bind="prop.measure_not_required"></ui-checkbox>
                 </ui-field>
-                <div class="ui two column wide grid">
+                <div class="ui two column wide stackable grid">
                     <div class="column">
                         <ui-field label="Property amount" required.bind="!prop.from_calculation">
                             <input value.bind="prop.amount & validate">
