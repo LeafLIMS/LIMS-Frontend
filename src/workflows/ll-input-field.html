@@ -1,6 +1,6 @@
 <template class="ui blue segment custom">
     <h5 class="ui header required">${field.label}</h5>
-    <div class="ui two column wide grid">
+    <div class="ui two column wide stackable padded grid">
         <div class="column">
             <div class="ui right labeled fluid input
                         ${field.from_calculation ? 'disabled left icon' : ''}">
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div class="ui two column wide grid">
+    <div class="ui two column wide stackable padded grid">
         <div class="column">
             <input placeholder="Barcode (optional)" value.bind="outputTo.destination_barcode">
         </div>

@@ -1,7 +1,7 @@
 <template class="ui violet segment custom step field">
     <h5 class="ui header">${field.label}</h5>
     <p class="maintain-breaks">${field.description}</p>
-    <div class="ui four column wide grid" if.bind="field.properties.length > 0">
+    <div class="ui four column wide stackable grid" if.bind="field.properties.length > 0">
         <div class="column" repeat.for="prop of field.properties">
             <p>${prop.label}</p>
             <div class="ui fluid ${!prop.measure_not_required ? 'right labeled' : ''} input

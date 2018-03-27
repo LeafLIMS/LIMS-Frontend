@@ -295,9 +295,20 @@ ui-field[required] label:after, ui-field.required label:after, .required:not(ui-
         min-width: 100%;
     }
 
-    .ui.stackable.grid .wide.column {
+    .ui.stackable.grid .wide.column, .ui.stackable.grid > .column:not(.row) {
         padding-left: 0 !important;
         padding-right: 0 !important;
+    }
+
+    .ui.stackable.grid.padded .column {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    // Tweak to add back padding for run info
+    .ui.stackable.grid .wide.column.run-info {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }
 }
 

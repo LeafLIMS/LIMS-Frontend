@@ -3,7 +3,7 @@
           submit.delegate="save()" novalidate>
         <h3 class="ui top attached inverted primary header">New Run</h3>
         <div class="ui attached segment">
-            <div class="ui two column wide grid">
+            <div class="ui two column wide stackable grid">
                 <ui-field label="Name" required class="column">
                     <input value.bind="run.name & validate" required>
                 </ui-field>
@@ -15,7 +15,7 @@
                 </ui-field>
             </div>
             <ll-template-hook name="new-run" source.bind="run"></ll-template-hook>
-            <div class="ui two column wide grid">
+            <div class="ui two column wide stackable padded grid">
                 <div class="ten wide column">
                     <div class="ui horizontal divider">Select products</div>
                     <ui-picker selected.bind="run.products"

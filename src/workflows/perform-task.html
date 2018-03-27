@@ -19,7 +19,7 @@
                 </ui-dropdown>
             </ui-field>
             <p></p>
-            <div class="ui grid">
+            <div class="ui stackable grid">
                 <div class="four wide column">
                     <h4 class="ui dividing header">Inputs</h4>
                     <div if.bind="currentData.product_input_amounts.length == 0">
@@ -41,7 +41,7 @@
                          repeat.for="step of currentData.step_fields">
                         <h5 class="ui header">${step.label}</h5>
                         <p class="maintain-breaks">${step.description}</p>
-                        <div class="ui four column wide grid"
+                        <div class="ui four column wide stackable padded grid"
                              if.bind="step.properties.length > 0">
                             <div class="column" repeat.for="prop of step.properties">
                                 <p>${prop.label}</p>

@@ -35,13 +35,13 @@
                         </ui-field>
                     </div>
                     <div class="ten wide column" if.bind="!task.labware_not_required">
-                        <div class="ui three column wide grid">
-                            <div class="four wide column">
+                        <div class="ui three column wide stackable padded grid">
+                            <div class="four wide padded column">
                                 <ui-field label="Labware amount" required>
                                     <input value.bind="taskData.labware_amount & validate">
                                 </ui-field>
                             </div>
-                            <div class="six wide column">
+                            <div class="six wide padded column">
                                 <ui-field label="Labware to use" required>
                                     <ui-autocomplete from="inventory"
                                             value.bind="taskData.labware_identifier & validate"
@@ -51,7 +51,7 @@
                                     </ui-autocomplete>
                                 </ui-field>
                             </div>
-                            <div class="six wide column">
+                            <div class="six wide padded column">
                                 <ui-field label="Labware barcode">
                                     <input value.bind="taskData.labware_barcode">
                                 </ui-field>
@@ -113,7 +113,7 @@
         </div>
         <div show.bind="requirements" class="ui attached ${loadingRequirements ? 'loading' : '' }
                                              segment">
-            <div class="ui three statistics">
+            <div class="ui three stacking statistics">
                 <div class="${taskRequirements.errors.length > 0 ? 'red' : 'green'} statistic">
                     <div class="value">
                         <i class="${taskRequirements.errors.length > 0 ?
