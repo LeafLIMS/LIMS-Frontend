@@ -5,7 +5,7 @@ import { Chart } from 'chartjs';
 export class ChartCustomElement {
     @bindable data = {};
     @bindable type = 'doughnut';
-    @bindable config = {};
+    @bindable config = {maintainAspectRatio: false};
 
     colours = [
         '31, 119, 180',
@@ -69,14 +69,17 @@ export class ChartCustomElement {
 
             // On small screens set height so charts don't appear horribly squished
             let windowWidth = document.documentElement.clientWidth;
+            let ctx = this.element;
             if (windowWidth < 768) {
-                let ctx = this.element;
                 this.chart.options.maintainAspectRatio = false;
                 ctx.style.height = '300px';
                 this.chart.update();
                 this.chart.resize();
             } else {
-                this.chart.options.maintainAspectRatio = true;
+                //ctx.style.height = '300px';
+                this.chart.options.maintainAspectRatio = false;
+                this.chart.update();
+                this.chart.resize();
             }
         }
     }
