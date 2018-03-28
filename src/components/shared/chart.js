@@ -66,6 +66,18 @@ export class ChartCustomElement {
         if (n) {
             let dataset = this.dataToDataset();
             this.makeChart(dataset);
+
+            // On small screens set height so charts don't appear horribly squished
+            let windowWidth = document.documentElement.clientWidth;
+            if (windowWidth < 768) {
+                let ctx = this.element;
+                this.chart.options.maintainAspectRatio = false;
+                ctx.style.height = '300px';
+                this.chart.update();
+                this.chart.resize();
+            } else {
+                this.chart.options.maintainAspectRatio = true;
+            }
         }
     }
 
