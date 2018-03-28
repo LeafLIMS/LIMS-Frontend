@@ -34,7 +34,7 @@
         <div class="ui stackable grid no gutter">
             <form class="ui eleven wide column form" novalidate>
                 <div class="ui segment">
-                    <div class="ui stackable grid two column wide">
+                    <div class="ui stackable padded grid two column wide">
                         <ui-field class="column" label="Name" required>
                             <input name="name" value.bind="item.name & validate & debounce:1000"
                                    placeholder="Item name">
@@ -48,7 +48,7 @@
                             </ui-autocomplete>
                         </ui-field>
                     </div>
-                    <div class="ui stackable grid two column wide">
+                    <div class="ui stackable padded grid two column wide">
                         <ui-field class="column" label="Barcode">
                             <input name="barcode" value.bind="item.barcode & debounce:500"
                                    placeholder="Barcode">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="ui segment">
                     <h3>Amount</h3>
-                    <div class="ui stackable grid four column wide">
+                    <div class="ui stackable padded grid four column wide">
                         <div class="middle aligned column">${item.amount_available}</div>
                         <ui-field class="column" label="Amount measure">
                             <ui-autocomplete from="measures"
@@ -87,7 +87,7 @@
                 </div>
                 <div class="ui segment">
                     <h3>Properties</h3>
-                    <div class="ui two column wide stackable grid"
+                    <div class="ui two column wide stackable padded grid"
                          repeat.for="p of item.properties">
                         <ui-field class="column" label="Name">
                             <input name="prop_${index}" value.bind="p.name & validate & debounce:1000">
