@@ -2,6 +2,8 @@ import { inject } from 'aurelia-framework';
 import { WorkflowApi } from '../../workflows/api';
 import { SettingsTable } from '../settings-table';
 import { ValidationRules } from 'aurelia-validation';
+import { ExportWorkflow } from './exportworkflow';
+import { ImportWorkflow } from './importworkflow';
 
 @inject(WorkflowApi)
 export class Workflows extends SettingsTable {
@@ -27,6 +29,43 @@ export class Workflows extends SettingsTable {
             .ensure('name').required()
             .ensure('order').required()
             .on(this.item);
+
+        this.importWorkflow = () => {
+            this.dialog.open({viewModel: ImportWorkflow})
+                .whenClosed(response => {
+                if (!response.wasCancelled) {
+                    console.log('import workflow');
+                }
+            });
+        }
+
+        this.exportWorkflow = () => {
+            this.dialog.open({viewModel: ExportWorkflow})
+                .whenClosed(response => {
+                if (!response.wasCancelled) {
+                    console.log('export workflow');
+                    console.log(response);
+                    // Set up file to be downloaded
+                    // TODO: Implement this in the export inventory element
+                    this.api.exportWorkflow(response.output).then(data => {
+                        let asText = JSON.stringify(data);
+                        let a = document.createElement('a');
+                        document.body.appendChild(a);
+                        let fileBlob = new Blob([asText], {type: 'text/plain'});
+                        this.fileUrl = URL.createObjectURL(fileBlob);
+                        a.href = this.fileUrl;
+                        a.download = data.workflow.name + '.workflow'
+                        a.click();
+                        document.body.removeChild(a);
+                    });
+                }
+            });
+        }
+
+        this.extraToolbarButtons = [
+            {text: 'Export', icon: 'upload', action: this.exportWorkflow},
+            {text: 'Import', icon: 'download', action: this.importWorkflow}
+        ]
     }
 
     edit(item) {

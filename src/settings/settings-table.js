@@ -33,10 +33,6 @@ export class SettingsTable {
         this.tableFields = [];
     }
 
-    activate(params, routerConfig) {
-        console.log("ST", params, routerConfig);
-    }
-
     setFunctions(objName) {
         this.objName = objName;
         this.getFunc = this.objName + 's';

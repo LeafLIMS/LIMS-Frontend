@@ -1,0 +1,21 @@
+<template>
+    <ux-dialog class="ui modal active">
+        <div class="header"><i class="ui upload icon"></i> Export Workflow</div>
+        <ux-dialog-body>
+            <div class="ui form content">
+                <ui-field label="Workflow to export" required>
+                    <ui-autocomplete value.bind="workflow"
+                                     from="workflows"
+                                     store-value="id">
+                    </ui-autocomplete>
+                </ui-field>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui basic cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui primary ok button"
+                    click.trigger="dialog.ok(workflow)">Download</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

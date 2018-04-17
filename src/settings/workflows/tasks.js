@@ -309,6 +309,14 @@ export class Tasks extends SettingsTable {
         this.applyValidation();
     }
 
+    /*
+    activate(model) {
+        if (model) {
+            this.item = model;
+        }
+    }
+    */
+
     cancel() {
         this.clearObject()
         super.cancel()
