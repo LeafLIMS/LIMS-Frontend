@@ -3,13 +3,15 @@ import { ProjectApi } from './api';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { DialogService } from 'aurelia-dialog';
 import { Prompt } from '../components/semantic-ui/ui-prompt';
+import { QueryStore } from '../shared/query-store';
 
-@inject(ProjectApi, EventAggregator, DialogService)
+@inject(ProjectApi, EventAggregator, DialogService, QueryStore)
 export class Projects {
 
-    constructor(projectApi, eventAggregator, dialogService) {
+    constructor(projectApi, eventAggregator, dialogService, queryStore) {
         this.api = projectApi;
         this.ea = eventAggregator;
+        this.qs = queryStore;
 
         this.dialog = dialogService;
 
@@ -21,11 +23,11 @@ export class Projects {
             ordering: '-identifier',
             archive: 'False',
         }
-
-        this.getProjects();
     }
 
     attached() {
+        this.query = this.qs.getQuery('projects', this.query);
+        this.getProjects();
         this.querySubscriber = this.ea.subscribe('queryChanged', response => {
             if (response.source == 'pagination') {
                 this.query.page = response.page;
@@ -34,6 +36,7 @@ export class Projects {
             if (response.source == 'search') {
                 this.query.search = response.value;
             }
+            this.qs.storeQuery('projects', this.query);
             this.getProjects();
         });
 
