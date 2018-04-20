@@ -103,6 +103,11 @@ export class WorkflowApi {
         return this.endpoint.destroyOne('workflows/', id);
     }
 
+    getWorkflowTasks(id) {
+        let path = `workflows/${id}/tasks/`;
+        return this.endpoint.find(path);
+    }
+
     exportWorkflow(id) {
         let path = `workflows/${id}/export/`;
         return this.endpoint.find(path);

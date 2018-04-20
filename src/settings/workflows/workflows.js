@@ -43,10 +43,7 @@ export class Workflows extends SettingsTable {
             this.dialog.open({viewModel: ExportWorkflow})
                 .whenClosed(response => {
                 if (!response.wasCancelled) {
-                    console.log('export workflow');
-                    console.log(response);
                     // Set up file to be downloaded
-                    // TODO: Implement this in the export inventory element
                     this.api.exportWorkflow(response.output).then(data => {
                         let asText = JSON.stringify(data);
                         let a = document.createElement('a');
@@ -71,26 +68,17 @@ export class Workflows extends SettingsTable {
     edit(item) {
         super.edit(item);
         // Get a list of tasks that are available
-        this.api.tasks().then(data => {
-            this.availableTasks = data;
-            this.taskList = this.item.order.split(',').map(x => {
-                return this.availableTasks.results.find(y => { return y.id == parseInt(x) });
-            });
-        });
-    }
-
-    create() {
-        super.create();
-        this.api.tasks().then(data => {
-            this.availableTasks = data;
+        this.api.getWorkflowTasks(item.id).then(data => {
+            this.taskList = data['tasks'];
         });
     }
 
     addTask() {
         if (this.taskToAdd) {
-            this.taskList.push(this.availableTasks.results.find(y => {
-                return y.id == parseInt(this.taskToAdd);
-            }));
+            this.api.taskDetail(this.taskToAdd).then(data => {
+                console.log(data);
+                this.taskList.push(data);
+            });
         }
     }
 

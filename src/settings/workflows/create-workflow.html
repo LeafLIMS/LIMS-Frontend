@@ -7,10 +7,10 @@
         </div>
         <div class="column">
             <div class="ui fluid action input">
-                <ui-dropdown value.bind="taskToAdd" placeholder="Choose task to add">
-                    <ui-item repeat.for="t of availableTasks.results"
-                             value.bind="t.id">${t.name}</ui-item>
-                </ui-dropdown>
+                <ui-autocomplete value.bind="taskToAdd"
+                                 from="tasks"
+                                 placeholder="Select task to add">
+                </ui-autocomplete>
                 <button class="ui primary button" click.delegate="addTask()">Add</button>
             </div>
             <div class="ui segments" sortable.bind="{draggable: '.segment'}">
