@@ -116,11 +116,6 @@ export class Tasks extends SettingsTable {
         this.outputFileObserver.dispose();
     }
 
-    detached() {
-        super.detached();
-        this.teardownWatchers();
-    }
-
     applyValidation() {
         ValidationRules
             .ensure('name').required()
@@ -339,6 +334,7 @@ export class Tasks extends SettingsTable {
 
     cancel() {
         this.clearObject()
+        this.teardownWatchers();
         super.cancel()
     }
 }
