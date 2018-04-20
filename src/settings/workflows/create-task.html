@@ -195,7 +195,7 @@
     </div>
     <p class="help text">Output files are designed to output information from a task into a format
                          that can be used in another system (e.g. an external inventory system).</p>
-    <div class="ui three column wide stackable vertically padded grid">
+    <div class="ui two column wide stackable vertically padded grid">
         <div class="column" repeat.for="field of item.output_fields">
             <ll-output-field field.bind="field"
                              output-to.bind="item.output_fields[$index]">
