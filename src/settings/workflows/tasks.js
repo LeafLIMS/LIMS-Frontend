@@ -117,7 +117,7 @@ export class Tasks extends SettingsTable {
     }
 
     detached() {
-        super.deatched()
+        super.detached();
         this.teardownWatchers();
     }
 
