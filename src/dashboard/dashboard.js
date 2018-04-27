@@ -32,15 +32,15 @@ export class Dashboard {
             this.inventory = data;
         });
 
-        this.api.stats('projects', 'status__name').then(data => {
+        this.api.stats('projects', 'status__name', 'archive').then(data => {
             this.project_statuses = this.makeDataset('status__name', data);
         });
 
-        this.api.stats('products', 'status__name').then(data => {
+        this.api.stats('products', 'status__name', 'project__archive').then(data => {
             this.product_statuses = this.makeDataset('status__name', data);
         });
 
-        this.api.stats('projects', 'deadline_status').then(data => {
+        this.api.stats('projects', 'deadline_status', 'archive').then(data => {
             this.deadlines = this.makeDataset('deadline_status', data);
         });
 
