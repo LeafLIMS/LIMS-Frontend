@@ -15,8 +15,14 @@ export class UiDropdownMenuItemCustomElement {
         this.setToggle = event => {
             if (this.toggle) {
                 if (this.toggle in this.toggleSource) {
-                    delete this.toggleSource[this.toggle];
-                    this.isToggled = false;
+                    if (this.toggleSource[this.toggle] == 'True') {
+                        this.toggleSource[this.toggle] = 'False';
+                        this.isToggled = false;
+                    } else {
+                        this.toggleSource[this.toggle] = 'True';
+                        this.isToggled = true;
+                    }
+                    // delete this.toggleSource[this.toggle];
                 } else {
                     this.toggleSource[this.toggle] = 'True';
                     this.isToggled = true;
@@ -28,7 +34,11 @@ export class UiDropdownMenuItemCustomElement {
 
     attached() {
         if (this.toggle && this.toggle in this.toggleSource) {
-            this.isToggled = true;
+            if (this.toggleSource[this.toggle] == 'False') {
+                this.isToggled = false;
+            } else {
+                this.isToggled = true;
+            }
         }
         this.element.addEventListener('click', this.setToggle);
     }
