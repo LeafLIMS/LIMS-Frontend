@@ -9,6 +9,7 @@
     <require from="../shared/string-truncate"></require>
     <require from="./ll-deadline"></require>
     <h2>
+        <i class="dim archive icon" if.bind="project.archive"></i>
         <a class="dim" route-href="route: project">Project</a>
         <span class="highlight">${project.project_identifier}:</span> ${project.name}</h2>
     <div class="ui inverted stackable primary menu">
@@ -19,6 +20,14 @@
         <a class="item" click.delegate="importProducts = true">
             <i class="icon upload"></i>
             Import products
+        </a>
+        <a class="item" if.bind="!project.archive" click.delegate="archive()">
+            <i class="icon archive"></i>
+            Finish project
+        </a>
+        <a class="item" if.bind="project.archive" click.delegate="resume()">
+            <i class="icon check"></i>
+            Resume project
         </a>
     </div>
     <ll-new-product source.bind="project" toggle.bind="newProduct"></ll-new-product>
