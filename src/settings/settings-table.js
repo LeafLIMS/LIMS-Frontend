@@ -4,13 +4,15 @@ import { DialogService } from 'aurelia-dialog';
 import { Prompt } from '../components/semantic-ui/ui-prompt';
 import { ValidationRules, ValidationController, validateTrigger } from 'aurelia-validation';
 import { UiValidationRenderer } from '../components/semantic-ui/ui-validation-renderer';
+import { QueryStore } from '../shared/query-store';
 
-@inject(EventAggregator, NewInstance.of(ValidationController), DialogService)
+@inject(EventAggregator, NewInstance.of(ValidationController), DialogService, QueryStore)
 export class SettingsTable {
 
-    constructor(eventAggregator, validationController, dialogService) {
+    constructor(eventAggregator, validationController, dialogService, queryStore) {
         this.ea = eventAggregator;
         this.dialog = dialogService;
+        this.qs = queryStore;
 
         this.validator = validationController;
         this.validator.validateTrigger = validateTrigger.changeOrBlur;
@@ -42,6 +44,7 @@ export class SettingsTable {
     }
 
     activate(model) {
+        this.query = this.qs.getQuery(this.objName, this.query);
         this.data = model;
         this.getData();
     }
@@ -107,6 +110,7 @@ export class SettingsTable {
             if (response.source == 'search') {
                 this.query.search = response.value;
             }
+            this.qs.storeQuery(this.objName, this.query);
             this.getData();
         });
     }

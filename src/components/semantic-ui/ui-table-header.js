@@ -1,16 +1,17 @@
-import { inject, bindable, bindingMode, NewInstance } from 'aurelia-framework';
+import { inject, bindable, bindingMode, BindingEngine, NewInstance } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { ValidationRules, ValidationController, validateTrigger } from 'aurelia-validation';
 import { UiValidationRenderer } from './ui-validation-renderer';
 
-@inject(EventAggregator, NewInstance.of(ValidationController))
+@inject(EventAggregator, NewInstance.of(ValidationController), BindingEngine)
 export class UiTableHeaderCustomElement {
     @bindable({ defaultBindingMode: bindingMode.twoWay }) search;
     @bindable searchOptions;
     @bindable({ defaultBindingMode: bindingMode.twoWay }) searchQuery;
 
-    constructor(eventAggregator, validationController) {
+    constructor(eventAggregator, validationController, bindingEngine) {
         this.ea = eventAggregator;
+        this.be = bindingEngine;
 
         this.validator = validationController;
         this.validator.validateTrigger = validateTrigger.changeOrBlur;
@@ -31,13 +32,16 @@ export class UiTableHeaderCustomElement {
     }
 
     attached() {
+        this.searchObs = this.be.propertyObserver(this, 'search').subscribe((n, o) => {
+            this.ea.publish('queryChanged', {source: 'search', value: n});
+        });
         // Deep copy values of original query for reset
         this.originalQuery = JSON.parse(JSON.stringify(this.searchQuery));
         this.addTerm();
     }
 
-    searchChanged(n) {
-        this.ea.publish('queryChanged', {source: 'search', value: n});
+    detached() {
+        this.searchObs.dispose();
     }
 
     toggleAdvanced() {

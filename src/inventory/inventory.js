@@ -4,15 +4,17 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 import { DialogService } from 'aurelia-dialog';
 import { Prompt } from '../components/semantic-ui/ui-prompt';
+import { QueryStore } from '../shared/query-store';
 
-@inject(InventoryApi, EventAggregator, Router, DialogService)
+@inject(InventoryApi, EventAggregator, Router, DialogService, QueryStore)
 export class Inventory {
 
-    constructor(inventoryApi, eventAggregator, router, dialogService) {
+    constructor(inventoryApi, eventAggregator, router, dialogService, queryStore) {
         this.api = inventoryApi;
         this.ea = eventAggregator;
         this.router = router;
         this.dialog = dialogService;
+        this.qs = queryStore;
 
         this.selected = [];
 
@@ -64,12 +66,13 @@ export class Inventory {
 
         this.isLoading = true;
         this.isLoadingTransfers = true;
-
-        this.getInventory();
-        this.getTransfers();
     }
 
     attached() {
+        this.query = this.qs.getQuery('inventory', this.query);
+        this.transfer_query = this.qs.getQuery('inventory_transfers', this.transfer_query);
+        this.getInventory();
+        this.getTransfers();
         this.querySubscriber = this.ea.subscribe('queryChanged', response => {
             if (response.source == 'pagination') {
                 this.query.page = response.page;
@@ -84,6 +87,7 @@ export class Inventory {
                 this.tempMessageTitle = 'Import successful';
                 this.tempMessageText = `${response.saved.length} items where added.`;
             }
+            this.qs.storeQuery('inventory', this.query);
             this.getInventory();
         });
 
@@ -142,20 +146,6 @@ export class Inventory {
                 });
             }
         });
-    }
-
-    exportSelectedItems() {
-    }
-
-    exportItems() {
-        /*
-        let message = 'Export search results';
-        this.dialog.open({viewModel: Prompt, model: message}).whenClosed(response => {
-            if (!response.wasCancelled) {
-                console.log('ok');
-            }
-        });
-        */
     }
 
 }
