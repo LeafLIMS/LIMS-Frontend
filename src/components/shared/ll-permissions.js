@@ -35,7 +35,9 @@ export class LlPermissions {
                             this.perms[group] = 'rw';
                         }
                     }
-                    this.selected.push(group);
+                    if (this.selected.indexOf(group) == -1) {
+                        this.selected.push(group);
+                    }
                 }
             } else {
                 for (var g in this.groups.results) {
@@ -43,7 +45,9 @@ export class LlPermissions {
                     if (group.name !== 'user') {
                         assigned_permissions[group.name] = 'rw';
                         this.perms[group.name] = 'rw';
-                        this.selected.push(group.name);
+                        if (this.selected.indexOf(group.name) == -1) {
+                            this.selected.push(group.name);
+                        }
                     }
                 }
             }
@@ -70,7 +74,6 @@ export class LlPermissions {
     }
 
     toggled(group) {
-        console.log(this.objectFor.assign_groups);
         if (group in this.objectFor.assign_groups) {
             delete this.objectFor.assign_groups[group];
             this.perms[group] = false;

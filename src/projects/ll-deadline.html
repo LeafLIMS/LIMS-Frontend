@@ -2,7 +2,9 @@
     <div class="ui visible
                 ${warn && !past ? 'orange' : ''}
                 ${past ? 'red' : ''}
+                ${inactive ? 'green' : ''}
                 message">
+        <div if.bind="inactive">Project Finished</div>
         <div if.bind="deadline && !inactive">
             <b>Deadline:</b> ${deadline|dateFormat:"DD/MM/YY"}
             <span if.bind="!deadlinePassed">(${daysToDeadline} days remaning)</span>

@@ -8,9 +8,13 @@ export class StatsApi {
         this.endpoint = config.getEndpoint('api');
     }
 
-    stats(endpoint, field) {
+    stats(endpoint, field, exclude) {
+        let data = {field: field};
+        if (exclude) {
+            data.exclude = exclude;
+        }
         let path = `${endpoint}/stats/`;
-        return this.endpoint.find(path, {field: field});
+        return this.endpoint.find(path, data);
     }
 
 }

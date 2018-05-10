@@ -9,7 +9,8 @@
                         <ui-autocomplete from="crm/project"
                                 value.bind="crm_project"
                                 display-value="Name"
-                                store-value="Id">
+                                store-value="Id"
+                                placeholder="Select a CRM project">
                         </ui-autocomplete>
                         <div class="ui horizontal divider">Or</div>
                     </div>
@@ -38,7 +39,7 @@
                             <ui-field label="Deadline" required class="column">
                                 <ui-datetime value.bind="project.deadline"
                                              name="from_date"
-                                             config.bind="config"></ui-datetime>
+                                             config.bind="dateConfig"></ui-datetime>
                             </ui-field>
                         </div>
                         <div class="column">

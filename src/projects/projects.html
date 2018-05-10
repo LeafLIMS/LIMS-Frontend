@@ -13,14 +13,14 @@
             <ui-dropdown-menu class="item"
                               icon="filter">
                 <ui-dropdown-menu-item toggle="archive" toggle-source.bind="query">
-                    Archived
+                    Finished
                 </ui-dropdown-menu-item>
             </ui-dropdown-menu>
             <ui-dropdown-menu class="item"
                          icon="ellipsis vertical">
                 <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
                                        click.delegate="archiveItems()" icon="archive">
-                    Archive selected
+                    Mark selected finished
                 </ui-dropdown-menu-item>
                 <ui-dropdown-menu-item class="${selected.length == 0 ? 'disabled' : ''}"
                                        click.delegate="deleteItems()" icon="erase">
@@ -41,7 +41,7 @@
                         <th>Project account</th>
                         <th sort-by="primary_lab_contact">Lab contact</th>
                         <th sort-by="deadline">Deadline</th>
-                        <th sort-by="archived">Archived</th>
+                        <th sort-by="archived">Finished</th>
                     </tr>
                 </thead>
                 <tbody>

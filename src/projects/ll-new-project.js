@@ -30,7 +30,7 @@ export class LlNewProject {
 
         this.project = {};
 
-        this.config = {
+        this.dateConfig = {
             type: 'date',
             today: true,
         }

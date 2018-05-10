@@ -101,6 +101,16 @@ export class ProjectDetail {
         });
     }
 
+    archive() {
+        this.project.archive = true;
+        this.save();
+    }
+
+    resume() {
+        this.project.archive = false;
+        this.save();
+    }
+
     deleteItems() {
         let message = 'Delete ' + this.selected.length + ' products?';
         this.dialog.open({viewModel: Prompt, model: message}).whenClosed(response => {

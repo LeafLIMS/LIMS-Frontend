@@ -1,0 +1,105 @@
+<template>
+    <ux-dialog class="ui fullscreen modal active">
+        <div class="header"><i class="ui download icon"></i> Import Workflow</div>
+        <ux-dialog-body>
+            <div class="ui form content">
+                <ui-field label="File to upload" required>
+                    <input type="file" files.bind="importedFile"
+                           change.delegate="fileUploaded($event)">
+                </ui-field>
+                <div class="ui visible icon error message" if.bind="fileError">
+                    <i class="exclamation triangle icon"></i>
+                    <div class="content">
+                        The file selected is not a valid Leaf LIMS workflow file!
+                    </div>
+                </div>
+                <div if.bind="parsedFile">
+                    <div class="ui divider"></div>
+                    <h3 class="ui top attached header">
+                        <i class="warning icon"></i>
+                        <div class="content">Import Issues</div>
+                    </h3>
+                    <div class="ui attached segment">
+                        <h4 class="ui header">Task errors</h4>
+                        <div class="ui middle aligned divided relaxed list">
+                            <div repeat.for="issue of importIssues" class="item">
+                                <div class="content">
+                                    ${issue.field} in task ${issue.issues.error_in}:
+                                    <span repeat.for="m of issue.issues.error">${m}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui visible icon info message"
+                             if.bind="importIssues.length == 0">
+                            <i class="check icon"></i>
+                            <div class="content">
+                                There are no errors in any tasks.
+                            </div>
+                        </div>
+                        <h4 class="ui header">Required for import</h4>
+                        <p>The following items are required for the workflow to be imported
+                           correctly. If a you would like to substitute for an existing entry in
+                           the LIMS you will need change the relevant field on the task.</p>
+                        <div class="ui middle aligned divided list">
+                            <template repeat.for="items of requiredItems">
+                                <div repeat.for="i of items" class="item">
+                                    <div class="right floated content">
+                                        <div class="ui green button"
+                                             click.delegate="addItem(i)">Add</div>
+                                    </div>
+                                    <div class="content">
+                                        ${i.item_type}: ${i.name}
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="ui visible icon info message"
+                             if.bind="requiredItems.length == 0">
+                            <i class="check icon"></i>
+                            <div class="content">
+                                All requirements are present.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui bottom attached clearing segment">
+                        <button class="ui green right floated button"
+                                if.bind="requiredItems.length > 0"
+                                click.delegate="addRequirements()">
+                            Auto add all requirements</button>
+                        <button class="ui primary right floated button"
+                                click.delegate="doDataCheck()">
+                            Recheck requirements</button>
+                    </div>
+                    <div class="ui two column wide stackable grid">
+                        <ui-field label="Name" required class="column">
+                            <input value.bind="workflowData.name">
+                        </ui-field>
+                        <ll-permissions object="workflows" object-for.bind="workflowData"
+                                        reset.bind="toggle"
+                                        class="column">
+                        </ll-permissions>
+                    </div>
+                    <div class="ui ordered top attached steps">
+                        <a class="step ${task.id == item.id ? 'active':''}"
+                           click.delegate="setTask($index)"
+                           repeat.for="task of workflowData.tasks">
+                            <div class="content">
+                                <div class="title">${task.name}</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="ui stacked bottom attached tall segment">
+                        <compose view="./create-task.html" if.bind="parsedFile"
+                                 model.bind="item"></compose>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+        <ux-dialog-footer class="actions">
+            <button class="ui basic cancel button"
+                    click.trigger="dialog.cancel()">Cancel</button>
+            <button class="ui primary ok button"
+                    click.trigger="save()">Save</button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

@@ -73,6 +73,9 @@ export class Tasks extends SettingsTable {
         this.removedFields = [];
         this.calculations = [];
 
+    }
+
+    setupWatchers() {
         this.equipmentObserver = this.be.propertyObserver(this.item, 'capable_equipment_source')
             .subscribe((n, o) => {
             if (!this.item.capable_equipment) {
@@ -104,7 +107,13 @@ export class Tasks extends SettingsTable {
             }
             this.item.output_files.push(n);
         });
+    }
 
+    teardownWatchers() {
+        this.equipmentObserver.dispose();
+        this.equipmentFileObserver.dispose();
+        this.inputFileObserver.dispose();
+        this.outputFileObserver.dispose();
     }
 
     applyValidation() {
@@ -144,6 +153,12 @@ export class Tasks extends SettingsTable {
     edit(item) {
         let parsedItem = this.parseItem(item);
         super.edit(parsedItem);
+        this.setupWatchers();
+    }
+
+    create() {
+        super.create();
+        this.setupWatchers();
     }
 
     createOrUpdateFields(templateId) {
@@ -309,8 +324,17 @@ export class Tasks extends SettingsTable {
         this.applyValidation();
     }
 
+    /*
+    activate(model) {
+        if (model) {
+            this.item = model;
+        }
+    }
+    */
+
     cancel() {
         this.clearObject()
+        this.teardownWatchers();
         super.cancel()
     }
 }

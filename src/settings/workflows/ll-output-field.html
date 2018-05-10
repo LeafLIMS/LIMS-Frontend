@@ -20,7 +20,7 @@
             </ui-field>
         </div>
         <div class="column">
-            <ui-field label="Input measure" required>
+            <ui-field label="Output measure" required>
                 <ui-autocomplete from="measures"
                         value.bind="field.measure & validate"
                         store-value="symbol"
@@ -31,10 +31,10 @@
             </ui-field>
         </div>
         <div class="column">
-            <ui-field label="Input type" required>
+            <ui-field label="Output type" required>
                 <ui-autocomplete from="itemtypes"
                         value.bind="field.lookup_type & validate"
-                        store-value="symbol"
+                        store-value="name"
                         display-value="display_name"
                         default-text.bind="field.lookup_type"
                         placeholder="Select input type">
