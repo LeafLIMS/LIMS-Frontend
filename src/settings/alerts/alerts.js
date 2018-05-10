@@ -31,7 +31,6 @@ export class Alert extends SettingsTable {
 
         this.models = [
             {model: 'Item', endpoint: 'inventory'},
-            {model: 'Set', endpoint: 'inventorysets'},
             {model: 'Project', endpoint: 'projects'},
             {model: 'Product', endpoint: 'products'},
             {model: 'Run', endpoint: 'runs'},
@@ -50,6 +49,21 @@ export class Alert extends SettingsTable {
             {value: '!=', name: 'not equal to'},
         ];
 
+        this.hasLinkedUser = false;
+        this.modelUserFields = {
+            'Project': [
+                {name: 'Primary lab contact', path: 'primary_lab_contact'},
+                {name: 'CRM user', path: 'crm_project__account__user'}
+            ],
+            'Product': [{name: 'Created by', path: 'created_by'}],
+            'Item': [{name: 'Added by', path: 'added_by'}],
+            'Run': [{name: 'Started by', path: 'started_by'}],
+            'EquipmentReservation': [{name: 'Reserved by', path: 'reserved_by'}],
+            'Task': [{name: 'Created by', path: 'created_by'}],
+            'Workflow': [{name: 'Created by', path: 'created_by'}],
+        }
+        this.linkedUserFields = [];
+
         this.triggerValidation = ValidationRules
                                     .ensure('field').required()
                                     .when(x => !x.fire_on_create)
@@ -65,6 +79,21 @@ export class Alert extends SettingsTable {
 
 
         this.applyValidation();
+
+        this.setAvailableFields = (event) => {
+            let model = this.models.find(x => x.model === event.target.value);
+            this.api.modelFields(model.endpoint).then(data => {
+                let fieldsList = Object.entries(data.actions.POST);
+                this.fields = new Map(fieldsList);
+            }).catch(err => console.log(error));
+
+            if (this.modelUserFields[model.model]) {
+                this.hasLinkedUser = true;
+                this.linkedUserFields = this.modelUserFields[model.model];
+            } else {
+                this.hasLinkedUser = false;
+            }
+        }
 
     }
 
@@ -102,14 +131,6 @@ export class Alert extends SettingsTable {
     removeSubscription(index, item) {
         this.removed.push(item);
         this.item.subscriptions.splice(index, 1);
-    }
-
-    setAvailableFields(event) {
-        let model = this.models.find(x => x.model === event.target.value);
-        this.api.modelFields(model.endpoint).then(data => {
-            let fieldsList = Object.entries(data.actions.POST);
-            this.fields = new Map(fieldsList);
-        }).catch(err => console.log(error));
     }
 
     edit(item) {
@@ -190,6 +211,7 @@ export class Alert extends SettingsTable {
         // Just replace the whole thing :P
         this.item = {};
         this.applyValidation();
+        this.hasLinkedUser = false;
     }
 
     cancel() {

@@ -17,6 +17,17 @@
             </ui-dropdown>
         </ui-field>
     </div>
+    <div class="ui two column wide stackable grid" if.bind="hasLinkedUser">
+        <ui-field label="Alert linked user?" class="column">
+            <ui-checkbox checked.bind="item.alert_linked_user & validate"></ui-checkbox>
+        </ui-field>
+        <ui-field label="Get user from" required.bind="item.alert_linked_user" class="column">
+            <ui-dropdown value.bind="item.alert_user_field & validate">
+                <ui-item repeat.for="field of linkedUserFields"
+                         value.bind="field.path">${field.name}</ui-item>
+            </ui-dropdown>
+        </ui-field>
+    </div>
     <h4>Email formatting</h4>
     <ui-field label="Email title">
         <input value.bind="item.email_title & validate">
