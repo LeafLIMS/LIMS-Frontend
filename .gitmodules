@@ -1,0 +1,6 @@
+[submodule "third_party/aurelia-route-mapper"]
+	path = third_party/aurelia-route-mapper
+	url = https://github.com/heruan/aurelia-route-mapper.git
+[submodule "third_party/semantic-ui"]
+	path = third_party/semantic-ui
+	url = https://github.com/Semantic-Org/Semantic-UI.git
